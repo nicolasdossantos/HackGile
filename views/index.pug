@@ -1,22 +1,31 @@
 doctype html
 html
     head
-        title Knowledge Base
+        title Hackgile
+        link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
         link(rel='stylesheet' href='/materialize-css/dist/css/materialize.min.css')
         link(rel='stylesheet' href='/css/style.css')
         
         
     body
-       nav
-        .nav-wrapper
-            a.brand-logo(img="images/logo.png" href='#') Logo
-            ul#nav-mobile.right.hide-on-med-and-down
-                li
-                    a(href='#') Login
-                li
-                    a(href='#') Signup
-            
-        .container
+        header#top
+            div.navbar-fixed
+                nav.nav-extended.green
+                    div.nav-wrapper.container.green
+                        h3.left.white-text(style='margin-top:.2em; margin-bottom:0em;') HackGile
+                        a.right.sidenav-trigger.button-collapse.hide-on-large-only(href='#', data-target='slide-out')
+                            i.material-icons menu
+                        ul.right.hide-on-med-and-down
+                            li
+                                a.white-text(href='#') Login
+                            li
+                                a.white-text(href='#') Sign Up
+                    ul#slide-out.sidenav.green
+                        li
+                            a.white-text(href='#') Login
+                        li
+                            a.white-text(href='#') Sign Up
+
            
     
         footer
@@ -24,4 +33,6 @@ html
         
         script(src='/materialize-css/dist/js/materialize.min.js')
         script(src='/js/main.js')
+        script(type='text/javascript').
+            M.AutoInit();
         
