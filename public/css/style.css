@@ -1,6 +1,9 @@
 body{
     background-color: #bfe1bc;
-    
+
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
 #test{
@@ -10,3 +13,7 @@ body{
     
     display: inline-block;
 }
+
+  main {
+    flex: 1 0 auto;
+  }

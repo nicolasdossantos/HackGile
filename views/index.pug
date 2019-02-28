@@ -7,7 +7,7 @@ html
         link(rel='stylesheet' href='/materialize-css/dist/css/materialize.min.css')
         link(rel='stylesheet' href='/css/style.css')
         
-    block content   
+    //block content   
     body
         header#top
             div.navbar-fixed
@@ -31,45 +31,40 @@ html
                 li
                     a.black-text(href='#') Sign Up
     
+        main
+            .row
+            
+                .col.l6.m12
+                    br
+                    br
+                    br
+                    br
+                    br
+                    br
+                    span.flow-text.white-text#test HackGile brings Agile/Scrum methodology to hackathons.
+                .col.l6.m12
+                    img.responsive-img(src="images/meeting.jpg")
+            br
+            br
+            br
+            br
+            br
+            br
+            br
 
-        .row
-          
-            .col.s5
-                br
-                br
-                br
-                br
-                br
-                br
-                span.flow-text.white-text#test HackGile brings Agile/Scrum methodology to hackathons.
-            .col.s6
-                img(src="images/meeting.jpg" width="120%" height="120%")
-        br
-        br
-        br
-        br
-        br
-        br
-        br
+            br
 
-        br
-
-        .row
-            .col.s7
-                img(src="images/deskOrganizer2.jpg" width="80%" height="80%")
-            .col.s4
-                span.flow-text.white-text#test Here we will list what one can do with Hackgile, also this needs to be properly alligned.
-    
-        .footer.page-footer.teal.accent-4
-            p.white-text FIX ME! NICK CAN'T SEE COLORS!
-                
-
-
-           
-  
+            .row
+                .col.l5.m12.right
+                    span.flow-text.white-text#test Here we will list what one can do with Hackgile, also this needs to be properly alligned.
+                .col.l7.m12.left
+                    img.responsive-img(src="images/deskOrganizer2.jpg")
         
-        script(src='/materialize-css/dist/js/materialize.min.js')
-        script(src='/js/main.js')
-        script(type='text/javascript').
-            M.AutoInit();
+        footer.page-footer.teal.accent-4
+            .footer-copyright
+                .container Test
+            script(src='/materialize-css/dist/js/materialize.min.js')
+            script(src='/js/main.js')
+            script(type='text/javascript').
+                M.AutoInit();
         
