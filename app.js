@@ -11,7 +11,7 @@ app.get("/login", (req, res)=>{
 });
 
 app.get("/signup", (req,res)=>{
-    res.send("This will be the Signup Page");
+    res.render('signup');
 })
 
 app.set('views', path.join(__dirname, 'views'));
