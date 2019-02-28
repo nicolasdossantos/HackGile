@@ -1,27 +1,74 @@
 doctype html
 html
     head
-        title Knowledge Base
+        title Hackgile
+        link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
         link(rel='stylesheet' href='/materialize-css/dist/css/materialize.min.css')
         link(rel='stylesheet' href='/css/style.css')
         
-        
+    block content   
     body
-       nav
-        .nav-wrapper.white
-            a.brand-logo(img="images/logo.png" href='#').black-text Logo
-            ul#nav-mobile.right.hide-on-med-and-down
-                li
-                    a(href='#').black-text Login
-                li
-                    a(href='#').black-text Signup
-            
-        .container
-           
+        header#top
+            div.navbar-fixed
+                nav.nav-extended.green
+                    div.nav-wrapper.white
+                        a(href="/")
+                            img(src="/images/logo.jpg" width="9%" height="9%")
+                        a.right.sidenav-trigger.button-collapse.hide-on-large-only(href='#', data-target='slide-out')
+                            i.material-icons menu
+                        ul.right.hide-on-med-and-down
+                            li
+                                a.black-text(href='/login') Login
+                            li
+                                a.black-text(href='/signup') Sign Up
+                    ul#slide-out.sidenav.green
+                        li
+                            a.black-text(href='/login') Login
+                        li
+                            a.black-text(href='#') Sign Up
     
-        footer
-        p Copyright &copy; 2019 
+
+        .row
+          
+            .col.s5
+                br
+                br
+                br
+                br
+                br
+                br
+                span.flow-text.white-text#test HackGile brings Agile/Scrum methodology to hackathons.
+            .col.s6
+                img(src="images/meeting.jpg" width="120%" height="120%")
+        br
+        br
+        br
+        br
+        br
+        br
+        br
+
+        br
+
+        .row
+            .col.s7
+                img(src="images/deskOrganizer2.jpg" width="80%" height="80%")
+            .col.s4
+                span.flow-text.white-text#test Here we will list what one can do with Hackgile, also this needs to be properly alligned.
+        .row.container
+            
+           
+            .col.s7.pull-s5
+        .footer.page-footer.teal.accent-4
+            p.white-text FIX ME! NICK CAN'T SEE COLORS!
+                
+
+
+           
+  
         
         script(src='/materialize-css/dist/js/materialize.min.js')
         script(src='/js/main.js')
+        script(type='text/javascript').
+            M.AutoInit();
         

@@ -1,0 +1,12 @@
+body{
+    background-color: #bfe1bc;
+    
+}
+
+#test{
+    font-family: "Kohinoor Devanagari";
+    font-size: 36pt;
+    text-align: center; 
+    
+    display: inline-block;
+}

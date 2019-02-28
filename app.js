@@ -6,6 +6,14 @@ app.get("/", (req, res)=>{
     res.render('index');
 });
 
+app.get("/login", (req, res)=>{
+    res.send("This Will be the Login Page");
+});
+
+app.get("/signup", (req,res)=>{
+    res.send("This will be the Signup Page");
+})
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
