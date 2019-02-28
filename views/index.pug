@@ -1,70 +1,27 @@
-doctype html
-html
-    head
-        title Hackgile
-        link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
-        <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
-        link(rel='stylesheet' href='/materialize-css/dist/css/materialize.min.css')
-        link(rel='stylesheet' href='/css/style.css')
-        
-    //block content   
-    body
-        header#top
-            div.navbar-fixed
-                nav.nav-extended
+extends layout
+block content
+    .row
+        .col.l6.m12
+            br
+            br
+            br
+            br
+            br
+            br
+            span.flow-text.white-text#test HackGile brings Agile/Scrum methodology to hackathons.
+        .col.l6.m12
+            img.responsive-img(src="images/meeting.jpg")
+    br
+    br
+    br
+    br
+    br
+    br
+    br
+    br
 
-                    div.nav-wrapper.white
-                        a(href="/")
-                            img(src="/images/logo.jpg" width="9%" height="9%")
-       
-                        a.right.sidenav-trigger.button-collapse.hide-on-large-only(href='#', data-target='slide-out')
-                            i.material-icons.black-text menu
-                        ul.right.hide-on-med-and-down
-                            li
-
-                                a.black-text(href='/login') Login
-                            li
-                                a.black-text(href='/signup') Sign Up
-            ul#slide-out.sidenav.white
-                li
-                    a.black-text(href='/login') Login
-                li
-                    a.black-text(href='#') Sign Up
-    
-        main
-            .row
-            
-                .col.l6.m12
-                    br
-                    br
-                    br
-                    br
-                    br
-                    br
-                    span.flow-text.white-text#test HackGile brings Agile/Scrum methodology to hackathons.
-                .col.l6.m12
-                    img.responsive-img(src="images/meeting.jpg")
-            br
-            br
-            br
-            br
-            br
-            br
-            br
-            br
-
-            .row
-                .col.l5.m12.right
-                    span.flow-text.white-text#test Here we will list what one can do with Hackgile, also this needs to be properly alligned.
-                .col.l7.m12.left
-                    img.responsive-img(src="images/deskOrganizer2.jpg")
-
-        
-        footer.page-footer.teal.accent-4
-            .footer-copyright
-                .container Test
-            script(src='/materialize-css/dist/js/materialize.min.js')
-            script(src='/js/main.js')
-            script(type='text/javascript').
-                M.AutoInit();
-        
+    .row
+        .col.l5.m12.right
+            span.flow-text.white-text#test Here we will list what one can do with Hackgile, also this needs to be properly alligned.
+        .col.l7.m12.left
+            img.responsive-img(src="images/deskOrganizer2.jpg")

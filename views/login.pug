@@ -1,34 +1,4 @@
-doctype html
-html
-    head
-        title Hackgile
-        link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
-        <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
-        link(rel='stylesheet' href='/materialize-css/dist/css/materialize.min.css')
-        link(rel='stylesheet' href='/css/style.css')
-        
-    block content   
-    body
-        header#top
-            div.navbar-fixed
-                nav.nav-extended
-
-                    div.nav-wrapper.white
-                        a(href="/")
-                            img(src="/images/logo.jpg" width="9%" height="9%")
-       
-                        a.right.sidenav-trigger.button-collapse.hide-on-large-only(href='#', data-target='slide-out')
-                            i.material-icons.black-text menu
-                        ul.right.hide-on-med-and-down
-                            li
-
-                                a.black-text(href='/login') Login
-                            li
-                                a.black-text(href='/signup') Sign Up
-            ul#slide-out.sidenav.white
-                li
-                    a.black-text(href='/login') Login
-                li
-                    a.black-text(href='#') Sign Up
-    
+extends layout
+block content
+    div
         p.white-text LOGIN INFO HERE
