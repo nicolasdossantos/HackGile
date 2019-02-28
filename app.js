@@ -7,7 +7,7 @@ app.get("/", (req, res)=>{
 });
 
 app.get("/login", (req, res)=>{
-    res.send("This Will be the Login Page");
+    res.render('login');
 });
 
 app.get("/signup", (req,res)=>{
