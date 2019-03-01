@@ -1,4 +1,30 @@
 extends layout
 block content
-    div
-        p.white-text LOGIN INFO HERE
+  
+    .row
+    .row.container.center-align
+        .col.l12
+        img.responsive-img(src="images/logoGreen.jpg" width="20%" height="20%" )
+    .form.col.l12
+        .row.container.center-align
+            .div.white-text#test Log In!
+        .row.container.center-align
+            .col.l10.input-field
+                input#password.validate(type='password')
+                label(for='password') Password
+            .col.l2
+                button.loginBtn.loginBtn--facebook
+                    | Login with Facebook
+        .row.container.center-align
+            .input-field.col.s6
+            input#email.validate(type='email')
+            label(for='email') Email
+
+
+
+    .row
+        button.loginBtn.loginBtn--facebook
+            | Login with Facebook
+    .row
+        button.loginBtn.loginBtn--google
+            | Login with Google
