@@ -27,13 +27,6 @@ let projectSchema = new Schema({
     sprtints:[{type: Schema.Types.ObjectId, ref: 'sprint'}],
     stories:[{type: Schema.Types.ObjectId, ref: 'story'}]
 });
-
-
-
-
-
-
     
-
 let Project = module.exports = mongoose.model('Project', projectSchema);
 

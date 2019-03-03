@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const config = require('./config/database');
+
 // const passport = require('passport');
 
 //Mongoose midleware
@@ -65,12 +66,14 @@ app.use(function (req, res, next) {
 app.get('*', (req,res,next)=>{
     res.locals.user = req.user || null;
     next();
-})
-
-
+});
 
 app.get("/", (req, res)=>{
     res.render('index');
+});
+
+app.get("/test", (req, res)=>{
+    res.render('test');
 });
 
 app.get("/login", (req, res)=>{
@@ -81,10 +84,53 @@ app.get("/signup", (req,res)=>{
     res.render('signup');
 });
 
-
-
 app.listen(7000, ()=>{
     console.log("Listening on port 7000...");
 });
 
 
+
+
+
+
+
+
+
+//--------------------------------------------------------------------//
+//Test if database models work:
+//--------------------------------------------------------------------//
+
+
+app.post('/test', (req, res) => {
+       let member= new Member();
+        member.firstname = req.body.firstname;
+        member.lastname = req.body.lastname;
+        member.password = req.body.password;
+        member.email = req.body.email;
+        member.image = "";
+        member.projects = [];
+        member.stories = [];
+
+        member.save((err) => {
+            if (err) {
+                console.log(err);
+                return;
+            } else {
+                req.flash('success', 'Article Added');
+                res.redirect('/');
+            }
+        });
+});
+
+app.get('/retrieve', (req, res)=>{
+    Member.find({}, (err, members) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render('retrieve', {
+                title: "Members",
+                members: members
+            });
+        }
+    });
+});

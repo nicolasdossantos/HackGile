@@ -3,11 +3,11 @@ let Schema = mongoose.Schema;
 
 //Member Schema
 let memberSchema = new Schema({
-    nameFirst: {
+    firstname: {
         type: String,
         required: true
     },
-    nameLast: {
+    lastname: {
         type: String,
         required: true
     },
@@ -16,8 +16,7 @@ let memberSchema = new Schema({
         required: true
     },
     image: {
-        type: String,
-        required: true
+        type: String
     },
     password: {
         type: String,
