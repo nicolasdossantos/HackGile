@@ -23,9 +23,16 @@ let projectSchema = new Schema({
         type: String,
         required: true
     },
-    members:[{type: Schema.Types.ObjectId, ref: 'member'}],
-    sprtints:[{type: Schema.Types.ObjectId, ref: 'sprint'}],
-    stories:[{type: Schema.Types.ObjectId, ref: 'story'}]
+    members:[{
+        type: Schema.Types.ObjectId,
+        ref: 'Member'
+    }],
+    sprints:[{
+        type: Schema.Types.ObjectId, 
+        ref: 'Sprint'}],
+    stories:[{
+        type: Schema.Types.ObjectId,
+        ref: 'Story'}]
 });
     
 let Project = module.exports = mongoose.model('Project', projectSchema);

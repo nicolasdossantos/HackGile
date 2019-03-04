@@ -29,6 +29,7 @@ db.once('open', ()=>{
 //required fields are filled out
 app.use(expressValidator());
 
+
 //Bring in models
 let Project = require('./models/project');
 let Member = require('./models/member');
@@ -68,69 +69,20 @@ app.get('*', (req,res,next)=>{
     next();
 });
 
+//Route files
+let projects = require('./routes/projects');
+let members = require('./routes/members');
+let sprints = require('./routes/sprints')
+app.use('/sprints', sprints);
+app.use('/projects', projects);
+app.use('/members', members);
+
+
+//Index Route
 app.get("/", (req, res)=>{
     res.render('index');
 });
 
-app.get("/test", (req, res)=>{
-    res.render('test');
-});
-
-app.get("/login", (req, res)=>{
-    res.render('login');
-});
-
-app.get("/signup", (req,res)=>{
-    res.render('signup');
-});
-
 app.listen(7000, ()=>{
     console.log("Listening on port 7000...");
-});
-
-
-
-
-
-
-
-
-
-//--------------------------------------------------------------------//
-//Test if database models work:
-//--------------------------------------------------------------------//
-
-
-app.post('/test', (req, res) => {
-       let member= new Member();
-        member.firstname = req.body.firstname;
-        member.lastname = req.body.lastname;
-        member.password = req.body.password;
-        member.email = req.body.email;
-        member.image = "";
-        member.projects = [];
-        member.stories = [];
-
-        member.save((err) => {
-            if (err) {
-                console.log(err);
-                return;
-            } else {
-                req.flash('success', 'Article Added');
-                res.redirect('/');
-            }
-        });
-});
-
-app.get('/retrieve', (req, res)=>{
-    Member.find({}, (err, members) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render('retrieve', {
-                title: "Members",
-                members: members
-            });
-        }
-    });
 });

@@ -13,7 +13,8 @@ let memberSchema = new Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     image: {
         type: String
@@ -22,8 +23,10 @@ let memberSchema = new Schema({
         type: String,
         required: true
     },
-    projects: [{type: Schema.Types.ObjectId, ref: 'project'}]
-   
+    projects: [{
+            type: Schema.Types.ObjectId,
+             ref: 'Project'
+            }]   
 });
 
 let Member = module.exports = mongoose.model('Member', memberSchema);
