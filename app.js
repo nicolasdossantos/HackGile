@@ -86,8 +86,8 @@ app.get("/signup", (req,res)=>{
     res.render('signup');
 });
 
-app.listen(7000, ()=>{
-    console.log("Listening on port 7000...");
+app.listen(8080, ()=>{
+    console.log("Listening on port 8080...");
 });
 
 
