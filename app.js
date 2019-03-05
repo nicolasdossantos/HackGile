@@ -10,9 +10,11 @@ const config = require('./config/database');
 
 // const passport = require('passport');
 
+var uri = "mongodb://admin:2O83xloJWnKClXGK@cluster0-shard-00-00-x3r74.gcp.mongodb.net:27017,cluster0-shard-00-01-x3r74.gcp.mongodb.net:27017,cluster0-shard-00-02-x3r74.gcp.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true"
+
 //Mongoose midleware
 //Setup DB
-mongoose.connect(config.database, {useNewUrlParser: true});
+mongoose.connect(uri);
 let db = mongoose.connection;
 
 //Check for DB errors
@@ -83,6 +85,6 @@ app.get("/", (req, res)=>{
     res.render('index');
 });
 
-app.listen(7000, ()=>{
-    console.log("Listening on port 7000...");
+app.listen(8080, ()=>{
+    console.log("Listening on port 8080...");
 });
