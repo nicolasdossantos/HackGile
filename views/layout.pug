@@ -19,19 +19,33 @@ html
                         a.right.sidenav-trigger.button-collapse.hide-on-large-only(href='#', data-target='slide-out')
                             i.material-icons.black-text menu
                         ul.right.hide-on-med-and-down
-                            li
+                            if user
+                                li
+                                     a.black-text(href='/members/logout') Logout
+                            else
+                                li
 
-                                a.black-text(href='/members/login') Login
-                            li
-                                a.black-text(href='/members/signup') Sign Up
+                                    a.black-text(href='/members/login') Login
+                                li
+                                    a.black-text(href='/members/signup') Sign Up
             ul#slide-out.sidenav.white
-                li
-                    a.black-text(href='/members/login') Login
-                li
-                    a.black-text(href='/members/signup') Sign Up
-    
+                if user
+                    a.black-text(href='/members/logout') Logout
+                else
+                    li
+                        a.black-text(href='/members/login') Login
+                    li
+                        a.black-text(href='/members/signup') Sign Up
+        .container
+            != messages('message', locals)
+            if errors
+                each error, i in errors
+                    div(class="alert alert-success" role="alert") #{error.msg}
+                    br
         main
+        
             block content
+            
 
         
         footer.page-footer.teal.accent-4

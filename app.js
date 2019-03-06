@@ -8,11 +8,13 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const config = require('./config/database');
 const passport = require('passport');
+const cookieParser = require('cookie-parser');
 
 //Mongoose midleware
 //Setup DB
 mongoose.connect(config.database,{ useNewUrlParser: true });
 let db = mongoose.connection;
+
 
 //Check for DB errors
 db.on('error', (err)=>{
@@ -34,6 +36,7 @@ let Project = require('./models/project');
 let Member = require('./models/member');
 let Sprint = require('./models/sprint');
 let Story = require('./models/story');
+
 
 //Load View engine / Pug
 app.set('views', path.join(__dirname, 'views'));
@@ -61,6 +64,7 @@ app.use(function (req, res, next) {
     res.locals.messages = require('express-messages')(req, res);
     next();
 });
+app.use(flash());
 
 //Passport Config
 require('./config/passport')(passport);
