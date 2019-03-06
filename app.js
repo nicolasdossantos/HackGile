@@ -31,15 +31,11 @@ db.once('open', ()=>{
 app.use(expressValidator());
 
 
-
-
 //Bring in models
 let Project = require('./models/project');
 let Member = require('./models/member');
 let Sprint = require('./models/sprint');
 let Story = require('./models/story');
-
-
 
 
 //Load View engine / Pug
