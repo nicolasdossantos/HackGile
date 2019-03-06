@@ -14,7 +14,10 @@ let memberSchema = new Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+    },
+    username:{
+        type: String,
+        required: true,
     },
     image: {
         type: String

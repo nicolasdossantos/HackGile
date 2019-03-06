@@ -7,14 +7,11 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const config = require('./config/database');
-
-// const passport = require('passport');
-
-var uri = "mongodb://admin:2O83xloJWnKClXGK@cluster0-shard-00-00-x3r74.gcp.mongodb.net:27017,cluster0-shard-00-01-x3r74.gcp.mongodb.net:27017,cluster0-shard-00-02-x3r74.gcp.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true"
+const passport = require('passport');
 
 //Mongoose midleware
 //Setup DB
-mongoose.connect(uri);
+mongoose.connect(config.database,{ useNewUrlParser: true });
 let db = mongoose.connection;
 
 //Check for DB errors
@@ -64,6 +61,13 @@ app.use(function (req, res, next) {
     res.locals.messages = require('express-messages')(req, res);
     next();
 });
+
+//Passport Config
+require('./config/passport')(passport);
+
+//Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Create global variable user
 app.get('*', (req,res,next)=>{

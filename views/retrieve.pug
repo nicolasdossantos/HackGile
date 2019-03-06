@@ -4,4 +4,4 @@ block content
      ul.list-group
         each member, i in members
             li.list-group-item
-                  a(href="/members/"+member._id)= member.email
+                  a(href="/members/"+member.id)= member.firstname + " " + member.lastname + " " +member.password
