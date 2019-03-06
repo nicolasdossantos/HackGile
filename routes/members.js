@@ -10,9 +10,6 @@ let Member = require('../models/member');
 let Project = require('../models/project');
 let Sprint = require('../models/story');
 
-
-
-
 //Login form
 router.get('/login', (req, res)=>{
     res.render('login');
@@ -27,31 +24,24 @@ router.post('/login', (req, res, next)=>{
     })(req,res,next);   
 });
 
-
-
-router.get("/signup", (req,res)=>{
-    res.render('signup');
-});
-
-
-
-
 //--------------------------------------------------------------------//
 //Test if database models work:
 //--------------------------------------------------------------------//
 
-router.get("/test", (req, res)=>{
-    res.render('test');
+router.get("/signup", (req, res)=>{
+    res.render('signup');
 });
 
-router.post('/test', (req, res) => {
+router.post('/signup', (req, res) => {
+    //Gather post data from signup form
     const firstname = req.body.firstname;
     const lastname = req.body.lastname;
     const email = req.body.email;
     const username = req.body.username;
     const password = req.body.password;
     const password2 = req.body.password2;
-    
+
+    //Verifies if fields were filled properly and if passwords match
     req.checkBody('firstname', 'First name is required').notEmpty();
     req.checkBody('lastname', 'Last name is required').notEmpty();
     req.checkBody('email', 'Email is required').notEmpty();
@@ -63,41 +53,55 @@ router.post('/test', (req, res) => {
     let errors = req.validationErrors();
 
     if(errors){
-        res.render('test', {
+        //Send flash message
+        console.log(errors); // For testing only
+        res.render('signup', {
             errors: errors
             
         });
         
     }else{
-        let newMember = new Member({
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            username: username,
-            image: '',
-            projects: [],
-            password: password
-        });
-    bcrypt.genSalt(10, (err, salt)=>{
-        bcrypt.hash(newMember.password, salt, (err, hash)=>{
+        let query = {username:username};
+        Member.findOne(query, (err, user)=>{
             if(err){
                 console.log(err);
+                res.render("signup");
             }
-            newMember.password = hash;
-            newMember.save((err)=>{
-                if(err){
-                    console.log(err);
-                    return;
-                }else{
-                    req.flash(null,'You are now registered and can login');
-                    res.redirect('/members/login');
-                }
-            });
-        });
-    });
+            if(user){
+                console.log("Username in use");
+                res.render("signup");
+            }else{
+                let newMember = new Member({
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
+                    username: username,
+                    image: '',
+                    projects: [],
+                    password: password
+                });
+                bcrypt.genSalt(10, (err, salt)=>{
+                    bcrypt.hash(newMember.password, salt, (err, hash)=>{
+                        if(err){
+                         console.log(err);
+                        }
+                        newMember.password = hash;
+                        newMember.save((err)=>{
+                            if(err){
+                                console.log(err);
+                                return;
+                            }else{
+                                req.flash(null,'You are now registered and can login');
+                                res.redirect('/members/login');
+                        }
+                        });
+                    });
+                 });
+            }
+        
+        });   
     }
-
-});
+}); 
 
 router.get("/retrieve", ensureAuthenticated, (req,res)=>{
     
