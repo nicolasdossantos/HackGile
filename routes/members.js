@@ -50,12 +50,11 @@ router.post('/signup', (req, res) => {
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
     
-    //FLASH MESSAGE HERE WITH ERRORS 
+    
     let errors = req.validationErrors();
 
     if(errors){
-        //FLASH MESSAGE HERE
-        console.log(errors); // For testing only
+       
         res.render('signup', {
             errors: errors
         });
@@ -68,7 +67,7 @@ router.post('/signup', (req, res) => {
                 res.render("signup");
             }
             if(user){
-                   //FLASH MESSAGE HERE USERNAME IS IN USE
+                req.flash('cardError', 'Username is taken')
                 console.log("Username in use");
                 res.render("signup");
             }else{
@@ -93,7 +92,7 @@ router.post('/signup', (req, res) => {
                                 return;
                             }else{
                                 //FLASH MESSAGE HERE -> Regisration Successful
-                                req.flash('info','You are now registered and can login');
+                                req.flash('cardSuccess','You are now registered and can login');
                                 res.redirect('/members/login');
                         }
                         });
@@ -124,8 +123,7 @@ router.get("/retrieve", ensureAuthenticated, (req,res)=>{
 //Logout
 router.get('/logout', (req, res)=>{
     req.logOut();
-    //FLASH MESSAGE HERE -> LogOut Successfull
-    req.flash('success', 'You are logged out');
+    req.flash('cardSuccess', 'You are logged out');
     res.redirect('/');
 });
 
@@ -134,8 +132,8 @@ function ensureAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return next();
     }else{
-           //FLASH MESSAGE HERE -> Please Login
-        req.flash('success', 'IT WORKS');
+           
+        req.flash('cardError', 'Please Login');
         
         res.redirect('/members/login');
        

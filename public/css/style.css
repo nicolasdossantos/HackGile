@@ -88,3 +88,17 @@ body{
     border-radius: 0 0 2px 2px;
     color: white;
   }
+
+  .cardSuccess {
+    background-color: #ADD8E6;
+    padding: 20px;
+    border-radius: 0 0 2px 2px;
+    color: #0000CC;
+  }
+
+  .card.error{
+    background-color: #FFCCCB;
+    padding: 20px;
+    border-radius: 0 0 2px 2px;
+    color: white;
+  }
