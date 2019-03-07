@@ -93,7 +93,7 @@ router.post('/signup', (req, res) => {
                                 return;
                             }else{
                                 //FLASH MESSAGE HERE -> Regisration Successful
-                                req.flash(null,'You are now registered and can login');
+                                req.flash('info','You are now registered and can login');
                                 res.redirect('/members/login');
                         }
                         });
@@ -136,7 +136,7 @@ function ensureAuthenticated(req, res, next){
     }else{
            //FLASH MESSAGE HERE -> Please Login
         req.flash('success', 'IT WORKS');
-        res.locals.message = req.flash();
+        
         res.redirect('/members/login');
        
     }

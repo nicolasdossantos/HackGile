@@ -37,13 +37,14 @@ html
                     li
                         a.black-text(href='/members/signup') Sign Up
         .container
+            br
             != messages('message', locals)
             if errors
                 each error, i in errors
-                    div(class="alert alert-success" role="alert") #{error.msg}
-                    br
-        main
+                    .card.cardError.red-text #{error.msg}
         
+        main
+           
             block content
             
 

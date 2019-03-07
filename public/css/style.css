@@ -81,3 +81,10 @@ body{
   .loginBtn--google:focus {
     background: #E74B37;
   }
+
+  .cardError {
+    background-color: #FFCCCB;
+    padding: 20px;
+    border-radius: 0 0 2px 2px;
+    color: white;
+  }

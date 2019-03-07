@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
-const expressValidator = require("express-validator");
+const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -25,11 +25,6 @@ db.on('error', (err)=>{
 db.once('open', ()=>{
     console.log("Connected to DB");
 });
-
-//Let App use express Validator -> This module lets you check if
-//required fields are filled out
-app.use(expressValidator());
-
 
 //Bring in models
 let Project = require('./models/project');
@@ -55,7 +50,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'keyboard cat',
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: true
 }));
 
 //Express Messages Middleware
@@ -64,7 +59,11 @@ app.use(function (req, res, next) {
     res.locals.messages = require('express-messages')(req, res);
     next();
 });
-app.use(flash());
+//app.use(flash());
+
+//Let App use express Validator -> This module lets you check if
+//required fields are filled out
+app.use(expressValidator());
 
 //Passport Config
 require('./config/passport')(passport);
