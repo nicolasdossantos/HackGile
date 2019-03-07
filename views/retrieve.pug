@@ -1,7 +1,7 @@
 extend layout
 block content
 
-     ul.list-group
+    ul.list-group
         each member, i in members
             li.list-group-item
-                  a(href="/members/"+member.id)= member.firstname + " " + member.lastname + " " +member.password
+                a(href="/members/" + member.id)= member.firstname + " " + member.lastname + " " + member.password

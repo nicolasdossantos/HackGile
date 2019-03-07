@@ -3,37 +3,39 @@ let Schema = mongoose.Schema;
 
 //project Schema
 let projectSchema = new Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
-    ishackathon:{
+    ishackathon: {
         type: String,
         required: true
     },
-    duration:{
+    duration: {
         type: Number,
         required: true
     },
-    description:{
+    description: {
         type: String,
         required: true
     },
-    git:{
+    git: {
         type: String,
         required: true
     },
-    members:[{
+    members: [{
         type: Schema.Types.ObjectId,
         ref: 'Member'
     }],
-    sprints:[{
-        type: Schema.Types.ObjectId, 
-        ref: 'Sprint'}],
-    stories:[{
+    sprints: [{
         type: Schema.Types.ObjectId,
-        ref: 'Story'}]
+        ref: 'Sprint'
+    }],
+    stories: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Story'
+    }]
 });
-    
+
 let Project = module.exports = mongoose.model('Project', projectSchema);
 

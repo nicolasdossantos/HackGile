@@ -15,21 +15,28 @@ let memberSchema = new Schema({
         type: String,
         required: true,
     },
-    username:{
-        type: String,
-        required: true,
+    username: {
+        type: String
     },
     image: {
         type: String
     },
+    googleID: {
+        type: String
+    },
+    facebookID: {
+        type: String
+    },
+    githubId: {
+        type: String
+    },
     password: {
         type: String,
-        required: true
     },
     projects: [{
-            type: Schema.Types.ObjectId,
-             ref: 'Project'
-            }]   
+        type: Schema.Types.ObjectId,
+        ref: 'Project'
+    }]
 });
 
 let Member = module.exports = mongoose.model('Member', memberSchema);

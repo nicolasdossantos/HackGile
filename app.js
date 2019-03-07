@@ -8,21 +8,22 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const config = require('./config/database');
 const passport = require('passport');
-const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
+const keys = require('./config/keys');
+
 
 //Mongoose midleware
 //Setup DB
-mongoose.connect(config.database,{ useNewUrlParser: true });
+mongoose.connect(config.database, {useNewUrlParser: true});
 let db = mongoose.connection;
 
-
 //Check for DB errors
-db.on('error', (err)=>{
+db.on('error', (err) => {
     console.log(err);
 });
 
 //Test connection
-db.once('open', ()=>{
+db.once('open', () => {
     console.log("Connected to DB");
 });
 
@@ -32,7 +33,7 @@ let Member = require('./models/member');
 let Sprint = require('./models/sprint');
 let Story = require('./models/story');
 
-//For Testing. This will remove all members from database
+// //For Testing. This will remove all members from database
 // Member.deleteMany({}, (err)=>{
 //     if(err){
 //         console.log(err);
@@ -49,6 +50,14 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 // parse application/json
 app.use(bodyParser.json());
+
+//Cookie Session init
+app.use(cookieSession({
+    //24 hours in millisec
+    maxAge: 24 * 60 * 60 * 1000,
+    keys:[keys.session.cookieKey]
+
+}));
 
 //Set Public Folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -79,7 +88,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Create global variable user
-app.get('*', (req,res,next)=>{
+app.get('*', (req, res, next) => {
     res.locals.user = req.user || null;
     next();
 });
@@ -94,12 +103,10 @@ app.use('/members', members);
 
 
 //Index Route
-app.get("/", (req, res)=>{
+app.get("/", (req, res) => {
     res.render('index');
 });
 
-
-
-app.listen(8080, ()=>{
+app.listen(8080, () => {
     console.log("Listening on port 8080...");
 });

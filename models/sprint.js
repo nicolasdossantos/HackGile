@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
@@ -7,12 +6,14 @@ const sprintSchema = new Schema({
         type: String,
         required: true
     },
-    time: { 
+    time: {
         type: Number,
-        required: true },
+        required: true
+    },
     stories: [{
         type: Schema.Types.ObjectId,
-        ref: 'Story'}]
+        ref: 'Story'
+    }]
 });
 
 let Sprint = module.exports = mongoose.model('Sprint', sprintSchema);

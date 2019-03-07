@@ -3,15 +3,15 @@ let Schema = mongoose.Schema;
 
 //Story Schema
 let storySchema = new Schema({
-    sprint:{
+    sprint: {
         type: String,
     },
-    status:{
+    status: {
         type: String,
         required: true
     },
     member: {
-        type: String  
+        type: String
     },
     description: {
         type: String,
@@ -19,7 +19,7 @@ let storySchema = new Schema({
     },
     estimatedTime: {
         type: String
-    }  
-    });
+    }
+});
 
 let Story = module.exports = mongoose.model('Story', storySchema);
