@@ -21,7 +21,7 @@ router.post('/login', (req, res, next)=>{
         successRedirect: '/members/retrieve',
         failureRedirect: '/members/login',
         failureFlash: true
-    })(req,res,next);      //FLASH MESSAGE HERE
+    })(req,res,next);      
 });
 
 //--------------------------------------------------------------------//
@@ -60,16 +60,22 @@ router.post('/signup', (req, res) => {
         });
         
     }else{
-        let query = {username:username};
+        let query = {$or:[{username:username}, {email:email}]};
         Member.findOne(query, (err, user)=>{
             if(err){
                 console.log(err);
                 res.render("signup");
             }
             if(user){
-                req.flash('cardError', 'Username is taken')
-                console.log("Username in use");
-                res.render("signup");
+                if(user.email === email){
+                    req.flash('cardError', 'The email entered is already in use. Please try logging in');
+                    res.render('login')
+                }else{
+                    req.flash('cardError', 'The userename entered is already in use. Please select a different one');
+                    res.render('signup');
+                }
+            
+                
             }else{
                 let newMember = new Member({
                     firstname: firstname,
@@ -91,7 +97,6 @@ router.post('/signup', (req, res) => {
                                 console.log(err);
                                 return;
                             }else{
-                                //FLASH MESSAGE HERE -> Regisration Successful
                                 req.flash('cardSuccess','You are now registered and can login');
                                 res.redirect('/members/login');
                         }

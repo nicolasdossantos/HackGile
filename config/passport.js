@@ -14,7 +14,7 @@ module.exports = (passport)=>{
                 console.log(err);
             }
             if(!user){
-                return done(null, false, {message: 'Wrong username/password'})
+                return done(null, false, {message: 'Invalid username/password'})
             }
 
             //Match Password
@@ -23,7 +23,7 @@ module.exports = (passport)=>{
                 if(isMatch){
                     return done(null, user);
                 }else{
-                    return done(null, false, 'Wrong username/password');
+                    return done(null, false, 'Invalid username/password');
                 }
             });
         });

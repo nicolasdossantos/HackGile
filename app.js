@@ -32,6 +32,13 @@ let Member = require('./models/member');
 let Sprint = require('./models/sprint');
 let Story = require('./models/story');
 
+//For Testing. This will remove all members from database
+// Member.deleteMany({}, (err)=>{
+//     if(err){
+//         console.log(err);
+//     }
+//     console.log("Entries have been removed");
+// });
 
 //Load View engine / Pug
 app.set('views', path.join(__dirname, 'views'));
@@ -59,7 +66,6 @@ app.use(function (req, res, next) {
     res.locals.messages = require('express-messages')(req, res);
     next();
 });
-//app.use(flash());
 
 //Let App use express Validator -> This module lets you check if
 //required fields are filled out
