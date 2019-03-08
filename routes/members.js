@@ -137,11 +137,15 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 });
 
 //Facebook Auth
-// router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res)=>{
-    
-// });
+router.get('/facebook', passport.authenticate('facebook'));
 
 //Facebook Redirect
+router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => {
+    //Once user is logged in, their info is available using req.user
+    res.send("REDIRECTING...");
+    //req.flash('cardSuccess', 'Welcome back '+req.user.firstname);
+    //res.redirect('/');
+});
 
 //GitHub Auth
 
