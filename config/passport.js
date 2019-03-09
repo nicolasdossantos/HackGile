@@ -7,6 +7,7 @@ const config = require('../config/database');
 const bcrypt = require('bcryptjs');
 const keys = require('./keys');
 
+//Making all strategies available throughout project
 module.exports = (passport) => {
    
     //Puts user id in a cookie for browser

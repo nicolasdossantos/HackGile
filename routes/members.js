@@ -144,10 +144,10 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 router.get('/facebook', passport.authenticate('facebook', { scope : ['public_profile', 'email'] }));
 
 // handle the callback after facebook has authenticated the user
-router.get('/facebook/redirect', passport.authenticate('facebook', {
-			successRedirect : '/members/retrieve',
-			failureRedirect : '/'
-		}));
+router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => { 
+    // req.flash('cardSuccess', 'Welcome back '+req.user.username);
+    res.redirect('/');
+});
 
 //GitHub Auth
 router.get('/github', passport.authenticate('github', {
