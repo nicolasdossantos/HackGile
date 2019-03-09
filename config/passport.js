@@ -88,7 +88,7 @@ module.exports = (passport) => {
            }));
 
            //Facebook Strategy
-    passport.use(new GoogleStrategy({
+    passport.use(new FacebookStrategy({
         //options for strategy
         callbackURL: '/members/facebook/redirect',
         clientID: keys.facebook.clientID,
