@@ -19,10 +19,11 @@ router.get('/login', (req, res) => {
 //Login Process
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
-        successRedirect: '/members/retrieve',
+        successRedirect: '/',
+        successFlash: true,
         failureRedirect: '/members/login',
         failureFlash: true
-    })(req, res, next);
+    },)(req, res, next);
 });
 
 //Signup Route
@@ -48,22 +49,24 @@ router.post('/signup', (req, res) => {
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
-
-    let errors = req.validationErrors();
+    //Puts errors generated at "CheckBody" into array
+     let errors = req.validationErrors();
 
     if (errors) {
-
+        //Display errors if any
         res.render('signup', {
             errors: errors
         });
 
     } else {
+        //Checks if email or username are already present in the database
         let query = {$or: [{username: username}, {email: email}]};
         Member.findOne(query, (err, user) => {
             if (err) {
                 console.log(err);
                 res.render("signup");
             }
+            //If user is already registered, redirect user to login page and generate message
             if (user) {
                 if (user.email === email) {
                     req.flash('cardError', 'The email entered is already in use. Please try logging in');
@@ -73,7 +76,7 @@ router.post('/signup', (req, res) => {
                     res.render('signup');
                 }
 
-
+            //If user is not in database yet, create new user
             } else {
                 let newMember = new Member({
                     firstname: firstname,
@@ -84,6 +87,7 @@ router.post('/signup', (req, res) => {
                     projects: [],
                     password: password
                 });
+                //Hash Password
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newMember.password, salt, (err, hash) => {
                         if (err) {
@@ -150,7 +154,7 @@ router.get('/github', passport.authenticate('github', {
     scope: [ 'user:email', 'profile' ]
 }));
 
-//Google Redirect
+//GitHub Redirect
 router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
     
     req.flash('cardSuccess', 'Welcome back '+req.user.username);
