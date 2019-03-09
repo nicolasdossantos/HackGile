@@ -136,20 +136,26 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
     res.redirect('/');
 });
 
-//Facebook Auth
-router.get('/facebook', passport.authenticate('facebook'));
 
-//Facebook Redirect
-router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => {
-    //Once user is logged in, their info is available using req.user
-    res.send("REDIRECTING...");
-    //req.flash('cardSuccess', 'Welcome back '+req.user.firstname);
-    //res.redirect('/');
-});
+router.get('/facebook', passport.authenticate('facebook', { scope : ['public_profile', 'email'] }));
+
+// handle the callback after facebook has authenticated the user
+router.get('/facebook/redirect', passport.authenticate('facebook', {
+			successRedirect : '/members/retrieve',
+			failureRedirect : '/'
+		}));
 
 //GitHub Auth
+router.get('/github', passport.authenticate('github', {
+    scope: [ 'user:email', 'profile' ]
+}));
 
-//GitHub Redirect
+//Google Redirect
+router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
+    
+    req.flash('cardSuccess', 'Welcome back '+req.user.username);
+    res.redirect('/');
+});
 
 
 //Logout route
