@@ -163,15 +163,11 @@ router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
 
 
 //Linkedin Auth
-router.get('/linkedin', passport.authenticate('linkedin'), (req, res)=>{
-    req.get('http://api.linkedin.com/v1/people/~:(email-address)');
-});
-
+router.get('/linkedin', passport.authenticate('linkedin'));
 //Linkedin Redirect
 router.get('/linkedin/redirect', passport.authenticate('linkedin'), (req, res) => {
-    res.send("Redirecting");
-    // req.flash('cardSuccess', 'Welcome back '+req.user.username);
-    // res.redirect('/');
+    req.flash('cardSuccess', 'Welcome back '+req.user.firstname);
+    res.redirect('/');
 });
 
 

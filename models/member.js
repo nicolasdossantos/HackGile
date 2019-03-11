@@ -28,6 +28,9 @@ let memberSchema = new Schema({
     githubId: {
         type: String
     },
+    linkedinID:{
+        type: String
+    },
     password: {
         type: String,
     },

@@ -1,8 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
-const LinkedinStrategy = require('passport-linkedin').Strategy;
+const LinkedinStrategy = require('passport-linkedin-oauth2').Strategy;
 
 const User = require('../models/member');
 const config = require('../config/database');
@@ -65,7 +64,6 @@ module.exports = (passport) => {
         let image = profile.photos[0].value;
         let googleId = profile.id;
 
-        console.log(firstname);
 
         //Check if user already exists in our database
         User.findOne({email: email}).then((user)=>{
@@ -89,49 +87,7 @@ module.exports = (passport) => {
         });
            }));
 
-    //Facebook Strategy
-    passport.use(new FacebookStrategy({
-        //options for strategy
-        callbackURL: '/members/facebook/redirect',
-        clientID: keys.facebook.clientID,
-        clientSecret: keys.facebook.clientSecret
-    }, (accessToken, refreshToken, profile, done) => {
-        
-        console.log(profile);
-
-
-        //Putting information gathered from profile into variables for readability
-        let firstname = profile.name.givenName;
-        let lastname = profile.name.familyName;
-        let email = profile.emails[0].value;
-        let image = profile.photos[0].value;
-        let facebookID = profile.id;
-
-
-        //Check if user already exists in our database
-        User.findOne({email: email}).then((user)=>{
-            if(user){
-                return done(null, user);
-                
-            }else{
-                new User({
-                    firstname: firstname,
-                    lastname: lastname,
-                    email: email,
-                    image: image,
-                    facebookID: facebookID
-        
-                }).save().then((newUser) => {
-                    done(null, newUser);
-                });
-            }
-        }).catch((error)=>{
-            done(error, false, error.message);
-        });
-           }));
-
-
-    
+       
     //GitHub Strategy
     passport.use(new GitHubStrategy({
         //options for strategy
@@ -171,45 +127,45 @@ module.exports = (passport) => {
         });
            }));
 
+
      //Linkedin Strategy
      passport.use(new LinkedinStrategy({
         //options for strategy
         callbackURL: '/members/linkedin/redirect',
-        consumerKey: keys.linkedin.clientID,
-        consumerSecret: keys.linkedin.clientSecret,
-        scope: ['r_emailaddress', 'r_liteprofile']
+        clientID: keys.linkedin.clientID,
+        clientSecret: keys.linkedin.clientSecret,
+        scope: ['r_basicprofile', 'r_emailaddress'],    
+        state: true    
       },
       function(req,token, refreshToken, profile, done) {
     
-        console.log(profile);
         //Putting information gathered from profile into variables for readability
-        // let firstname = profile.name.givenName;
-        // let lastname = profile.name.familyName;
-        // let email = profile.emails[0].value;
-        // let image = profile.photos[0].value;
-        // let googleId = profile.id;
+        let firstname = profile.name.givenName;
+        let lastname = profile.name.familyName;
+        let email = profile.emails[0].value;
+        let image = profile.photos[0].value;
+        let linkeinID = profile.id;
 
-
-        // //Check if user already exists in our database
-        // User.findOne({email: email}).then((user)=>{
-        //     if(user){
-        //         return done(null, user);
+        //Check if user already exists in our database
+        User.findOne({email: email}).then((user)=>{
+            if(user){
+                return done(null, user);
                 
-        //     }else{
-        //         new User({
-        //             firstname: firstname,
-        //             lastname: lastname,
-        //             email: email,
-        //             image: image,
-        //             googleID: googleId
+            }else{
+                new User({
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
+                    image: image,
+                    linkedinID: linkeinID
         
-        //         }).save().then((newUser) => {
-        //             done(null, newUser);
-        //         });
-        //     }
-        // }).catch((error)=>{
-        //     done(error, false, error.message);
-        // });
+                }).save().then((newUser) => {
+                    done(null, newUser);
+                });
+            }
+        }).catch((error)=>{
+            done(error, false, error.message);
+        });
            }));
 
 
