@@ -93,6 +93,14 @@ app.get('*', (req, res, next) => {
     next();
 });
 
+//Global Redirect to https
+app.get('*', function(req, res) {  
+    res.redirect('https://' + req.headers.host + req.url);
+
+    // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
+    // res.redirect('https://example.com' + req.url);
+})
+
 //Route files
 let projects = require('./routes/projects');
 let members = require('./routes/members');
