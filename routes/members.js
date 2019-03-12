@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-const alert = require('alert-node');
-const passportSetup = require('../config/passport');
 
 //Bring in Models
 let Story = require('../models/story');
@@ -137,15 +135,6 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
     //Once user is logged in, their info is available using req.user
     //res.send(req.user);
     req.flash('cardSuccess', 'Welcome back '+req.user.firstname);
-    res.redirect('/');
-});
-
-
-router.get('/facebook', passport.authenticate('facebook', { scope : ['public_profile', 'email'] }));
-
-// handle the callback after facebook has authenticated the user
-router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => { 
-    // req.flash('cardSuccess', 'Welcome back '+req.user.username);
     res.redirect('/');
 });
 

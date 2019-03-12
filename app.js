@@ -93,8 +93,6 @@ app.get('*', (req, res, next) => {
     next();
 });
 
-
-
 //Route files
 let projects = require('./routes/projects');
 let members = require('./routes/members');

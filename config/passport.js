@@ -2,9 +2,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
 const LinkedinStrategy = require('passport-linkedin-oauth2').Strategy;
-
 const User = require('../models/member');
-const config = require('../config/database');
 const bcrypt = require('bcryptjs');
 const keys = require('./keys');
 
@@ -47,7 +45,6 @@ module.exports = (passport) => {
             });
         });
     }));
-
 
     //Google Strategy
     passport.use(new GoogleStrategy({
@@ -167,6 +164,4 @@ module.exports = (passport) => {
             done(error, false, error.message);
         });
            }));
-
-
 }
