@@ -37,6 +37,10 @@ let memberSchema = new Schema({
     projects: [{
         type: Schema.Types.ObjectId,
         ref: 'Project'
+    }],
+    stories: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Story'
     }]
 });
 
