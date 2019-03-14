@@ -1,20 +1,25 @@
 extends layout
 block content
-    form(method='POST', action='/members/login')
-        .row
-        .row
-        #form-group.container
-            label.white-text.test2 Username:
-            input.form-control(name='username', type='text').white
-
-            label.white-text Password:
-            input.form-control(name='password', type='password').white
-
-
-            input.btn.btn-primary(type='submit', value='Submit').white-text.green
-
     br
     .container
-        a.google-btn(href="/members/google") Google+
-        a(href="/members/github") Login with GitHub        
-        a(href="/members/linkedin") Login with LinkedIn
+        .row
+            .col.m8.s12
+                form(method='POST', action='/members/login')
+                    #form-group
+                        label.white-text.test2 Username:
+                        input.form-control(name='username', type='text').white
+
+                        label.white-text Password:
+                        input.form-control(name='password', type='password').white
+
+
+                        input.btn.btn-primary(type='submit', value='Submit').white-text.green
+            .col.m1.s12
+                .hide-on-med-and-up
+                    br
+                    hr
+                    br
+            .col.m3.s12.valign-wrapper
+                    a.google-btn(href="/members/google") Google+
+                    a(href="/members/github") Login with GitHub        
+                    a(href="/members/linkedin") Login with LinkedIn
