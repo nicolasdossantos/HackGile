@@ -112,7 +112,7 @@ router.post('/signup', (req, res) => {
 
 
 //Test to retrieve members from DB
-router.get("/retrieve", functions.ensureAuthentication,(req, res) => {
+router.get("/retrieve", ensureAuthentication,(req, res) => {
 
     Member.find({}, (err, members) => {
         if (err) {
@@ -172,3 +172,15 @@ router.get('/logout', (req, res) => {
 
 
 module.exports = router;
+
+
+function ensureAuthentication(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        req.flash('cardError', 'Please Login');
+
+        res.redirect('/members/login');
+
+     }
+}
