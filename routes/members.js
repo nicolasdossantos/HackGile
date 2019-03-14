@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+let functions = require('../app');
+
 
 //Bring in Models
 let Story = require('../models/story');
@@ -108,8 +110,9 @@ router.post('/signup', (req, res) => {
     }
 });
 
+
 //Test to retrieve members from DB
-router.get("/retrieve", ensureAuthenticated, (req, res) => {
+router.get("/retrieve", functions.ensureAuthentication,(req, res) => {
 
     Member.find({}, (err, members) => {
         if (err) {
@@ -167,18 +170,5 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-//Add this function as a parameter for any route that should only be accessed by users
-//EX: router.get("/retrieve", ensureAuthenticated, (req,res)=>{...}
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
-
-        req.flash('cardError', 'Please Login');
-
-        res.redirect('/members/login');
-
-    }
-}
 
 module.exports = router;

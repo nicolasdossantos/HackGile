@@ -110,3 +110,16 @@ app.get("/", (req, res) => {
 app.listen(8080, () => {
     console.log("Listening on port 8080...");
 });
+
+module.exports = {
+    ensureAuthentication: function (req, res, next) {
+        if (req.isAuthenticated()) {
+            return next();
+        } else {
+            req.flash('cardError', 'Please Login');
+
+            res.redirect('/members/login');
+
+         }
+    }
+    }
