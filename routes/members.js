@@ -112,7 +112,8 @@ router.post('/signup', (req, res) => {
 
 
 //Test to retrieve members from DB
-router.get("/retrieve", ensureAuthentication,(req, res) => {
+router.get("/retrieve", /*functions.ensureAuthentication,*/(req, res) => {
+
 
     Member.find({}, (err, members) => {
         if (err) {
