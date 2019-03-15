@@ -3,7 +3,7 @@ block content
     br
     .container
         .row
-            .col.m8.s12
+            .col.m7.s12
                 form(method='POST', action='/members/signup')
                     #form-group.container
                     
@@ -26,12 +26,33 @@ block content
                         input.form-control(name='password2', type='password').white
 
                         input.btn.btn-primary(type='submit', value='Submit').white-text.green
-                        .col.m1.s12
-            .hide-on-med-and-up
+            .col.m1.s12
+                .hide-on-med-and-up
+                    br
+                    hr
+                    br
+            .col.m4.s12
                 br
-                hr
-                br
-            .col.m3.s12.valign-wrapper
-                a.google-btn(href="/members/google") Google+
-                a(href="/members/github") Login with GitHub
-                a(href="/members/linkedin") Login with LinkedIn
+                .hide-on-med-and-down
+                    .row
+                        a.waves-effect.waves-light.social.col.s12.btn.google(href="/members/google")
+                            i.fa.fa-google
+                            | Sign in with Google
+                    .row
+                        a.waves-effect.waves-light.social.col.s12.btn.github(href="/members/github")
+                            i.fa.fa-github
+                            | Sign in with GitHub
+                    .row
+                        a.waves-effect.waves-light.social.col.s12.btn.linkedin(href="/members/linkedin")
+                            i.fa.fa-linkedin
+                            | Sign in with LinkedIn
+                .hide-on-large-only
+                    .row
+                        a.waves-effect.waves-light.social-icon.col.s12.btn.google(href="/members/google")
+                            i.fa.fa-google
+                    .row
+                        a.waves-effect.waves-light.social-icon.col.s12.btn.github(href="/members/github")
+                            i.fa.fa-github
+                    .row
+                        a.waves-effect.waves-light.social-icon.col.s12.btn.linkedin(href="/members/linkedin")
+                            i.fa.fa-linkedin

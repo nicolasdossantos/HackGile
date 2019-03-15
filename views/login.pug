@@ -3,7 +3,7 @@ block content
     br
     .container
         .row
-            .col.m8.s12
+            .col.m7.s12
                 form(method='POST', action='/members/login')
                     #form-group
                         label.white-text.test2 Username:
@@ -19,9 +19,28 @@ block content
                     br
                     hr
                     br
-            .col.m3.s12.valign-wrapper
-                    a.google-btn(href="/members/google") Google+
-                    a.waves-effect.waves-light.btn-large.social.google
-                        i.fa.fa-google Sign in with google
-                    a(href="/members/github") Login with GitHub     
-                    a(href="/members/linkedin") Login with LinkedIn
+            .col.m4.s12
+                br
+                .hide-on-med-and-down
+                    .row
+                        a.waves-effect.waves-light.social.col.s12.btn.google(href="/members/google")
+                            i.fa.fa-google
+                            | Sign in with Google
+                    .row
+                        a.waves-effect.waves-light.social.col.s12.btn.github(href="/members/github")
+                            i.fa.fa-github
+                            | Sign in with GitHub
+                    .row
+                        a.waves-effect.waves-light.social.col.s12.btn.linkedin(href="/members/linkedin")
+                            i.fa.fa-linkedin
+                            | Sign in with LinkedIn
+                .hide-on-large-only
+                    .row
+                        a.waves-effect.waves-light.social-icon.col.s12.btn.google(href="/members/google")
+                            i.fa.fa-google
+                    .row
+                        a.waves-effect.waves-light.social-icon.col.s12.btn.github(href="/members/github")
+                            i.fa.fa-github
+                    .row
+                        a.waves-effect.waves-light.social-icon.col.s12.btn.linkedin(href="/members/linkedin")
+                            i.fa.fa-linkedin
