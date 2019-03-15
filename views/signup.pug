@@ -1,31 +1,37 @@
 extend layout
 block content
-
-    form(method='POST', action='/members/signup')
+    br
+    .container
         .row
-        .row
-        #form-group.container
-        
-            label.white-text First Name:
-            input.form-control(name='firstname', type='text', ).white
+            .col.m8.s12
+                form(method='POST', action='/members/signup')
+                    #form-group.container
+                    
+                        label.white-text First Name:
+                        input.form-control(name='firstname', type='text', ).white
 
-            label.white-text Last Name:
-            input.form-control(name='lastname', type='text').white
+                        label.white-text Last Name:
+                        input.form-control(name='lastname', type='text').white
 
-            label.white-text.test2 Email:
-            input.form-control(name='email', type='text').white
+                        label.white-text.test2 Email:
+                        input.form-control(name='email', type='text').white
 
-            label.white-text Username:
-            input.form-control(name='username', type='text').white
+                        label.white-text Username:
+                        input.form-control(name='username', type='text').white
 
-            label.white-text Password:
-            input.form-control(name='password', type='password').white
+                        label.white-text Password:
+                        input.form-control(name='password', type='password').white
 
-            label.white-text Confirm Password:
-            input.form-control(name='password2', type='password').white
+                        label.white-text Confirm Password:
+                        input.form-control(name='password2', type='password').white
 
-            input.btn.btn-primary(type='submit', value='Submit').white-text.green
-            .container
+                        input.btn.btn-primary(type='submit', value='Submit').white-text.green
+                        .col.m1.s12
+            .hide-on-med-and-up
+                br
+                hr
+                br
+            .col.m3.s12.valign-wrapper
                 a.google-btn(href="/members/google") Google+
-                a.google-btn(href="/members/linkedin") LinkedIn
-                a.google-btn(href="/members/github") Github
+                a(href="/members/github") Login with GitHub
+                a(href="/members/linkedin") Login with LinkedIn
