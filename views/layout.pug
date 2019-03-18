@@ -34,7 +34,18 @@ html
                                     a.black-text(href='/members/signup') Sign Up
             ul#slide-out.sidenav.white
                 if user
-                    a.black-text(href='/members/logout') Logout
+                    li
+                    .user-view
+                        .background
+                            img(src='images/default_bg.jpg')
+                        a(href='#user')
+                            img.circle(src='images/yuna.jpg')
+                        a(href='#name')
+                            span.name.black-text John Doe
+                        a(href='#email')
+                            span.email.black-text example@gmail.com
+                    li
+                        a.black-text(href='/members/logout') Logout
                 else
                     li
                         a.black-text(href='/members/login') Login
