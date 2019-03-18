@@ -39,11 +39,11 @@ html
                         .background
                             img(src='images/default_bg.jpg')
                         a(href='#user')
-                            img.circle(src='images/yuna.jpg')
+                            img.circle(src=user.image)
                         a(href='#name')
-                            span.name.black-text John Doe
+                            span.name.black-text #{user.firstname}
                         a(href='#email')
-                            span.email.black-text example@gmail.com
+                            span.email.black-text #{user.email}
                     li
                         a.black-text(href='/members/logout') Logout
                 else
