@@ -34,7 +34,8 @@ html
                                     a.black-text(href='/members/signup') Sign Up
             ul#slide-out.sidenav.white
                 if user
-                    a.black-text(href='/members/logout') Logout
+                    li
+                        a.black-text(href='/members/logout') Logout
                 else
                     li
                         a.black-text(href='/members/login') Login
