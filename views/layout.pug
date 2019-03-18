@@ -35,6 +35,16 @@ html
             ul#slide-out.sidenav.white
                 if user
                     li
+                    .user-view
+                        .background
+                            img(src='images/default_bg.jpg')
+                        a(href='#user')
+                            img.circle(src='images/yuna.jpg')
+                        a(href='#name')
+                            span.name.black-text John Doe
+                        a(href='#email')
+                            span.email.black-text example@gmail.com
+                    li
                         a.black-text(href='/members/logout') Logout
                 else
                     li
