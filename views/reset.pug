@@ -1,0 +1,14 @@
+extends layout
+block content
+    br
+    .container
+        .row
+            .col.m7.s12
+                form(method='POST')
+                    legend Reset Password
+                    #form-group.container
+                        label.white-text.test2 New Password:
+                        input.form-control(name='password', type='password').white
+                        label.white-text.test2 Confirm Password:
+                        input.form-control(name='password2', type='password').white
+                        input.left.btn.btn-primary(type='submit', value='Submit').white-text.green

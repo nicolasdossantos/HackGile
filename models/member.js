@@ -41,7 +41,9 @@ let memberSchema = new Schema({
     stories: [{
         type: Schema.Types.ObjectId,
         ref: 'Story'
-    }]
+    }],
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
 
 let Member = module.exports = mongoose.model('Member', memberSchema);

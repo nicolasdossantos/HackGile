@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-let functions = require('../app');
+const async = require('async');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const functions = require('../app');
+
 
 
 //Bring in Models
@@ -162,6 +166,204 @@ router.get('/linkedin/redirect', passport.authenticate('linkedin'), (req, res) =
     req.flash('cardSuccess', 'Welcome back '+req.user.firstname);
     res.redirect('/');
 });
+
+//Forgot Password Route
+router.get('/forgot', (req, res)=>{
+    res.render('forgot');
+});
+
+//Forgot Post
+router.post('/forgot', (req,res,next)=>{
+    async.waterfall([
+        (done)=>{
+            //Creates a 20 character encrypted token
+            crypto.randomBytes(20, (err, buf)=>{
+                let token = buf.toString('hex');
+                done(err,token);
+            });
+        },
+        //Find user by email and add assigns token and expiration to user in database
+        (token, done) => {
+            Member.findOne({email: req.body.email}, (err, user)=>{
+                if(!user){
+                    req.flash('cardError','No account linked to this email.');
+                    return res.redirect('forgot');
+                }
+                user.resetPasswordToken = token;
+                user.resetPasswordExpires = Date.now() + 3600000;
+
+                user.save((err)=>{
+                    done(err,token,user);
+                });
+                
+            });
+
+        },
+        //Send email for password reset
+        (token, user, done)=>{
+            let smtpTransport = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: 'infohackgile@gmail.com',
+                    pass: 'nicolasthomasgerard'
+                }
+
+            });
+            let mailOptions = {
+                to: user.email,
+                from: 'infohackgile@gmail.com',
+                subject: 'HackGile Password Request',
+                text: 'You told us you forgot your passowrd. If you really did, click here to choose a new one:'+
+                    '\n\n http://localhost:8080/members/reset/' + token + '\n\n'+
+                    'If you didn\'t mean to, please ignore this email. Your password will remain unchanged.'
+            };
+            smtpTransport.sendMail(mailOptions, (err)=>{
+                console.log('email sent')
+                console.log(user)
+                
+                req.flash('cardSuccess','An email has been sent to '+user.email + ' with further instructions.')
+                done(err,'done');
+            });
+        }
+    ], (err)=>{
+        if (err) return next(err);
+       res.redirect('forgot');
+    });
+});
+
+//Reset Route...Find user by token
+router.get('/reset/:token', (req, res)=>{
+    Member.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, (err,user)=>{
+        if(!user){
+            req.flash('cardError', 'Password reset token is invalid or has expired');
+            return res.redirect('/members/forgot');
+            console.log(err)
+        }
+        res.render('reset', {user: req.user});
+});
+    });
+
+//Changes user password, hashes and salts it
+router.post('/reset/:token', (req,res)=>{
+    async.waterfall([
+        (done)=>{
+            Member.findOne({resetPasswordToken: req.params.token, resetPasswordExpires:{$gt: Date.now()}}, (err,user)=>{
+                if(!user){
+                    req.flash('cardError', 'Password reset token is invalid or has expired');
+                    return res.redirect('/members/forgot');
+                    console.log(err)
+                }
+                //Validate fields **NEEDS TESTING**
+                req.checkBody('password', 'Password is required').notEmpty();
+                req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
+            
+                //Puts errors generated at "CheckBody" into array
+                let errors = req.validationErrors();
+            
+                if (errors) {
+                    //Display errors if any
+                    res.render('reset', {
+                        errors: errors
+                    });
+                }
+
+                user.password = req.body.password;
+                user.resetPasswordExpires = undefined;
+                user.resetPasswordToken = undefined;
+
+                //Hash Password
+                bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(user.password, salt, (err, hash) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                        user.password = hash;
+                        user.save((err) => {
+                            if (err) {
+                                console.log(err);
+                                return;
+                            } else {
+                                req.logIn(user, (err)=>{
+                                    done(err,user);
+                                });
+                            }
+                        });
+                    });
+                });
+
+                
+            });
+            },
+        (user, done)=>{
+            let smtpTransport = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: 'infohackgile@gmail.com',
+                    pass: 'nicolasthomasgerard'
+                }
+
+            });
+            let mailOptions = {
+                to: user.email,
+                from: 'infohackgile@gmail.com',
+                subject: 'Your Password Has Been Changed',
+                text: 'This is a confirmation that the password for your account has been changed.\n'
+                +'Thank you!'
+            };
+            smtpTransport.sendMail(mailOptions, (err)=>{
+                console.log('email sent')
+                req.flash('cardSuccess','Success! Your password has been changed!');
+                res.redirect('/');
+                done(err,'done');
+            });
+        }
+    ], (err)=>{
+        if (err) return next(err);
+       res.redirect('forgot');
+    });
+});
+
+//Forgot username Route
+router.get('/forgot_username', (req, res)=>{
+    res.render('forgot_username');
+});
+
+//Forgot Post
+router.post('/forgot_username', (req,res,next)=>{
+        let email = req.body.email;
+        //console.log(email)
+        Member.findOne({email: email}, (err, user)=>{
+            if(err){
+                req.flash('cardError', 'The email entered does not match any records in our database.')
+            }else{
+                console.log(user);
+                let smtpTransport = nodemailer.createTransport({
+                    service: 'Gmail',
+                    auth: {
+                        user: 'infohackgile@gmail.com',
+                        pass: 'nicolasthomasgerard'
+                    }
+                });
+                let mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'HackGile Username Request',
+                    text: 'Hello, it seems that you have forgoten your username. Don\'t worry, we got you:\n'
+                    +'Your username is: '+user.username
+                };
+                smtpTransport.sendMail(mailOptions, (err)=>{
+                    console.log('email sent')
+                    console.log(user)
+                    
+                    req.flash('cardSuccess','An email has been sent to '+user.email + ' with your username.');
+                    res.redirect('login');
+                    done(err,'done');
+                });
+            }
+        
+});
+});
+
 
 
 //Logout route
