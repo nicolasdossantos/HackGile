@@ -175,6 +175,7 @@ router.get('/forgot', (req, res)=>{
 
 //Forgot Post
 router.post('/forgot', (req,res,next)=>{
+    let mailOptions;
     async.waterfall([
         (done)=>{
             //Creates a 20 character encrypted token
@@ -210,14 +211,48 @@ router.post('/forgot', (req,res,next)=>{
                 }
 
             });
-            let mailOptions = {
-                to: user.email,
-                from: 'infohackgile@gmail.com',
-                subject: 'HackGile Password Request',
-                text: 'You told us you forgot your passowrd. If you really did, click here to choose a new one:'+
-                    '\n\n http://localhost:8080/members/reset/' + token + '\n\n'+
-                    'If you didn\'t mean to, please ignore this email. Your password will remain unchanged.'
-            };
+
+            if(user.provider === 'local'){
+                mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'HackGile Password Request',
+                    text: 'You told us you forgot your passowrd. If you really did, click here to choose a new one:'+
+                        '\n\n http://localhost:8080/members/reset/' + token + '\n\n'+
+                        'If you didn\'t mean to, please ignore this email. Your password will remain unchanged.'
+                };
+            }else if(user.provider === 'google'){
+                mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'HackGile Password Request',
+                    text: 'You originally have registered using your Google account '+user.email+'.\n'+
+                    'Please login using: http://localhost:8080/members/google'
+                };
+    
+
+                }
+            else if(user.provider === 'linkedin'){
+                mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'HackGile Password Request',
+                    text: 'You originally have registered using your LinkedIn account '+user.email+'.\n'+
+                    'Please login using: http://localhost:8080/members/linkedin'
+                };
+
+            }
+            else if(user.provider=== 'github'){
+                mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'HackGile Password Request',
+                    text: 'You originally have registered using your GitHub account '+user.email+'.\n'+
+                    'Please login using: http://localhost:8080/members/github'
+                };
+            }
+
+            
             smtpTransport.sendMail(mailOptions, (err)=>{
                 console.log('email sent')
                 console.log(user)
@@ -353,7 +388,7 @@ router.post('/forgot_username', (req,res,next)=>{
                         to: user.email,
                         from: 'infohackgile@gmail.com',
                         subject: 'HackGile Username Request',
-                        text: 'You originally have registered using your Google account.\n'+
+                        text: 'You originally have registered using your Google account '+user.email+'.\n'+
                         'Please login using: http://localhost:8080/members/google'
                     };
         
@@ -364,7 +399,7 @@ router.post('/forgot_username', (req,res,next)=>{
                         to: user.email,
                         from: 'infohackgile@gmail.com',
                         subject: 'HackGile Username Request',
-                        text: 'You originally have registered using your LinkedIn account.\n'+
+                        text: 'You originally have registered using your LinkedIn account '+user.email+'.\n'+
                         'Please login using: http://localhost:8080/members/linkedin'
                     };
 
@@ -374,21 +409,21 @@ router.post('/forgot_username', (req,res,next)=>{
                         to: user.email,
                         from: 'infohackgile@gmail.com',
                         subject: 'HackGile Username Request',
-                        text: 'You originally have registered using your GitHub account.\n'+
+                        text: 'You originally have registered using your GitHub account '+user.email+'.\n'+
                         'Please login using: http://localhost:8080/members/github'
                     };
 
                 }else if (user.provider === 'local'){ 
                
 
-                mailOptions = {
-                    to: user.email,
-                    from: 'infohackgile@gmail.com',
-                    subject: 'HackGile Username Request',
-                    text: 'Hello, it seems that you have forgoten your username. Don\'t worry, we got you:\n'
-                    +'Your username is: '+user.username
-                };
-            }
+                    mailOptions = {
+                        to: user.email,
+                        from: 'infohackgile@gmail.com',
+                        subject: 'HackGile Username Request',
+                        text: 'Hello, it seems that you have forgoten your username. Don\'t worry, we got you:\n'
+                        +'Your username is: '+user.username
+                    };
+             }
                 
                 smtpTransport.sendMail(mailOptions, (err)=>{
                     console.log('email sent')
