@@ -330,7 +330,8 @@ router.get('/forgot_username', (req, res)=>{
 
 //Forgot Post
 router.post('/forgot_username', (req,res,next)=>{
-        let email = req.body.email;
+        let mailOptions;
+        let email = req.body.email
         //console.log(email)
         Member.findOne({email: email}, (err, user)=>{
             if(err){
@@ -344,16 +345,52 @@ router.post('/forgot_username', (req,res,next)=>{
                         pass: 'nicolasthomasgerard'
                     }
                 });
-                let mailOptions = {
+
+                if(user.googleID !== 'undefined'){
+                    mailOptions = {
+                        to: user.email,
+                        from: 'infohackgile@gmail.com',
+                        subject: 'HackGile Username Request',
+                        text: 'You originally have registered using your Google account.\n'+
+                        'Please login using: http://localhost:8080/members/google'
+                    };
+        
+
+                    }
+                else if(user.linkedinID !== 'undefined'){
+                    mailOptions = {
+                        to: user.email,
+                        from: 'infohackgile@gmail.com',
+                        subject: 'HackGile Username Request',
+                        text: 'You originally have registered using your LinkedIn account.\n'+
+                        'Please login using: http://localhost:8080/members/linkedin'
+                    };
+
+                }
+                else if(user.githubID !== 'undefined'){
+                    mailOptions = {
+                        to: user.email,
+                        from: 'infohackgile@gmail.com',
+                        subject: 'HackGile Username Request',
+                        text: 'You originally have registered using your GitHub account.\n'+
+                        'Please login using: http://localhost:8080/members/github'
+                    };
+
+                }else{
+               
+
+                mailOptions = {
                     to: user.email,
                     from: 'infohackgile@gmail.com',
                     subject: 'HackGile Username Request',
                     text: 'Hello, it seems that you have forgoten your username. Don\'t worry, we got you:\n'
                     +'Your username is: '+user.username
                 };
+            }
+                
                 smtpTransport.sendMail(mailOptions, (err)=>{
                     console.log('email sent')
-                    console.log(user)
+                
                     
                     req.flash('cardSuccess','An email has been sent to '+user.email + ' with your username.');
                     res.redirect('login');

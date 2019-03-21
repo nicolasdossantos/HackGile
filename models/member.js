@@ -22,9 +22,6 @@ let memberSchema = new Schema({
     googleID: {
         type: String
     },
-    facebookID: {
-        type: String
-    },
     githubId: {
         type: String
     },
