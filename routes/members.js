@@ -171,6 +171,15 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
+//Account settings route
+router.get('/account', (req, res) => {
+    if (req.user){
+        res.render('account');
+    }else{
+        res.redirect('/');
+    }
+});
+
 
 module.exports = router;
 
