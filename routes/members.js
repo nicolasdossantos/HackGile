@@ -88,6 +88,7 @@ router.post('/signup', (req, res) => {
                     email: email,
                     username: username,
                     image: '',
+                    provider: 'local',
                     projects: [],
                     password: password
                 });
@@ -334,8 +335,9 @@ router.post('/forgot_username', (req,res,next)=>{
         let email = req.body.email
         //console.log(email)
         Member.findOne({email: email}, (err, user)=>{
-            if(err){
-                req.flash('cardError', 'The email entered does not match any records in our database.')
+            if(!user){
+                req.flash('cardError', 'The email entered does not match any records in our database.');
+                return res.redirect('/members/forgot_username')
             }else{
                 console.log(user);
                 let smtpTransport = nodemailer.createTransport({
@@ -346,7 +348,7 @@ router.post('/forgot_username', (req,res,next)=>{
                     }
                 });
 
-                if(user.googleID !== 'undefined'){
+                if(user.provider === 'google'){
                     mailOptions = {
                         to: user.email,
                         from: 'infohackgile@gmail.com',
@@ -357,7 +359,7 @@ router.post('/forgot_username', (req,res,next)=>{
         
 
                     }
-                else if(user.linkedinID !== 'undefined'){
+                else if(user.provider === 'linkedin'){
                     mailOptions = {
                         to: user.email,
                         from: 'infohackgile@gmail.com',
@@ -367,7 +369,7 @@ router.post('/forgot_username', (req,res,next)=>{
                     };
 
                 }
-                else if(user.githubID !== 'undefined'){
+                else if(user.provider=== 'github'){
                     mailOptions = {
                         to: user.email,
                         from: 'infohackgile@gmail.com',
@@ -376,7 +378,7 @@ router.post('/forgot_username', (req,res,next)=>{
                         'Please login using: http://localhost:8080/members/github'
                     };
 
-                }else{
+                }else if (user.provider === 'local'){ 
                
 
                 mailOptions = {

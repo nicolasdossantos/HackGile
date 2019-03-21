@@ -19,13 +19,7 @@ let memberSchema = new Schema({
     image: {
         type: String
     },
-    googleID: {
-        type: String
-    },
-    githubId: {
-        type: String
-    },
-    linkedinID:{
+    provider: {
         type: String
     },
     password: {

@@ -59,8 +59,7 @@ module.exports = (passport) => {
         let lastname = profile.name.familyName;
         let email = profile.emails[0].value;
         let image = profile.photos[0].value;
-        let googleId = profile.id;
-
+        let provider = profile.provider;
 
         //Check if user already exists in our database
         User.findOne({email: email}).then((user)=>{
@@ -73,7 +72,7 @@ module.exports = (passport) => {
                     lastname: lastname,
                     email: email,
                     image: image,
-                    googleID: googleId
+                    provider: provider
         
                 }).save().then((newUser) => {
                     done(null, newUser);
@@ -100,7 +99,7 @@ module.exports = (passport) => {
         let username = profile.username;
         let email = profile.emails[0].value;
         let image = profile.photos[0].value;
-        let githubID = profile.id;
+        let provider = profile.provider;
 
 
         //Check if user already exists in our database
@@ -113,7 +112,7 @@ module.exports = (passport) => {
                     username: username,
                     email: email,
                     image: image,
-                    githubID: githubID
+                    provider: provider
         
                 }).save().then((newUser) => {
                     done(null, newUser);
@@ -141,7 +140,7 @@ module.exports = (passport) => {
         let lastname = profile.name.familyName;
         let email = profile.emails[0].value;
         let image = profile.photos[0].value;
-        let linkeinID = profile.id;
+        let provider = profile.provider;
 
         //Check if user already exists in our database
         User.findOne({email: email}).then((user)=>{
@@ -154,8 +153,8 @@ module.exports = (passport) => {
                     lastname: lastname,
                     email: email,
                     image: image,
-                    linkedinID: linkeinID
-        
+                    provider: provider
+                    
                 }).save().then((newUser) => {
                     done(null, newUser);
                 });
