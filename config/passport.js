@@ -134,7 +134,6 @@ module.exports = (passport) => {
         state: true    
       },
       function(req,token, refreshToken, profile, done) {
-        console.log(profile)
         //Putting information gathered from profile into variables for readability
         let firstname = profile.name.givenName;
         let lastname = profile.name.familyName;

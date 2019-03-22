@@ -11,8 +11,9 @@ let projectSchema = new Schema({
         type: String,
         required: true
     },
-    duration: {
-        type: Number
+    enddate: {
+        type: Date,
+        required: true
     },
     description: {
         type: String

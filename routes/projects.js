@@ -9,13 +9,13 @@ let Project = require('../models/project');
 
 router.get('/home', (req,res)=>{
     
-    Project.find({members:{$in:req.user._id}}, (err, project) => {
+    Project.find({members:{$in:req.user._id}}, (err, projects) => {
         if (err) {
             console.log(err);
         } else {
             res.render('home', {
                 title: "Projects",
-                project: project
+                projects: projects
             });
         }
     })

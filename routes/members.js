@@ -145,7 +145,7 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
     //Once user is logged in, their info is available using req.user
     //res.send(req.user);
     req.flash('cardSuccess', 'Welcome ' + req.user.firstname);
-    res.redirect('/projects/home');
+    res.redirect('/');
 });
 
 //GitHub Auth
@@ -166,7 +166,7 @@ router.get('/linkedin', passport.authenticate('linkedin'));
 //Linkedin Redirect
 router.get('/linkedin/redirect', passport.authenticate('linkedin'), (req, res) => {
     req.flash('cardSuccess', 'Welcome ' + req.user.firstname);
-    res.redirect('/projects/home');
+    res.redirect('/');
 });
 
 //Forgot Password Route
@@ -254,8 +254,6 @@ router.post('/forgot', (req, res, next) => {
 
             smtpTransport.sendMail(mailOptions, (err) => {
                 console.log('email sent')
-                console.log(user)
-
                 req.flash('cardSuccess', 'An email has been sent to ' + user.email + ' with further instructions.')
                 done(err, 'done');
             });
