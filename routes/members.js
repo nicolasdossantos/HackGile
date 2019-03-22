@@ -13,7 +13,7 @@ const keys = require('../config/keys')
 let Story = require('../models/story');
 let Member = require('../models/member');
 let Project = require('../models/project');
-let Sprint = require('../models/story');
+let Sprint = require('../models/sprint');
 
 //Login form
 router.get('/login', (req, res) => {
