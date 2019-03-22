@@ -11,11 +11,14 @@ block content
 
                         label.white-text Password:
                         input.form-control(name='password', type='password').white
-
-                        input.left.btn.btn-primary(type='submit', value='Submit').white-text.green
-                        a.right(href="/members/forgot") Forget Password?
-                        br
-                        a.right(href="/members/forgot_username") Forget Username?
+                        .row
+                            .col
+                                input.left.btn.btn-primary(type='submit', value='Submit').white-text.green
+                            .col.right
+                                .row(style="margin-bottom:0px;")
+                                    a.left(style="color:white;" href="/members/forgot_username") Forgot Username?   
+                                .row(style="margin-bottom:0px;")              
+                                    a.left(style="color:white;" href="/members/forgot") Forgot Password?
             .col.m1.s12
                 .hide-on-med-and-up
                     br
