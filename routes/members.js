@@ -144,8 +144,8 @@ router.get('/google', passport.authenticate('google', {
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
     //Once user is logged in, their info is available using req.user
     //res.send(req.user);
-    req.flash('cardSuccess', 'Welcome back ' + req.user.firstname);
-    res.redirect('/');
+    req.flash('cardSuccess', 'Welcome ' + req.user.firstname);
+    res.redirect('/projects/home');
 });
 
 //GitHub Auth
@@ -156,8 +156,8 @@ router.get('/github', passport.authenticate('github', {
 //GitHub Redirect
 router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
 
-    req.flash('cardSuccess', 'Welcome back ' + req.user.username);
-    res.redirect('/');
+    req.flash('cardSuccess', 'Welcome ' + req.user.username);
+    res.redirect('/projects/home');
 });
 
 
@@ -165,8 +165,8 @@ router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
 router.get('/linkedin', passport.authenticate('linkedin'));
 //Linkedin Redirect
 router.get('/linkedin/redirect', passport.authenticate('linkedin'), (req, res) => {
-    req.flash('cardSuccess', 'Welcome back ' + req.user.firstname);
-    res.redirect('/');
+    req.flash('cardSuccess', 'Welcome ' + req.user.firstname);
+    res.redirect('/projects/home');
 });
 
 //Forgot Password Route
