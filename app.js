@@ -55,7 +55,7 @@ app.use(bodyParser.json());
 app.use(cookieSession({
     //24 hours in millisec
     maxAge: 24 * 60 * 60 * 1000,
-    keys:[keys.session.cookieKey]
+    keys: [keys.session.cookieKey]
 
 }));
 
@@ -112,14 +112,17 @@ app.listen(8080, () => {
 });
 
 module.exports = {
+
     ensureAuthentication: function (req, res, next) {
+
         if (req.isAuthenticated()) {
             return next();
+
         } else {
             req.flash('cardError', 'Please Login');
 
             res.redirect('/members/login');
 
-         }
+        }
     }
-    }
+}
