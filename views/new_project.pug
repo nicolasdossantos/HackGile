@@ -1,0 +1,25 @@
+extend layout
+block content
+    br
+    .container
+        .row
+            .col.m7.s12
+                form(method='POST')
+                    #form-group.container
+                    
+                        label.white-text Project Name:
+                        input.form-control(name='name', type='text', ).white
+
+                        label.white-text Is this a hackathon project?:
+                        input.form-control(name='ishackathon', type='text').white
+
+                        label.white-text.test2 Duration:
+                        input.form-control(name='duration', type='number').white
+
+                        label.white-text Project Description:
+                        input.form-control(name='description', type='text').white
+
+                        label.white-text Git Repository:
+                        input.form-control(name='git', type='text').white
+
+                        input.btn.btn-primary(type='submit', value='Submit').white-text.green
