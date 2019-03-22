@@ -72,6 +72,7 @@ router.post('/signup', (req, res) => {
             }
             //If user is already registered, redirect user to login page and generate message
             if (user) {
+                
                 if (user.email === email) {
                     req.flash('cardError', 'The email entered is already in use. Please try logging in');
                     res.render('login')
@@ -87,7 +88,7 @@ router.post('/signup', (req, res) => {
                     lastname: lastname,
                     email: email,
                     username: username,
-                    image: '',
+                    image: '/images/default-user.jpg',
                     provider: 'local',
                     projects: [],
                     password: password
@@ -101,7 +102,7 @@ router.post('/signup', (req, res) => {
                         }
                         newMember.password = hash;
                         newMember.save((err) => {
-                            if (err) {
+                            if (err) {  
                                 console.log(err);
                                 return;
                             } else {
@@ -439,11 +440,13 @@ router.post('/forgot_username', (req, res, next) => {
 
 
 //Logout route
-router.get('/logout', (req, res) => {
+router.get('/logout', (req, res)=> {
     req.logOut();
     req.flash('cardSuccess', 'You are logged out');
     res.redirect('/');
 });
+
+
 //Account settings route
 router.get('/account', (req, res) => {
     if (req.user) {
