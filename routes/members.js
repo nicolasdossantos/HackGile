@@ -6,7 +6,7 @@ const async = require('async');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const functions = require('../app');
-
+const keys = require('../config/keys')
 
 
 //Bring in Models
@@ -54,7 +54,7 @@ router.post('/signup', (req, res) => {
     req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
     //Puts errors generated at "CheckBody" into array
-     let errors = req.validationErrors();
+    let errors = req.validationErrors();
 
     if (errors) {
         //Display errors if any
@@ -92,6 +92,7 @@ router.post('/signup', (req, res) => {
                     projects: [],
                     password: password
                 });
+
                 //Hash Password
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newMember.password, salt, (err, hash) => {
@@ -143,19 +144,19 @@ router.get('/google', passport.authenticate('google', {
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
     //Once user is logged in, their info is available using req.user
     //res.send(req.user);
-    req.flash('cardSuccess', 'Welcome back '+req.user.firstname);
+    req.flash('cardSuccess', 'Welcome back ' + req.user.firstname);
     res.redirect('/');
 });
 
 //GitHub Auth
 router.get('/github', passport.authenticate('github', {
-    scope: [ 'user:email', 'profile' ]
+    scope: ['user:email', 'profile']
 }));
 
 //GitHub Redirect
 router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
-    
-    req.flash('cardSuccess', 'Welcome back '+req.user.username);
+
+    req.flash('cardSuccess', 'Welcome back ' + req.user.username);
     res.redirect('/');
 });
 
@@ -164,127 +165,128 @@ router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
 router.get('/linkedin', passport.authenticate('linkedin'));
 //Linkedin Redirect
 router.get('/linkedin/redirect', passport.authenticate('linkedin'), (req, res) => {
-    req.flash('cardSuccess', 'Welcome back '+req.user.firstname);
+    req.flash('cardSuccess', 'Welcome back ' + req.user.firstname);
     res.redirect('/');
 });
 
 //Forgot Password Route
-router.get('/forgot', (req, res)=>{
+router.get('/forgot', (req, res) => {
     res.render('forgot');
 });
 
 //Forgot Post
-router.post('/forgot', (req,res,next)=>{
+router.post('/forgot', (req, res, next) => {
     let mailOptions;
     async.waterfall([
-        (done)=>{
+        (done) => {
             //Creates a 20 character encrypted token
-            crypto.randomBytes(20, (err, buf)=>{
+            crypto.randomBytes(20, (err, buf) => {
                 let token = buf.toString('hex');
-                done(err,token);
+                done(err, token);
             });
         },
         //Find user by email and add assigns token and expiration to user in database
         (token, done) => {
-            Member.findOne({email: req.body.email}, (err, user)=>{
-                if(!user){
-                    req.flash('cardError','No account linked to this email.');
+            Member.findOne({email: req.body.email}, (err, user) => {
+                if (!user) {
+                    req.flash('cardError', 'No account linked to this email.');
                     return res.redirect('forgot');
                 }
                 user.resetPasswordToken = token;
                 user.resetPasswordExpires = Date.now() + 3600000;
 
-                user.save((err)=>{
-                    done(err,token,user);
+                user.save((err) => {
+                    done(err, token, user);
                 });
-                
+
             });
 
         },
         //Send email for password reset
-        (token, user, done)=>{
+        (token, user, done) => {
             let smtpTransport = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
-                    user: 'infohackgile@gmail.com',
-                    pass: 'nicolasthomasgerard'
+                    user: keys.email.username,
+                    pass: keys.email.password
                 }
 
             });
 
-            if(user.provider === 'local'){
+            if (user.provider === 'local') {
                 mailOptions = {
                     to: user.email,
                     from: 'infohackgile@gmail.com',
                     subject: 'HackGile Password Request',
-                    text: 'You told us you forgot your passowrd. If you really did, click here to choose a new one:'+
-                        '\n\n http://localhost:8080/members/reset/' + token + '\n\n'+
+                    text: 'You told us you forgot your passowrd. If you really did, click here to choose a new one:' +
+                        '\n\n http://localhost:8080/members/reset/' + token + '\n\n' +
                         'If you didn\'t mean to, please ignore this email. Your password will remain unchanged.'
                 };
-            }else if(user.provider === 'google'){
+            } else if (user.provider === 'google') {
                 mailOptions = {
                     to: user.email,
                     from: 'infohackgile@gmail.com',
                     subject: 'HackGile Password Request',
-                    text: 'You originally have registered using your Google account '+user.email+'.\n'+
-                    'Please login using: http://localhost:8080/members/google'
-                };
-    
-
-                }
-            else if(user.provider === 'linkedin'){
-                mailOptions = {
-                    to: user.email,
-                    from: 'infohackgile@gmail.com',
-                    subject: 'HackGile Password Request',
-                    text: 'You originally have registered using your LinkedIn account '+user.email+'.\n'+
-                    'Please login using: http://localhost:8080/members/linkedin'
+                    text: 'You originally have registered using your Google account ' + user.email + '.\n' +
+                        'Please login using: http://localhost:8080/members/google'
                 };
 
-            }
-            else if(user.provider=== 'github'){
+
+            } else if (user.provider === 'linkedin') {
                 mailOptions = {
                     to: user.email,
                     from: 'infohackgile@gmail.com',
                     subject: 'HackGile Password Request',
-                    text: 'You originally have registered using your GitHub account '+user.email+'.\n'+
-                    'Please login using: http://localhost:8080/members/github'
+                    text: 'You originally have registered using your LinkedIn account ' + user.email + '.\n' +
+                        'Please login using: http://localhost:8080/members/linkedin'
+                };
+
+            } else if (user.provider === 'github') {
+                mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'HackGile Password Request',
+                    text: 'You originally have registered using your GitHub account ' + user.email + '.\n' +
+                        'Please login using: http://localhost:8080/members/github'
                 };
             }
 
-            
-            smtpTransport.sendMail(mailOptions, (err)=>{
+
+            smtpTransport.sendMail(mailOptions, (err) => {
                 console.log('email sent')
                 console.log(user)
-                
-                req.flash('cardSuccess','An email has been sent to '+user.email + ' with further instructions.')
-                done(err,'done');
+
+                req.flash('cardSuccess', 'An email has been sent to ' + user.email + ' with further instructions.')
+                done(err, 'done');
             });
         }
-    ], (err)=>{
+    ], (err) => {
         if (err) return next(err);
-       res.redirect('forgot');
+        res.redirect('forgot');
     });
 });
 
 //Reset Route...Find user by token
-router.get('/reset/:token', (req, res)=>{
-    Member.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, (err,user)=>{
-        if(!user){
+router.get('/reset/:token', (req, res) => {
+    Member.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, (err, user) => {
+        if (!user) {
             req.flash('cardError', 'Password reset token is invalid or has expired');
             return res.redirect('/members/forgot');
             console.log(err)
         }
         res.render('reset', {user: req.user});
-});
     });
+});
 
 //Changes user password, hashes and salts it
-router.post('/reset/:token', (req,res)=>{
+router.post('/reset/:token', (req, res) => {
     async.waterfall([
-        (done)=>{
-            Member.findOne({resetPasswordToken: req.params.token, resetPasswordExpires:{$gt: Date.now()}}, (err,user)=>{
-                if(!user){
+        (done) => {
+            Member.findOne({
+                resetPasswordToken: req.params.token,
+                resetPasswordExpires: {$gt: Date.now()}
+            }, (err, user) => {
+                if (!user) {
                     req.flash('cardError', 'Password reset token is invalid or has expired');
                     return res.redirect('/members/forgot');
                     console.log(err)
@@ -292,10 +294,10 @@ router.post('/reset/:token', (req,res)=>{
                 //Validate fields **NEEDS TESTING**
                 req.checkBody('password', 'Password is required').notEmpty();
                 req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
-            
+
                 //Puts errors generated at "CheckBody" into array
                 let errors = req.validationErrors();
-            
+
                 if (errors) {
                     //Display errors if any
                     res.render('reset', {
@@ -319,18 +321,18 @@ router.post('/reset/:token', (req,res)=>{
                                 console.log(err);
                                 return;
                             } else {
-                                req.logIn(user, (err)=>{
-                                    done(err,user);
+                                req.logIn(user, (err) => {
+                                    done(err, user);
                                 });
                             }
                         });
                     });
                 });
 
-                
+
             });
-            },
-        (user, done)=>{
+        },
+        (user, done) => {
             let smtpTransport = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
@@ -344,100 +346,98 @@ router.post('/reset/:token', (req,res)=>{
                 from: 'infohackgile@gmail.com',
                 subject: 'Your Password Has Been Changed',
                 text: 'This is a confirmation that the password for your account has been changed.\n'
-                +'Thank you!'
+                    + 'Thank you!'
             };
-            smtpTransport.sendMail(mailOptions, (err)=>{
+            smtpTransport.sendMail(mailOptions, (err) => {
                 console.log('email sent')
-                req.flash('cardSuccess','Success! Your password has been changed!');
+                req.flash('cardSuccess', 'Success! Your password has been changed!');
                 res.redirect('/');
-                done(err,'done');
+                done(err, 'done');
             });
         }
-    ], (err)=>{
+    ], (err) => {
         if (err) return next(err);
-       res.redirect('forgot');
+        res.redirect('forgot');
     });
 });
 
 //Forgot username Route
-router.get('/forgot_username', (req, res)=>{
+router.get('/forgot_username', (req, res) => {
     res.render('forgot_username');
 });
 
 //Forgot Post
-router.post('/forgot_username', (req,res,next)=>{
-        let mailOptions;
-        let email = req.body.email
-        //console.log(email)
-        Member.findOne({email: email}, (err, user)=>{
-            if(!user){
-                req.flash('cardError', 'The email entered does not match any records in our database.');
-                return res.redirect('/members/forgot_username')
-            }else{
-                console.log(user);
-                let smtpTransport = nodemailer.createTransport({
-                    service: 'Gmail',
-                    auth: {
-                        user: 'infohackgile@gmail.com',
-                        pass: 'nicolasthomasgerard'
-                    }
-                });
-
-                if(user.provider === 'google'){
-                    mailOptions = {
-                        to: user.email,
-                        from: 'infohackgile@gmail.com',
-                        subject: 'HackGile Username Request',
-                        text: 'You originally have registered using your Google account '+user.email+'.\n'+
-                        'Please login using: http://localhost:8080/members/google'
-                    };
-        
-
-                    }
-                else if(user.provider === 'linkedin'){
-                    mailOptions = {
-                        to: user.email,
-                        from: 'infohackgile@gmail.com',
-                        subject: 'HackGile Username Request',
-                        text: 'You originally have registered using your LinkedIn account '+user.email+'.\n'+
-                        'Please login using: http://localhost:8080/members/linkedin'
-                    };
-
+router.post('/forgot_username', (req, res, next) => {
+    let mailOptions;
+    let email = req.body.email
+    //console.log(email)
+    Member.findOne({email: email}, (err, user) => {
+        if (!user) {
+            req.flash('cardError', 'The email entered does not match any records in our database.');
+            return res.redirect('/members/forgot_username')
+        } else {
+            console.log(user);
+            let smtpTransport = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: 'infohackgile@gmail.com',
+                    pass: 'nicolasthomasgerard'
                 }
-                else if(user.provider=== 'github'){
-                    mailOptions = {
-                        to: user.email,
-                        from: 'infohackgile@gmail.com',
-                        subject: 'HackGile Username Request',
-                        text: 'You originally have registered using your GitHub account '+user.email+'.\n'+
+            });
+
+
+            if (user.provider === 'google') {
+                mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'HackGile Username Request',
+                    text: 'You originally have registered using your Google account ' + user.email + '.\n' +
+                        'Please login using: http://localhost:8080/members/google'
+                };
+
+
+            } else if (user.provider === 'linkedin') {
+                mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'HackGile Username Request',
+                    text: 'You originally have registered using your LinkedIn account ' + user.email + '.\n' +
+                        'Please login using: http://localhost:8080/members/linkedin'
+                };
+
+            } else if (user.provider === 'github') {
+                mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'HackGile Username Request',
+                    text: 'You originally have registered using your GitHub account ' + user.email + '.\n' +
                         'Please login using: http://localhost:8080/members/github'
-                    };
+                };
 
-                }else if (user.provider === 'local'){ 
-               
+            } else if (user.provider === 'local') {
 
-                    mailOptions = {
-                        to: user.email,
-                        from: 'infohackgile@gmail.com',
-                        subject: 'HackGile Username Request',
-                        text: 'Hello, it seems that you have forgoten your username. Don\'t worry, we got you:\n'
-                        +'Your username is: '+user.username
-                    };
-             }
-                
-                smtpTransport.sendMail(mailOptions, (err)=>{
-                    console.log('email sent')
-                
-                    
-                    req.flash('cardSuccess','An email has been sent to '+user.email + ' with your username.');
-                    res.redirect('login');
-                    done(err,'done');
-                });
+
+                mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'HackGile Username Request',
+                    text: 'Hello, it seems that you have forgoten your username. Don\'t worry, we got you:\n'
+                        + 'Your username is: ' + user.username
+                };
             }
-        
-});
-});
 
+            smtpTransport.sendMail(mailOptions, (err) => {
+                console.log('email sent')
+
+
+                req.flash('cardSuccess', 'An email has been sent to ' + user.email + ' with your username.');
+                res.redirect('login');
+                done(err, 'done');
+            });
+        }
+
+    });
+});
 
 
 //Logout route
@@ -445,13 +445,12 @@ router.get('/logout', (req, res) => {
     req.logOut();
     req.flash('cardSuccess', 'You are logged out');
     res.redirect('/');
-});
 
 //Account settings route
 router.get('/account', (req, res) => {
-    if (req.user){
+    if (req.user) {
         res.render('account');
-    }else{
+    } else {
         res.redirect('/');
     }
 });
@@ -465,8 +464,7 @@ function ensureAuthentication(req, res, next) {
         return next();
     } else {
         req.flash('cardError', 'Please Login');
-
         res.redirect('/members/login');
 
-     }
+    }
 }
