@@ -445,7 +445,6 @@ router.get('/logout', (req, res) => {
     req.logOut();
     req.flash('cardSuccess', 'You are logged out');
     res.redirect('/');
-});
 
 //Account settings route
 router.get('/account', (req, res) => {
