@@ -60,7 +60,6 @@ router.post('/new_project', (req, res)=>{
 
     });
 
-    newProject.members.push(req.user._id);
 
     newProject.save((err)=>{
         if(err){
