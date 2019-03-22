@@ -12,16 +12,13 @@ let projectSchema = new Schema({
         required: true
     },
     duration: {
-        type: Number,
-        required: true
+        type: Number
     },
     description: {
-        type: String,
-        required: true
+        type: String
     },
     git: {
-        type: String,
-        required: true
+        type: String
     },
     members: [{
         type: Schema.Types.ObjectId,

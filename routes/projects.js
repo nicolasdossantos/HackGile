@@ -56,10 +56,7 @@ router.post('/new_project', (req, res)=>{
         description: description,
         git: git,
         members: member
-
-
     });
-
 
     newProject.save((err)=>{
         if(err){
@@ -74,10 +71,4 @@ router.post('/new_project', (req, res)=>{
 
 });
    
-   
-   
-  
-
-
-
 module.exports = router;
