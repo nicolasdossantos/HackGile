@@ -51,6 +51,7 @@ router.post('/signup', (req, res) => {
     req.checkBody('username', 'Username is required').notEmpty();
     req.checkBody('password', 'Password is required').notEmpty();
     req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
+    req.checkBody('password', 'Password should be least 8 characters long').isLength(8);
 
     //Puts errors generated at "CheckBody" into array
     let errors = req.validationErrors();
@@ -315,6 +316,7 @@ router.post('/reset/:token', (req, res) => {
                 }
                 //Validate fields
                 req.checkBody('password', 'Password is required').notEmpty();
+                req.checkBody('password', 'Password should be at least 8 characters long').isLength(8);
                 req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
                 //Puts errors generated at "CheckBody" into array
@@ -325,58 +327,60 @@ router.post('/reset/:token', (req, res) => {
                     res.render('reset', {
                         errors: errors
                     });
-                }
+                }else{
 
-                user.password = req.body.password;
-                user.resetPasswordExpires = undefined;
-                user.resetPasswordToken = undefined;
+                    user.password = req.body.password;
+                    user.resetPasswordExpires = undefined;
+                    user.resetPasswordToken = undefined;
 
-                //Hash Password
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(user.password, salt, (err, hash) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                        user.password = hash;
-                        user.save((err) => {
+                    //Hash Password
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(user.password, salt, (err, hash) => {
                             if (err) {
                                 console.log(err);
-                                return;
-                            } else {
-                                req.logIn(user, (err) => {
-                                    done(err, user);
-                                });
                             }
+                            user.password = hash;
+                            user.save((err) => {
+                                if (err) {
+                                    console.log(err);
+                                    return;
+                                } else {
+                                    req.logIn(user, (err) => {
+                                        done(err, user);
+                                    });
+                                }
+                            });
                         });
                     });
-                });
-
-
-            });
-        },
-        (user, done) => {
-            let smtpTransport = nodemailer.createTransport({
-                service: 'Gmail',
-                auth: {
-                    user: 'infohackgile@gmail.com',
-                    pass: 'nicolasthomasgerard'
                 }
 
-            });
-            let mailOptions = {
-                to: user.email,
-                from: 'infohackgile@gmail.com',
-                subject: 'Your Password Has Been Changed',
-                text: 'This is a confirmation that the password for your account has been changed.\n' +
-                    'Thank you!'
-            };
-            smtpTransport.sendMail(mailOptions, (err) => {
-                console.log('email sent')
-                req.flash('cardSuccess', 'Success! Your password has been changed!');
-                res.redirect('/');
-                done(err, 'done');
-            });
-        }
+                });
+
+            },
+            (user, done) => {
+                let smtpTransport = nodemailer.createTransport({
+                    service: 'Gmail',
+                    auth: {
+                        user: 'infohackgile@gmail.com',
+                        pass: 'nicolasthomasgerard'
+                    }
+
+                });
+                let mailOptions = {
+                    to: user.email,
+                    from: 'infohackgile@gmail.com',
+                    subject: 'Your Password Has Been Changed',
+                    text: 'This is a confirmation that the password for your account has been changed.\n' +
+                        'Thank you!'
+                };
+                smtpTransport.sendMail(mailOptions, (err) => {
+                    console.log('email sent')
+                    req.flash('cardSuccess', 'Success! Your password has been changed!');
+                    res.redirect('/');
+                    done(err, 'done');
+                });
+            }
+        
     ], (err) => {
         if (err) return next(err);
         res.redirect('forgot');
