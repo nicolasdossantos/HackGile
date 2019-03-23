@@ -8,7 +8,7 @@ const keys = require('./keys');
 
 //Making all strategies available throughout project
 module.exports = (passport) => {
-   
+
     //Puts user id in a cookie for browser
     passport.serializeUser((user, done) => {
         done(null, user.id);
@@ -25,13 +25,21 @@ module.exports = (passport) => {
     passport.use(new LocalStrategy((username, password, done) => {
 
         //Match Username
-        let query ={$or: [{username: username}, {email: username}]};
+        let query = {
+            $or: [{
+                username: username
+            }, {
+                email: username
+            }]
+        };
         User.findOne(query, (err, user) => {
             if (err) {
                 console.log(err);
             }
             if (!user) {
-                return done(null, false, {message: 'Invalid username/password'})
+                return done(null, false, {
+                    message: 'Invalid username/password'
+                })
             }
 
             //Match Password
@@ -53,7 +61,7 @@ module.exports = (passport) => {
         clientID: keys.google.clientID,
         clientSecret: keys.google.clientSecret
     }, (accessToken, refreshToken, profile, done) => {
-        
+
         //Putting information gathered from profile into variables for readability
         let firstname = profile.name.givenName;
         let lastname = profile.name.familyName;
@@ -62,37 +70,39 @@ module.exports = (passport) => {
         let provider = profile.provider;
 
         //Check if user already exists in our database
-        User.findOne({email: email}).then((user)=>{
-            if(user){
+        User.findOne({
+            email: email
+        }).then((user) => {
+            if (user) {
                 return done(null, user);
-                
-            }else{
+
+            } else {
                 new User({
                     firstname: firstname,
                     lastname: lastname,
                     email: email,
                     image: image,
                     provider: provider
-        
+
                 }).save().then((newUser) => {
                     done(null, newUser);
                 });
             }
-        }).catch((error)=>{
+        }).catch((error) => {
             done(error, false, error.message);
         });
-           }));
+    }));
 
-       
+
     //GitHub Strategy
     passport.use(new GitHubStrategy({
         //options for strategy
         callbackURL: '/members/github/redirect',
         clientID: keys.github.clientID,
         clientSecret: keys.github.clientSecret,
-        scope: [ 'user:email' ]
+        scope: ['user:email']
     }, (accessToken, refreshToken, profile, done) => {
-        
+
         // //Putting information gathered from profile into variables for readability
         // let firstname = profile.name.givenName;
         // let lastname = profile.name.familyName;
@@ -103,63 +113,67 @@ module.exports = (passport) => {
 
 
         //Check if user already exists in our database
-        User.findOne({email: email}).then((user)=>{
-            if(user){
+        User.findOne({
+            email: email
+        }).then((user) => {
+            if (user) {
                 return done(null, user);
-                
-            }else{
+
+            } else {
                 new User({
                     username: username,
                     email: email,
                     image: image,
                     provider: provider
-        
+
                 }).save().then((newUser) => {
                     done(null, newUser);
                 });
             }
-        }).catch((error)=>{
+        }).catch((error) => {
             done(error, false, error.message);
         });
-           }));
+    }));
 
 
-     //Linkedin Strategy
-     passport.use(new LinkedinStrategy({
-        //options for strategy
-        callbackURL: '/members/linkedin/redirect',
-        clientID: keys.linkedin.clientID,
-        clientSecret: keys.linkedin.clientSecret,
-        scope: ['r_basicprofile', 'r_emailaddress'],    
-        state: true    
-      },
-      function(req,token, refreshToken, profile, done) {
-        //Putting information gathered from profile into variables for readability
-        let firstname = profile.name.givenName;
-        let lastname = profile.name.familyName;
-        let email = profile.emails[0].value;
-        let image = profile.photos[0].value;
-        let provider = profile.provider;
+    //Linkedin Strategy
+    passport.use(new LinkedinStrategy({
+            //options for strategy
+            callbackURL: '/members/linkedin/redirect',
+            clientID: keys.linkedin.clientID,
+            clientSecret: keys.linkedin.clientSecret,
+            scope: ['r_basicprofile', 'r_emailaddress'],
+            state: true
+        },
+        function (req, token, refreshToken, profile, done) {
+            //Putting information gathered from profile into variables for readability
+            let firstname = profile.name.givenName;
+            let lastname = profile.name.familyName;
+            let email = profile.emails[0].value;
+            let image = profile.photos[0].value;
+            let provider = profile.provider;
 
-        //Check if user already exists in our database
-        User.findOne({email: email}).then((user)=>{
-            if(user){
-                return done(null, user);
-                
-            }else{
-                new User({
-                    firstname: firstname,
-                    lastname: lastname,
-                    email: email,
-                    image: image,
-                    provider: provider
-                    
-                }).save().then((newUser) => {
-                    done(null, newUser);
-                });
-            }
-        }).catch((error)=>{
-            done(error, false, error.message);
-        });
-           }));
+            //Check if user already exists in our database
+            User.findOne({
+                email: email
+            }).then((user) => {
+                if (user) {
+                    return done(null, user);
+
+                } else {
+                    new User({
+                        firstname: firstname,
+                        lastname: lastname,
+                        email: email,
+                        image: image,
+                        provider: provider
+
+                    }).save().then((newUser) => {
+                        done(null, newUser);
+                    });
+                }
+            }).catch((error) => {
+                done(error, false, error.message);
+            });
+        }));
 }

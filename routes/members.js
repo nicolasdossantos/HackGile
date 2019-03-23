@@ -26,7 +26,7 @@ router.post('/login', (req, res, next) => {
         successFlash: true,
         failureRedirect: '/members/login',
         failureFlash: true
-    },)(req, res, next);
+    }, )(req, res, next);
 });
 
 //Signup Route
@@ -63,7 +63,13 @@ router.post('/signup', (req, res) => {
 
     } else {
         //Checks if email or username are already present in the database
-        let query = {$or: [{username: username}, {email: email}]};
+        let query = {
+            $or: [{
+                username: username
+            }, {
+                email: email
+            }]
+        };
         Member.findOne(query, (err, user) => {
             if (err) {
                 console.log(err);
@@ -71,7 +77,7 @@ router.post('/signup', (req, res) => {
             }
             //If user is already registered, redirect user to login page and generate message
             if (user) {
-                
+
                 if (user.email === email) {
                     req.flash('cardError', 'The email entered is already in use. Please try logging in');
                     res.render('login')
@@ -80,7 +86,7 @@ router.post('/signup', (req, res) => {
                     res.render('signup');
                 }
 
-            //If user is not in database yet, create new user
+                //If user is not in database yet, create new user
             } else {
                 let newMember = new Member({
                     firstname: firstname,
@@ -101,7 +107,7 @@ router.post('/signup', (req, res) => {
                         }
                         newMember.password = hash;
                         newMember.save((err) => {
-                            if (err) {  
+                            if (err) {
                                 console.log(err);
                                 return;
                             } else {
@@ -118,7 +124,7 @@ router.post('/signup', (req, res) => {
 
 
 //Test to retrieve members from DB
-router.get("/retrieve", ensureAuthentication,(req, res) => {
+router.get("/retrieve", ensureAuthentication, (req, res) => {
 
 
     Member.find({}, (err, members) => {
@@ -141,12 +147,13 @@ router.get('/google', passport.authenticate('google', {
 }));
 
 //Google Redirect
-router.get('/google/redirect', (req, res,next)=>{ passport.authenticate('google',{
-    successRedirect: '/projects/home',
-    successFlash: 'You are now logged in!',
-    failureRedirect: '/members/login',
-    failureFlash: true
-},)(req, res, next);
+router.get('/google/redirect', (req, res, next) => {
+    passport.authenticate('google', {
+        successRedirect: '/projects/home',
+        successFlash: 'You are now logged in!',
+        failureRedirect: '/members/login',
+        failureFlash: true
+    }, )(req, res, next);
 });
 
 //GitHub Auth
@@ -155,23 +162,25 @@ router.get('/github', passport.authenticate('github', {
 }));
 
 //GitHub Redirect
-router.get('/github/redirect', (req, res,next)=>{ passport.authenticate('github',{
-    successRedirect: '/projects/home',
-    successFlash: 'You are now logged in!',
-    failureRedirect: '/members/login',
-    failureFlash: true
-},)(req, res, next);
+router.get('/github/redirect', (req, res, next) => {
+    passport.authenticate('github', {
+        successRedirect: '/projects/home',
+        successFlash: 'You are now logged in!',
+        failureRedirect: '/members/login',
+        failureFlash: true
+    }, )(req, res, next);
 });
 
 //Linkedin Auth
 router.get('/linkedin', passport.authenticate('linkedin'));
 //Linkedin Redirect
-router.get('/linkedin/redirect', (req, res,next)=>{ passport.authenticate('linkedin',{
-    successRedirect: '/projects/home',
-    successFlash: 'You are now logged in!',
-    failureRedirect: '/members/login',
-    failureFlash: true
-},)(req, res, next);
+router.get('/linkedin/redirect', (req, res, next) => {
+    passport.authenticate('linkedin', {
+        successRedirect: '/projects/home',
+        successFlash: 'You are now logged in!',
+        failureRedirect: '/members/login',
+        failureFlash: true
+    }, )(req, res, next);
 });
 
 //Forgot Password Route
@@ -192,7 +201,9 @@ router.post('/forgot', (req, res, next) => {
         },
         //Find user by email and add assigns token and expiration to user in database
         (token, done) => {
-            Member.findOne({email: req.body.email}, (err, user) => {
+            Member.findOne({
+                email: req.body.email
+            }, (err, user) => {
                 if (!user) {
                     req.flash('cardError', 'No account linked to this email.');
                     return res.redirect('forgot');
@@ -270,13 +281,20 @@ router.post('/forgot', (req, res, next) => {
 
 //Reset Route...Find user by token
 router.get('/reset/:token', (req, res) => {
-    Member.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, (err, user) => {
+    Member.findOne({
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: {
+            $gt: Date.now()
+        }
+    }, (err, user) => {
         if (!user) {
             req.flash('cardError', 'Password reset token is invalid or has expired');
             return res.redirect('/members/forgot');
             console.log(err)
         }
-        res.render('reset', {user: req.user});
+        res.render('reset', {
+            user: req.user
+        });
     });
 });
 
@@ -286,7 +304,9 @@ router.post('/reset/:token', (req, res) => {
         (done) => {
             Member.findOne({
                 resetPasswordToken: req.params.token,
-                resetPasswordExpires: {$gt: Date.now()}
+                resetPasswordExpires: {
+                    $gt: Date.now()
+                }
             }, (err, user) => {
                 if (!user) {
                     req.flash('cardError', 'Password reset token is invalid or has expired');
@@ -347,8 +367,8 @@ router.post('/reset/:token', (req, res) => {
                 to: user.email,
                 from: 'infohackgile@gmail.com',
                 subject: 'Your Password Has Been Changed',
-                text: 'This is a confirmation that the password for your account has been changed.\n'
-                    + 'Thank you!'
+                text: 'This is a confirmation that the password for your account has been changed.\n' +
+                    'Thank you!'
             };
             smtpTransport.sendMail(mailOptions, (err) => {
                 console.log('email sent')
@@ -364,7 +384,7 @@ router.post('/reset/:token', (req, res) => {
 });
 
 //Logout route
-router.get('/logout', (req, res)=> {
+router.get('/logout', (req, res) => {
     req.logOut();
     req.flash('cardSuccess', 'You are logged out');
     res.redirect('/');
