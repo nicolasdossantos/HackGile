@@ -336,7 +336,9 @@ router.post('/reset/:token', (req, res) => {
         },
         (user, done) => {
             let smtpTransport = nodemailer.createTransport({
-                service: 'Gmail',
+                host: "smtp.domain.com",
+                port: 465,
+                secure: false,
                 auth: {
                     user: 'infohackgile@gmail.com',
                     pass: 'nicolasthomasgerard'
