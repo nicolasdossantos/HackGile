@@ -1,7 +1,19 @@
 include sprint_planning.pug
 .row
     .col.s12
+        //- Agile Panel
         .card-panel
-            +sprintCard('Test', 5, 'adsf')
-            +sprintCard('Test', 5, 'adsf')
-            +sprintCard('Test', 5, 'adsf')
+            .row
+                .col.l9.s12.right
+                    .card-panel
+                        each val in project.sprints
+                            +sprintCard(val.name, val.time, val.stories)
+                .col.l3.s12.left
+                    //- Backlog panel
+                    .card-panel
+                        each val in project.stories
+                            if (val.status == 'Backlog')
+                                +storyCard(val.title, val.description)
+            //- +sprintCard('Test', 5, 'adsf')
+            //- +sprintCard('Test', 5, 'adsf')
+            //- +sprintCard('Test', 5, 'adsf')

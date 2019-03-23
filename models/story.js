@@ -13,6 +13,9 @@ let storySchema = new Schema({
     member: {
         type: String
     },
+    title: {
+        type: String
+    },
     description: {
         type: String,
         required: true

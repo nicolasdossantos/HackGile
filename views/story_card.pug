@@ -4,11 +4,12 @@ mixin storyCard(title, description)
             .card
                 .card-content
                     span.card-title= title
-                        p.flow-text=description
+                        p.flow-text= description
                 .card-action.valign-wrapper
                     a.left.dropdown-trigger.btn(data-target="move" href="#") Move To
                     a.right(href="#")
                         i.material-icons.black-text settings
+    //-TODO: make dropdown IDs unique
     ul#move.dropdown-content
         li
             a(href="#") Backlog
