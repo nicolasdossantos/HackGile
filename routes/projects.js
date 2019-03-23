@@ -3,32 +3,35 @@ const router = express.Router();
 const functions = require('../app');
 const flash = require('connect-flash');
 
+
 //Bring in models
 let Member = require('../models/member');
 let Project = require('../models/project');
 
 router.get('/home', (req,res)=>{
     
-    Project.find({members:{$in:req.user._id}}, (err, project) => {
+    Project.find({members:{$in:req.user._id}}, (err, projects) => {
         if (err) {
             console.log(err);
         } else {
             res.render('home', {
                 title: "Projects",
-                project: project
+                projects: projects
             });
         }
     })
 });
 
-router.get('/new_project', (req, res)=>{
+
+router.get('/new_project', ensureAuthentication,(req, res)=>{
     res.render('new_project');
 });
 
-router.post('/new_project', (req, res)=>{
+router.post('/new_project',ensureAuthentication, (req, res)=>{
     let name = req.body.name;
     let isHackathon = req.body.ishackathon;
-    let duration = req.body.duration;
+    let endDate = req.body.enddate;
+    let endTime = req.body.endtime;
     let description = req.body.description;
     let git = req.body.git;
     let member = req.user._id;
@@ -52,9 +55,10 @@ router.post('/new_project', (req, res)=>{
     let newProject = new Project({
         name: name,
         ishackathon: isHackathon,
-        duration: duration,
+        enddate: endDate,
         description: description,
         git: git,
+
         members: member
     });
 
@@ -70,5 +74,15 @@ router.post('/new_project', (req, res)=>{
 }
 
 });
+
+function ensureAuthentication(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        req.flash('cardError', 'Please Login');
+        res.redirect('/members/login');
+    }
+}
+
    
 module.exports = router;

@@ -57,3 +57,31 @@ body{
     color: white;
     text-align: center;
   }
+  
+  .alert-error {
+    background-color: #FFCCCB;
+    padding: 20px;
+    border-radius: 0 0 2px 2px;
+    color: white;
+    text-align: center;
+  }
+
+  .card.success {
+    background-color: #ADD8E6;
+    padding: 20px;
+    border-radius: 0 0 2px 2px;
+    color: #0000CC;
+    text-align: center;
+  }
+
+  .largelabel {
+    color: white;
+    font-size: 36pt;
+    margin-left: 70px;
+
+
+  }
+
+  .logo {
+    margin-left: 400px;
+  }
