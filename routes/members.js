@@ -211,7 +211,6 @@ router.post('/forgot', (req, res, next) => {
         (token, user, done) => {
             let smtpTransport = nodemailer.createTransport({
                 service: 'Gmail',
-                secure: true,
                 auth: {
                     user: keys.email.username,
                     pass: keys.email.password
@@ -221,7 +220,7 @@ router.post('/forgot', (req, res, next) => {
             if (user.provider === 'local') {
                 mailOptions = {
                     to: user.email,
-                    from: 'noreply@hackgile.org',
+                    from: 'HackGile <noreply@hackgile.org>',
                     subject: 'HackGile Password Request',
                     text: 'You told us you forgot your passowrd. If you really did, click here to choose a new one:' +
                         '\n\n http://localhost:8080/members/reset/' + token + '\n\n' +
@@ -336,7 +335,10 @@ router.post('/reset/:token', (req, res) => {
         },
         (user, done) => {
             let smtpTransport = nodemailer.createTransport({
-                service: 'Gmail',
+                pool: true,
+                host: "smtp.domain.com",
+                port: 465,
+                secure: true,
                 auth: {
                     user: keys.email.username,
                     pass: keys.email.password
