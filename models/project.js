@@ -15,7 +15,7 @@ let projectSchema = new Schema({
         type: Number,
         required: true
     },
-    
+
     description: {
         type: String
     },
@@ -37,4 +37,3 @@ let projectSchema = new Schema({
 });
 
 let Project = module.exports = mongoose.model('Project', projectSchema);
-
