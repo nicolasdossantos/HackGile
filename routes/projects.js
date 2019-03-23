@@ -9,18 +9,6 @@ let Member = require('../models/member');
 let Project = require('../models/project');
 
 router.get('/home', (req,res)=>{
-    let str = "14:00"
-    let split = str.split(":");
-    console.log(parseInt(split[0], 10));
-
-
-    Project.findOne({name:'tets'}, (err, project)=>{
-        if(project){
-           
-        }
-    })
-
-
 
     Project.find({members:{$in:req.user._id}}, (err, projects) => {
         if (err) {
@@ -92,9 +80,8 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
         }
     })
 }
-
 });
-
+    
 function ensureAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -103,5 +90,36 @@ function ensureAuthentication(req, res, next) {
         res.redirect('/members/login');
     }
 }
-   
+
+router.get('/:id', (req, res) => {
+    Project.findById(req.params.id, (err, project) => {
+            res.render('project', {
+                project: project
+            });
+        });
+       
+    });
+router.get('/add_member/:id', (req, res)=>{
+    res.render('add_member');
+});
+
+router.post('/add_member/:id', (req, res)=>{
+    let email = req.body.email;
+    let projectId = req.params.id;
+
+Member.findOne({email:email}, (err,member)=>{
+    if(!member){
+        console.log(err);
+    }else{
+        Project.findById(projectId, (err, project)=>{
+            if(err){
+                console.log(err);
+            }else{
+                project.members.push(member.id)
+            }
+        });
+    }
+    });
+    });
+
 module.exports = router;
