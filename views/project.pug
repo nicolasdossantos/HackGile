@@ -1,7 +1,10 @@
-extend layout
-
+extends layout
 block content
     h1= project.name
-    p= project.description
-    hr
-    a(href="/projects/add_member/"+project.id) Add Member
+    include agile_board.pug
+
+//- block content
+//-     h1= project.name
+//-     p= project.description
+//-     hr
+//-     a(href="/projects/add_member/"+project.id) Add Member

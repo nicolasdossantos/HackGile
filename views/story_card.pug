@@ -1,11 +1,10 @@
-extends layout
-block content
+mixin storyCard(title, description)
     .row
         .col.s12
             .card
                 .card-content
-                    span.card-title Title
-                        p Description
+                    span.card-title= title
+                        p.flow-text=description
                 .card-action.valign-wrapper
                     a.left.dropdown-trigger.btn(data-target="move" href="#") Move To
                     a.right(href="#")
@@ -17,3 +16,4 @@ block content
             a(href="#") Doing
         Li
             a(href="#") Done
+    
