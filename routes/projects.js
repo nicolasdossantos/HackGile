@@ -9,7 +9,19 @@ let Member = require('../models/member');
 let Project = require('../models/project');
 
 router.get('/home', (req,res)=>{
-    
+    let str = "14:00"
+    let split = str.split(":");
+    console.log(parseInt(split[0], 10));
+
+
+    Project.findOne({name:'tets'}, (err, project)=>{
+        if(project){
+           
+        }
+    })
+
+
+
     Project.find({members:{$in:req.user._id}}, (err, projects) => {
         if (err) {
             console.log(err);
@@ -36,11 +48,12 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
     let git = req.body.git;
     let member = req.user._id;
 
+
     //Field verification here:
     req.checkBody('name', 'Name field is required').notEmpty();
     req.checkBody('ishackathon', 'Hackathon field is required').notEmpty();
     req.checkBody('description', 'Description fiels is required').notEmpty();
-    req.checkBody('git', 'Git URL is required').notEmpty();
+    
 
     let errors = req.validationErrors();
 
@@ -52,13 +65,20 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
 
      } else {
 
+    //time manipulation
+    let splitTime = endTime.split(":");
+    let epochHour = parseInt(splitTime[0], 10) * 60 * 60;
+    let epochMin = parseInt(splitTime[1], 10) * 60;
+    let epochEndTime = epochHour + epochMin;
+
+    let deadLine = epochEndTime + Date.parse(endDate);
+
     let newProject = new Project({
         name: name,
         ishackathon: isHackathon,
-        enddate: endDate,
+        deadline: deadLine,
         description: description,
         git: git,
-
         members: member
     });
 
@@ -83,6 +103,5 @@ function ensureAuthentication(req, res, next) {
         res.redirect('/members/login');
     }
 }
-
    
 module.exports = router;
