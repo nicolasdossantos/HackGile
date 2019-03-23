@@ -116,6 +116,14 @@ Member.findOne({email:email}, (err,member)=>{
                 console.log(err);
             }else{
                 project.members.push(member.id)
+                project.save((err)=>{
+                    if(err){
+                        console.log(err);
+                    }else{
+                        req.flash('cardSuccess', 'Member has been added!');
+                        res.redirect('/projects/home')
+                    }
+                });
             }
         });
     }
