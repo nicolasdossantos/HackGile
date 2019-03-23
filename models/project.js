@@ -15,6 +15,9 @@ let projectSchema = new Schema({
         type: Date,
         required: true
     },
+    endtime:{
+        type: Number
+    },
     description: {
         type: String
     },

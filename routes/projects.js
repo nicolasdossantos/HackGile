@@ -30,7 +30,8 @@ router.get('/new_project', ensureAuthentication,(req, res)=>{
 router.post('/new_project',ensureAuthentication, (req, res)=>{
     let name = req.body.name;
     let isHackathon = req.body.ishackathon;
-    let duration = req.body.duration;
+    let endDate = req.body.enddate;
+    let endTime = req.body.endtime;
     let description = req.body.description;
     let git = req.body.git;
     let member = req.user._id;
@@ -54,9 +55,10 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
     let newProject = new Project({
         name: name,
         ishackathon: isHackathon,
-        duration: duration,
+        enddate: endDate,
         description: description,
         git: git,
+
         members: member
     });
 
