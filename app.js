@@ -10,6 +10,7 @@ const config = require('./config/database');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
+'use strict';
 
 
 //Mongoose midleware
@@ -111,18 +112,16 @@ app.listen(8080, () => {
     console.log("Listening on port 8080...");
 });
 
-module.exports = {
 
-    ensureAuthentication: function (req, res, next) {
+function ensureAuthentication(req, res, next) {
 
-        if (req.isAuthenticated()) {
-            return next();
+    if (req.isAuthenticated()) {
+        return next();
 
-        } else {
-            req.flash('cardError', 'Please Login');
+    } else {
+        req.flash('cardError', 'Please Login');
 
-            res.redirect('/members/login');
+        res.redirect('/members/login');
 
-        }
     }
 }

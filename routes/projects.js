@@ -3,6 +3,7 @@ const router = express.Router();
 const functions = require('../app');
 const flash = require('connect-flash');
 
+
 //Bring in models
 let Member = require('../models/member');
 let Project = require('../models/project');
@@ -21,11 +22,12 @@ router.get('/home', (req,res)=>{
     })
 });
 
-router.get('/new_project', (req, res)=>{
+
+router.get('/new_project', ensureAuthentication,(req, res)=>{
     res.render('new_project');
 });
 
-router.post('/new_project', (req, res)=>{
+router.post('/new_project',ensureAuthentication, (req, res)=>{
     let name = req.body.name;
     let isHackathon = req.body.ishackathon;
     let duration = req.body.duration;
@@ -70,5 +72,15 @@ router.post('/new_project', (req, res)=>{
 }
 
 });
+
+function ensureAuthentication(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        req.flash('cardError', 'Please Login');
+        res.redirect('/members/login');
+    }
+}
+
    
 module.exports = router;

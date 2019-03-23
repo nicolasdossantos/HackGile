@@ -6,7 +6,7 @@ block content
             .col.m7.s12
                 form(method='POST', action='/members/login')
                     #form-group.container
-                        label.white-text.test2 Username:
+                        label.white-text.test2 Username or Email:
                         input.form-control(name='username', type='text').white
 
                         label.white-text Password:
@@ -15,8 +15,6 @@ block content
                             .col
                                 input.left.btn.btn-primary(type='submit', value='Submit').white-text.green
                             .col.right
-                                .row(style="margin-bottom:0px;")
-                                    a.left(style="color:white;" href="/members/forgot_username") Forgot Username?   
                                 .row(style="margin-bottom:0px;")              
                                     a.left(style="color:white;" href="/members/forgot") Forgot Password?
             .col.m1.s12

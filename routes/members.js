@@ -5,7 +5,6 @@ const passport = require('passport');
 const async = require('async');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const functions = require('../app');
 const keys = require('../config/keys')
 
 
@@ -13,7 +12,7 @@ const keys = require('../config/keys')
 let Story = require('../models/story');
 let Member = require('../models/member');
 let Project = require('../models/project');
-let Sprint = require('../models/story');
+let Sprint = require('../models/sprint');
 
 //Login form
 router.get('/login', (req, res) => {
@@ -23,7 +22,7 @@ router.get('/login', (req, res) => {
 //Login Process
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
-        successRedirect: '/',
+        successRedirect: '/projects/home',
         successFlash: true,
         failureRedirect: '/members/login',
         failureFlash: true
@@ -119,7 +118,7 @@ router.post('/signup', (req, res) => {
 
 
 //Test to retrieve members from DB
-router.get("/retrieve", /*functions.ensureAuthentication,*/(req, res) => {
+router.get("/retrieve", ensureAuthentication,(req, res) => {
 
 
     Member.find({}, (err, members) => {
@@ -142,11 +141,12 @@ router.get('/google', passport.authenticate('google', {
 }));
 
 //Google Redirect
-router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-    //Once user is logged in, their info is available using req.user
-    //res.send(req.user);
-    req.flash('cardSuccess', 'Welcome ' + req.user.firstname);
-    res.redirect('/');
+router.get('/google/redirect', (req, res,next)=>{ passport.authenticate('google',{
+    successRedirect: '/projects/home',
+    successFlash: 'You are now logged in!',
+    failureRedirect: '/members/login',
+    failureFlash: true
+},)(req, res, next);
 });
 
 //GitHub Auth
@@ -155,19 +155,23 @@ router.get('/github', passport.authenticate('github', {
 }));
 
 //GitHub Redirect
-router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
-
-    req.flash('cardSuccess', 'Welcome ' + req.user.username);
-    res.redirect('/projects/home');
+router.get('/github/redirect', (req, res,next)=>{ passport.authenticate('github',{
+    successRedirect: '/projects/home',
+    successFlash: 'You are now logged in!',
+    failureRedirect: '/members/login',
+    failureFlash: true
+},)(req, res, next);
 });
-
 
 //Linkedin Auth
 router.get('/linkedin', passport.authenticate('linkedin'));
 //Linkedin Redirect
-router.get('/linkedin/redirect', passport.authenticate('linkedin'), (req, res) => {
-    req.flash('cardSuccess', 'Welcome ' + req.user.firstname);
-    res.redirect('/');
+router.get('/linkedin/redirect', (req, res,next)=>{ passport.authenticate('linkedin',{
+    successRedirect: '/projects/home',
+    successFlash: 'You are now logged in!',
+    failureRedirect: '/members/login',
+    failureFlash: true
+},)(req, res, next);
 });
 
 //Forgot Password Route
@@ -252,7 +256,6 @@ router.post('/forgot', (req, res, next) => {
                 };
             }
 
-
             smtpTransport.sendMail(mailOptions, (err) => {
                 console.log('email sent')
                 req.flash('cardSuccess', 'An email has been sent to ' + user.email + ' with further instructions.')
@@ -290,7 +293,7 @@ router.post('/reset/:token', (req, res) => {
                     return res.redirect('/members/forgot');
                     console.log(err)
                 }
-                //Validate fields **NEEDS TESTING**
+                //Validate fields
                 req.checkBody('password', 'Password is required').notEmpty();
                 req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
@@ -359,85 +362,6 @@ router.post('/reset/:token', (req, res) => {
         res.redirect('forgot');
     });
 });
-
-//Forgot username Route
-router.get('/forgot_username', (req, res) => {
-    res.render('forgot_username');
-});
-
-//Forgot Post
-router.post('/forgot_username', (req, res, next) => {
-    let mailOptions;
-    let email = req.body.email
-    //console.log(email)
-    Member.findOne({email: email}, (err, user) => {
-        if (!user) {
-            req.flash('cardError', 'The email entered does not match any records in our database.');
-            return res.redirect('/members/forgot_username')
-        } else {
-            console.log(user);
-            let smtpTransport = nodemailer.createTransport({
-                service: 'Gmail',
-                auth: {
-                    user: 'infohackgile@gmail.com',
-                    pass: 'nicolasthomasgerard'
-                }
-            });
-
-
-            if (user.provider === 'google') {
-                mailOptions = {
-                    to: user.email,
-                    from: 'infohackgile@gmail.com',
-                    subject: 'HackGile Username Request',
-                    text: 'You originally have registered using your Google account ' + user.email + '.\n' +
-                        'Please login using: http://localhost:8080/members/google'
-                };
-
-
-            } else if (user.provider === 'linkedin') {
-                mailOptions = {
-                    to: user.email,
-                    from: 'infohackgile@gmail.com',
-                    subject: 'HackGile Username Request',
-                    text: 'You originally have registered using your LinkedIn account ' + user.email + '.\n' +
-                        'Please login using: http://localhost:8080/members/linkedin'
-                };
-
-            } else if (user.provider === 'github') {
-                mailOptions = {
-                    to: user.email,
-                    from: 'infohackgile@gmail.com',
-                    subject: 'HackGile Username Request',
-                    text: 'You originally have registered using your GitHub account ' + user.email + '.\n' +
-                        'Please login using: http://localhost:8080/members/github'
-                };
-
-            } else if (user.provider === 'local') {
-
-
-                mailOptions = {
-                    to: user.email,
-                    from: 'infohackgile@gmail.com',
-                    subject: 'HackGile Username Request',
-                    text: 'Hello, it seems that you have forgoten your username. Don\'t worry, we got you:\n'
-                        + 'Your username is: ' + user.username
-                };
-            }
-
-            smtpTransport.sendMail(mailOptions, (err) => {
-                console.log('email sent')
-
-
-                req.flash('cardSuccess', 'An email has been sent to ' + user.email + ' with your username.');
-                res.redirect('login');
-                done(err, 'done');
-            });
-        }
-
-    });
-});
-
 
 //Logout route
 router.get('/logout', (req, res)=> {
