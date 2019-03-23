@@ -9,7 +9,7 @@ let Member = require('../models/member');
 let Project = require('../models/project');
 
 router.get('/home', (req,res)=>{
-    
+
     Project.find({members:{$in:req.user._id}}, (err, projects) => {
         if (err) {
             console.log(err);
@@ -36,11 +36,12 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
     let git = req.body.git;
     let member = req.user._id;
 
+
     //Field verification here:
     req.checkBody('name', 'Name field is required').notEmpty();
     req.checkBody('ishackathon', 'Hackathon field is required').notEmpty();
     req.checkBody('description', 'Description fiels is required').notEmpty();
-    req.checkBody('git', 'Git URL is required').notEmpty();
+    
 
     let errors = req.validationErrors();
 
@@ -52,13 +53,20 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
 
      } else {
 
+    //time manipulation
+    let splitTime = endTime.split(":");
+    let epochHour = parseInt(splitTime[0], 10) * 60 * 60;
+    let epochMin = parseInt(splitTime[1], 10) * 60;
+    let epochEndTime = epochHour + epochMin;
+
+    let deadLine = epochEndTime + Date.parse(endDate);
+
     let newProject = new Project({
         name: name,
         ishackathon: isHackathon,
-        enddate: endDate,
+        deadline: deadLine,
         description: description,
         git: git,
-
         members: member
     });
 
@@ -72,9 +80,8 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
         }
     })
 }
-
 });
-
+    
 function ensureAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -84,5 +91,35 @@ function ensureAuthentication(req, res, next) {
     }
 }
 
-   
+router.get('/:id', (req, res) => {
+    Project.findById(req.params.id, (err, project) => {
+            res.render('project', {
+                project: project
+            });
+        });
+       
+    });
+router.get('/add_member/:id', (req, res)=>{
+    res.render('add_member');
+});
+
+router.post('/add_member/:id', (req, res)=>{
+    let email = req.body.email;
+    let projectId = req.params.id;
+
+Member.findOne({email:email}, (err,member)=>{
+    if(!member){
+        console.log(err);
+    }else{
+        Project.findById(projectId, (err, project)=>{
+            if(err){
+                console.log(err);
+            }else{
+                project.members.push(member.id)
+            }
+        });
+    }
+    });
+    });
+
 module.exports = router;

@@ -42,6 +42,15 @@ let Story = require('./models/story');
 //     console.log("Entries have been removed");
 // });
 
+
+// //For Testing. This will remove all members from database
+// Project.deleteMany({}, (err)=>{
+//     if(err){
+//         console.log(err);
+//     }
+//     console.log("Entries have been removed");
+// });
+
 //Load View engine / Pug
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
