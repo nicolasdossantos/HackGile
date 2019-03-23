@@ -8,8 +8,9 @@ const flash = require('connect-flash');
 let Member = require('../models/member');
 let Project = require('../models/project');
 
-router.get('/home', (req,res)=>{
-
+//Home route
+router.get('/home',ensureAuthentication, (req,res)=>{
+    //Retrieve all current user's projects
     Project.find({members:{$in:req.user._id}}, (err, projects) => {
         if (err) {
             console.log(err);
@@ -21,12 +22,12 @@ router.get('/home', (req,res)=>{
         }
     })
 });
-
-
+//New Project Route
 router.get('/new_project', ensureAuthentication,(req, res)=>{
     res.render('new_project');
 });
 
+//
 router.post('/new_project',ensureAuthentication, (req, res)=>{
     let name = req.body.name;
     let isHackathon = req.body.ishackathon;
@@ -35,7 +36,6 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
     let description = req.body.description;
     let git = req.body.git;
     let member = req.user._id;
-
 
     //Field verification here:
     req.checkBody('name', 'Name field is required').notEmpty();
@@ -60,7 +60,7 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
     let epochEndTime = epochHour + epochMin;
 
     let deadLine = epochEndTime + Date.parse(endDate);
-
+    //Create new project
     let newProject = new Project({
         name: name,
         ishackathon: isHackathon,
@@ -69,7 +69,7 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
         git: git,
         members: member
     });
-
+    //Save project
     newProject.save((err)=>{
         if(err){
             console.log(err)
@@ -81,6 +81,55 @@ router.post('/new_project',ensureAuthentication, (req, res)=>{
     })
 }
 });
+//Project page route
+router.get('/:id', (req, res) => {
+    Project.findById(req.params.id, (err, project) => {
+            res.render('project', {
+                project: project
+            });
+        });
+       
+    });
+
+//Add member route
+router.get('/add_member/:id', (req, res)=>{
+    res.render('add_member');
+});
+
+//Project is found by ID, user found by email. If user is not already present in project, it is then added to it
+router.post('/add_member/:id', (req, res)=>{
+    let email = req.body.email;
+    let projectId = req.params.id;
+
+    Member.findOne({email:email}, (err,member)=>{
+        if(!member){
+            req.flash('cardError','The email entered does not correspond to an active member.');
+            res.redirect('/projects/add_member/'+projectId);
+        }else{
+            Project.findById(projectId, (err, project)=>{
+                if(err){
+                    console.log(err);
+                }else{
+                    if(project.members.indexOf(member.id) < 0){
+                        project.members.push(member.id)
+                        project.save((err)=>{
+                            if(err){
+                                console.log(err);
+                            }else{
+                                req.flash('cardSuccess', 'Member has been added!');
+                                res.redirect('/projects/home')
+                            }
+                        });
+                    }else{
+                        req.flash('cardError', 'The member is already part of the project');
+                        res.redirect('/projects/add_member/'+projectId)
+                    }
+                }
+            });
+        }
+        });
+    });
+
     
 function ensureAuthentication(req, res, next) {
     if (req.isAuthenticated()) {
@@ -90,44 +139,6 @@ function ensureAuthentication(req, res, next) {
         res.redirect('/members/login');
     }
 }
-
-router.get('/:id', (req, res) => {
-    Project.findById(req.params.id, (err, project) => {
-            res.render('project', {
-                project: project
-            });
-        });
-       
-    });
-router.get('/add_member/:id', (req, res)=>{
-    res.render('add_member');
-});
-
-router.post('/add_member/:id', (req, res)=>{
-    let email = req.body.email;
-    let projectId = req.params.id;
-
-Member.findOne({email:email}, (err,member)=>{
-    if(!member){
-        console.log(err);
-    }else{
-        Project.findById(projectId, (err, project)=>{
-            if(err){
-                console.log(err);
-            }else{
-                project.members.push(member.id)
-                project.save((err)=>{
-                    if(err){
-                        console.log(err);
-                    }else{
-                        req.flash('cardSuccess', 'Member has been added!');
-                        res.redirect('/projects/home')
-                    }
-                });
-            }
-        });
-    }
-    });
-    });
+    
 
 module.exports = router;
