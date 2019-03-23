@@ -2,14 +2,14 @@ extends layout
 block content
     .row
         .col.s12
-            .card.blue-grey.darken-1
-                .card-content.white-text
+            .card
+                .card-content
                     span.card-title Title
                         p Description
                 .card-action.valign-wrapper
                     a.left.dropdown-trigger.btn(data-target="move" href="#") Move To
                     a.right(href="#")
-                        i.material-icons.white-text settings
+                        i.material-icons.black-text settings
     ul#move.dropdown-content
         li
             a(href="#") Backlog
