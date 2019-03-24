@@ -110,6 +110,10 @@ app.get("/", (req, res) => {
     res.render('index');
 });
 
+app.get("/card", (req, res) => {
+    res.render('story_card');
+});
+
 app.listen(8080, () => {
     console.log("Listening on port 8080...");
 });

@@ -31,6 +31,10 @@ router.get('/new_project', ensureAuthentication, (req, res) => {
 });
 
 //
+
+router.post('/thistest', (req, res)=>{
+    console.log(req.body.duration)
+});
 router.post('/new_project', ensureAuthentication, (req, res) => {
     let name = req.body.name;
     let isHackathon = req.body.ishackathon;
@@ -92,6 +96,10 @@ router.get('/:id', (req, res) => {
         });
     });
 
+});
+
+router.post('/modal#1', (req, res) => {
+    console.log(req.body.duration);
 });
 
 //Add member route

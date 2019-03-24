@@ -365,22 +365,34 @@ router.post('/reset/:token', (req, res) => {
                         pass: 'nicolasthomasgerard'
                     }
 
-                });
-                let mailOptions = {
-                    to: user.email,
-                    from: 'infohackgile@gmail.com',
-                    subject: 'Your Password Has Been Changed',
-                    text: 'This is a confirmation that the password for your account has been changed.\n' +
-                        'Thank you!'
-                };
-                smtpTransport.sendMail(mailOptions, (err) => {
-                    console.log('email sent')
-                    req.flash('cardSuccess', 'Success! Your password has been changed!');
-                    res.redirect('/');
-                    done(err, 'done');
-                });
-            }
-        
+
+            });
+        },
+        (user, done) => {
+            let smtpTransport = nodemailer.createTransport({
+                host: "smtp.domain.com",
+                port: 465,
+                secure: false,
+                auth: {
+                    user: 'infohackgile@gmail.com',
+                    pass: 'nicolasthomasgerard'
+                }
+
+            });
+            let mailOptions = {
+                to: user.email,
+                from: 'infohackgile@gmail.com',
+                subject: 'Your Password Has Been Changed',
+                text: 'This is a confirmation that the password for your account has been changed.\n' +
+                    'Thank you!'
+            };
+            smtpTransport.sendMail(mailOptions, (err) => {
+                console.log('email sent')
+                req.flash('cardSuccess', 'Success! Your password has been changed!');
+                res.redirect('/');
+                done(err, 'done');
+            });
+        }
     ], (err) => {
         if (err) return next(err);
         res.redirect('forgot');

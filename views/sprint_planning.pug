@@ -1,0 +1,31 @@
+include story_card.pug
+mixin sprintCard(name, time, stories)
+    .row
+        .col.s12
+            .card
+                .card-content
+                    span.card-title= name
+                        .row
+                            .col.s12.l4
+                                .card
+                                    .card-content
+                                        span.card-title Backlog
+                                            if val
+                                                each val in stories
+                                                    if val.status = 'Backlog'
+                                                        +storyCard(val.name, val.description)
+                            .col.s12.l4
+                                .card
+                                    .card-content
+                                        span.card-title Doing
+                                            +storyCard('Test', 'This is a description')
+                                            +storyCard('Test', 'This is a description')
+                            .col.s12.l4
+                                .card
+                                    .card-content
+                                        span.card-title Done
+                                            +storyCard('Test', 'This is a description')
+                                            +storyCard('Test', 'This is a description')
+                                            +storyCard('Test', 'This is a description')
+                                            +storyCard('Test', 'This is a description')
+                                            +storyCard('Test', 'This is a description')
