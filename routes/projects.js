@@ -87,7 +87,16 @@ router.post('/new_project', ensureAuthentication, (req, res) => {
 });
 //Project page route
 router.get('/:id', (req, res) => {
-    Project.findById(req.params.id, (err, project) => {
+    //Populates the project with all its nested objects.
+    //Ex. calling project.stories doesn't return an ObjectID array but a JSON array
+    Project.findById(req.params.id)
+        .populate({path: 'stories',
+            populate: {path: 'member'}})
+        .populate({path: 'sprints',
+            populate: {path: 'stories',
+                populate: {path: 'member'}}})
+        .populate('members')
+        .exec(function(err, project) {
         res.render('project', {
             project: project
         });
