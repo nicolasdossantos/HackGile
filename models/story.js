@@ -11,7 +11,8 @@ let storySchema = new Schema({
         required: true
     },
     member: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'Member'
     },
     title: {
         type: String
@@ -25,4 +26,4 @@ let storySchema = new Schema({
     }
 });
 
-let Story = module.exports = mongoose.model('Story', storySchema);
+const Story = module.exports = mongoose.model('Story', storySchema);
