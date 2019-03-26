@@ -10,12 +10,12 @@ const config = require('./config/database');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
-'use strict';
-
 
 //Mongoose midleware
 //Setup DB
-mongoose.connect(config.database, {useNewUrlParser: true});
+mongoose.connect(config.database, {
+    useNewUrlParser: true
+});
 let db = mongoose.connection;
 
 //Check for DB errors
@@ -47,7 +47,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 //Body Parser middleware parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
 // parse application/json
 app.use(bodyParser.json());
@@ -108,20 +110,10 @@ app.get("/", (req, res) => {
     res.render('index');
 });
 
+app.get("/card", (req, res) => {
+    res.render('story_card');
+});
+
 app.listen(8080, () => {
     console.log("Listening on port 8080...");
 });
-
-
-function ensureAuthentication(req, res, next) {
-
-    if (req.isAuthenticated()) {
-        return next();
-
-    } else {
-        req.flash('cardError', 'Please Login');
-
-        res.redirect('/members/login');
-
-    }
-}
