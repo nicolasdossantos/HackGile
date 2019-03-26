@@ -10,7 +10,11 @@ const config = require('./config/database');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
+const redirectToHTTPS = require('express-http-to-https').redirectToHTTPS
 
+
+app.use(redirectToHTTPS([/localhost:(\d{4})/], [/\/insecure/], 301));
+ 
 //Mongoose midleware
 //Setup DB
 mongoose.connect(config.database, {
