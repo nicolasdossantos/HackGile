@@ -236,7 +236,7 @@ router.post('/forgot', (req, res, next) => {
                     from: 'infohackgile@gmail.com',
                     subject: 'HackGile Password Request',
                     text: 'You told us you forgot your passowrd. If you really did, click here to choose a new one:' +
-                        '\n\n http://localhost:8080/members/reset/' + token + '\n\n' +
+                        '\n\n https://hackgile.org/members/reset/' + token + '\n\n' +
                         'If you didn\'t mean to, please ignore this email. Your password will remain unchanged.'
                 };
             } else if (user.provider === 'google') {
@@ -245,7 +245,7 @@ router.post('/forgot', (req, res, next) => {
                     from: 'infohackgile@gmail.com',
                     subject: 'HackGile Password Request',
                     text: 'You originally have registered using your Google account ' + user.email + '.\n' +
-                        'Please login using: http://localhost:8080/members/google'
+                        'Please login using: https://hackgile.org/members/google'
                 };
 
 
@@ -255,7 +255,7 @@ router.post('/forgot', (req, res, next) => {
                     from: 'infohackgile@gmail.com',
                     subject: 'HackGile Password Request',
                     text: 'You originally have registered using your LinkedIn account ' + user.email + '.\n' +
-                        'Please login using: http://localhost:8080/members/linkedin'
+                        'Please login using: https://hackgile.org/members/linkedin'
                 };
 
             } else if (user.provider === 'github') {
@@ -264,7 +264,7 @@ router.post('/forgot', (req, res, next) => {
                     from: 'infohackgile@gmail.com',
                     subject: 'HackGile Password Request',
                     text: 'You originally have registered using your GitHub account ' + user.email + '.\n' +
-                        'Please login using: http://localhost:8080/members/github'
+                        'Please login using: https://hackgile.org/members/github'
                 };
             }
 
@@ -361,8 +361,8 @@ router.post('/reset/:token', (req, res) => {
                 let smtpTransport = nodemailer.createTransport({
                     service: 'Gmail',
                     auth: {
-                        user: 'infohackgile@gmail.com',
-                        pass: 'nicolasthomasgerard'
+                        user: keys.email.username,
+                        pass: keys.email.password
                     }
 
 
