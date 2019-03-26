@@ -222,18 +222,20 @@ router.post('/forgot', (req, res, next) => {
         //Send email for password reset
         (token, user, done) => {
             let smtpTransport = nodemailer.createTransport({
-                service: 'Gmail',
+                pool: true,
+                host: "smtp.domain.com",
+                port: 465,
+                secure: true,
                 auth: {
                     user: keys.email.username,
                     pass: keys.email.password
                 }
-
             });
 
             if (user.provider === 'local') {
                 mailOptions = {
                     to: user.email,
-                    from: 'infohackgile@gmail.com',
+                    from: 'HackGile <noreply@hackgile.org>',
                     subject: 'HackGile Password Request',
                     text: 'You told us you forgot your passowrd. If you really did, click here to choose a new one:' +
                         '\n\n https://hackgile.org/members/reset/' + token + '\n\n' +
@@ -242,7 +244,7 @@ router.post('/forgot', (req, res, next) => {
             } else if (user.provider === 'google') {
                 mailOptions = {
                     to: user.email,
-                    from: 'infohackgile@gmail.com',
+                    from: 'HackGile <noreply@hackgile.org>',
                     subject: 'HackGile Password Request',
                     text: 'You originally have registered using your Google account ' + user.email + '.\n' +
                         'Please login using: https://hackgile.org/members/google'
@@ -252,7 +254,7 @@ router.post('/forgot', (req, res, next) => {
             } else if (user.provider === 'linkedin') {
                 mailOptions = {
                     to: user.email,
-                    from: 'infohackgile@gmail.com',
+                    from: 'HackGile <noreply@hackgile.org>',
                     subject: 'HackGile Password Request',
                     text: 'You originally have registered using your LinkedIn account ' + user.email + '.\n' +
                         'Please login using: https://hackgile.org/members/linkedin'
@@ -261,7 +263,7 @@ router.post('/forgot', (req, res, next) => {
             } else if (user.provider === 'github') {
                 mailOptions = {
                     to: user.email,
-                    from: 'infohackgile@gmail.com',
+                    from: 'HackGile <noreply@hackgile.org>',
                     subject: 'HackGile Password Request',
                     text: 'You originally have registered using your GitHub account ' + user.email + '.\n' +
                         'Please login using: https://hackgile.org/members/github'
@@ -359,7 +361,10 @@ router.post('/reset/:token', (req, res) => {
             },
             (user, done) => {
                 let smtpTransport = nodemailer.createTransport({
-                    service: 'Gmail',
+                    pool: true,
+                    host: "smtp.domain.com",
+                    port: 465,
+                    secure: true,
                     auth: {
                         user: keys.email.username,
                         pass: keys.email.password
@@ -370,16 +375,18 @@ router.post('/reset/:token', (req, res) => {
         },
         (user, done) => {
             let smtpTransport = nodemailer.createTransport({
-                service: 'Gmail',
+                pool: true,
+                host: "smtp.domain.com",
+                port: 465,
+                secure: true,
                 auth: {
                     user: keys.email.username,
                     pass: keys.email.password
                 }
-
             });
             let mailOptions = {
                 to: user.email,
-                from: 'infohackgile@gmail.com',
+                from: 'Hackgile <noreply@hackgile.org>',
                 subject: 'Your Password Has Been Changed',
                 text: 'This is a confirmation that the password for your account has been changed.\n' +
                     'Thank you!'
