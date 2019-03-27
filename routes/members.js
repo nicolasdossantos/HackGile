@@ -359,20 +359,6 @@ router.post('/reset/:token', (req, res) => {
                 });
 
             },
-            (user, done) => {
-                let smtpTransport = nodemailer.createTransport({
-                    pool: true,
-                    host: "smtp.domain.com",
-                    port: 465,
-                    secure: true,
-                    auth: {
-                        user: keys.email.username,
-                        pass: keys.email.password
-                    }
-
-
-            });
-        },
         (user, done) => {
             let smtpTransport = nodemailer.createTransport({
                 pool: true,

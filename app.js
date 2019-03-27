@@ -11,8 +11,6 @@ const passport = require('passport');
 const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
 
-
- 
 //Mongoose midleware
 //Setup DB
 mongoose.connect(config.database, {

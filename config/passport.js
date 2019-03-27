@@ -43,14 +43,19 @@ module.exports = (passport) => {
             }
 
             //Match Password
-            bcrypt.compare(password, user.password, (err, isMatch) => {
-                if (err) throw err;
-                if (isMatch) {
-                    return done(null, user);
-                } else {
-                    return done(null, false, 'Invalid username/password');
-                }
-            });
+            if (user.provider === 'local') {
+                bcrypt.compare(password, user.password, (err, isMatch) => {
+                    if (err) throw err;
+                    if (isMatch) {
+                        return done(null, user);
+                    } else {
+                        return done(null, false, 'Invalid username/password');
+                    }
+                });
+
+            } else {
+                return done(null, false, 'Please log in with your ' + user.provider.charAt(0).toUpperCase() + user.provider.slice(1) + ' account.');
+            }
         });
     }));
 
