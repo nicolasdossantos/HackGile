@@ -37,4 +37,4 @@ let memberSchema = new Schema({
     resetPasswordExpires: Date
 });
 
-let Member = module.exports = mongoose.model('Member', memberSchema);
+const Member = module.exports = mongoose.model('Member', memberSchema);

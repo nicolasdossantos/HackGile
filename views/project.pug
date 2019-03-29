@@ -1,0 +1,29 @@
+extends layout
+block content
+    h1= project.name
+
+    a.waves-effect.waves-light.btn.modal-trigger(href='#modal1') New Sprint
+    a.waves-effect.waves-light.btn.modal-trigger(href='/projects/add_member/'+project.id) Add Member
+    #modal1.modal.container
+        .modal-content
+            form(method='POST', action='/'+project.id)
+            .row
+                .input-field.col
+
+                input#duration.validate(placeholder='2' type='number')
+
+                label(for='duration') How long do you want the sprint to be in hours?
+            .row
+                button#submitDuration.btn.waves-effect.waves-light(type='submit', name='submit') Submit
+                    i.material-icons.right send
+        .modal-footer
+            a.modal-close.waves-effect.waves-green.btn-flat(href='#!') Close
+
+    include agile_board.pug
+
+//- block content
+//-     h1= project.name
+//-     p= project.description
+//-     hr
+//-     a(href="/projects/add_member/"+project.id) Add Member
+

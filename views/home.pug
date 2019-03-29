@@ -1,6 +1,15 @@
 extends layout
 block content
-    .container
-        ul 
-            li=project
-            
+    .container.ul.list-group
+        each project, i in projects
+            li.list-group-item
+                a(href="/projects/"+project.id)= project.name
+    .container.ul.list-group
+          each project, i in projects
+            li.list-group-item
+                a(href="#")=project
+    .containter.center
+        #temporary
+        a(href="/projects/new_project") New Project
+    
+    

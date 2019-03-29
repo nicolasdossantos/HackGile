@@ -11,9 +11,11 @@ let projectSchema = new Schema({
         type: String,
         required: true
     },
-    duration: {
-        type: Number
+    deadline: {
+        type: Number,
+        required: true
     },
+
     description: {
         type: String
     },
@@ -34,5 +36,4 @@ let projectSchema = new Schema({
     }]
 });
 
-let Project = module.exports = mongoose.model('Project', projectSchema);
-
+const Project = module.exports = mongoose.model('Project', projectSchema);
