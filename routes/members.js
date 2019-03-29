@@ -170,6 +170,58 @@ router.get('/linkedin/redirect', passport.authenticate('linkedin'), (req, res) =
     res.redirect('/projects/home');
 });
 
+
+
+//Contact Us Route
+router.get('/contact_us', (req, res) => {
+    res.render('contact_us');
+});
+
+//Contact Us Post
+router.post('/contact_us', (req, res, next) =>{
+    let mailOptions;
+    //Gather post data from contact us form
+    const probEmail = req.body.probEmail;
+    const probDesc = req.body.probDesc;
+    const probSub = req.body.probSub;
+
+    mailOptions = {
+        to: 'infohackgile@gmail.com',
+        from: 'infohackgile@gmail.com',
+        subject: probSub,
+        text: probDesc + '\n\nfrom: ' + probEmail
+
+    
+    };
+    async.waterfall([
+        
+        (user, done) => {
+            let smtpTransport = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: keys.email.username,
+                    pass: keys.email.password
+            }
+
+        });
+
+            smtpTransport.sendMail(mailOptions, (err) => {
+                console.log('email sent')
+                console.log(user)
+
+                req.flash('cardSuccess', 'We have recieved your email! Thank you for your feedback!')
+                res.redirect('/');  
+                done(err, 'done');
+            });
+        }
+    
+    ], (err) => {
+        if (err) return next(err);
+        res.redirect('contact_us');
+    });
+});
+
+
 //Forgot Password Route
 router.get('/forgot', (req, res) => {
     res.render('forgot');

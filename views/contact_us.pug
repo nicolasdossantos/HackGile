@@ -1,0 +1,23 @@
+extends layout
+block content
+    br
+    .container
+        .row
+            .col.m7.s12.center
+                
+                 form(method = 'POST', action='/members/contact_us')
+                    #form-group.container
+
+
+                        label.white-text.test2 Your Email:
+                        input.form-control(name='probEmail', type='text', height='200px', width = '200px').white
+
+                        label.white-text Subject:
+                        input.form-control(name='probSub', type='text').white
+
+                        label.white-text Description:
+                        input.form-control(name='probDesc', type='text',).white
+                        .row
+                            .col
+                                input.left.btn.btn-primary(type='submit', value='Submit').white-text.green
+                            
