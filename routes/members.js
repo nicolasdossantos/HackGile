@@ -357,13 +357,14 @@ router.post('/reset/:token', (req, res) => {
 
         },
         (user, done) => {
-            let smtpTransport = nodemailer.createTransport({
-                service: 'Gmail',
-                auth: {
-                    user: keys.email2.username,
-                    pass: keys.email2.password
-                }
-            });
+                let smtpTransport = nodemailer.createTransport({
+                    service: 'Gmail',
+                    auth: {
+                        user: keys.email2.username,
+                        pass: keys.email2.password
+                    }
+                });
+    
             let mailOptions = {
                 to: user.email,
                 from: 'Hackgile <noreply@hackgile.org>',

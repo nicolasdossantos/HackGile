@@ -25,11 +25,11 @@ html
                         ul.right.hide-on-med-and-down
                             if user
                                 li
-                                    a.black-text(href='/members/logout') Logout
+                                    a.black-text(href='/members/logout') Log Out
                             else
                                 li
 
-                                    a.black-text(href='/members/login') Login
+                                    a.black-text(href='/members/login') Log In
                                 li
                                     a.black-text(href='/members/signup') Sign Up
             ul#slide-out.sidenav.white
@@ -45,10 +45,10 @@ html
                         a(href='#email')
                             span.email.black-text #{user.email}
                     li
-                        a.black-text(href='/members/logout') Logout
+                        a.black-text(href='/members/logout') Log Out
                 else
                     li
-                        a.black-text(href='/members/login') Login
+                        a.black-text(href='/members/login') Log In
                     li
                         a.black-text(href='/members/signup') Sign Up
         .container
