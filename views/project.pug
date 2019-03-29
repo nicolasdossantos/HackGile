@@ -3,6 +3,7 @@ block content
     h1= project.name
 
     a.waves-effect.waves-light.btn.modal-trigger(href='#modal1') New Sprint
+    a.waves-effect.waves-light.btn.modal-trigger(href='/projects/add_member/'+project.id) Add Member
     #modal1.modal.container
         .modal-content
             form(method='POST', action='/'+project.id)
