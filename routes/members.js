@@ -222,13 +222,10 @@ router.post('/forgot', (req, res, next) => {
         //Send email for password reset
         (token, user, done) => {
             let smtpTransport = nodemailer.createTransport({
-                pool: true,
-                host: "smtp.domain.com",
-                port: 465,
-                secure: true,
+                service: 'Gmail',
                 auth: {
-                    user: keys.email.username,
-                    pass: keys.email.password
+                    user: keys.email2.username,
+                    pass: keys.email2.password
                 }
             });
 
@@ -329,7 +326,7 @@ router.post('/reset/:token', (req, res) => {
                     res.render('reset', {
                         errors: errors
                     });
-                }else{
+                } else {
 
                     user.password = req.body.password;
                     user.resetPasswordExpires = undefined;
@@ -356,18 +353,15 @@ router.post('/reset/:token', (req, res) => {
                     });
                 }
 
-                });
+            });
 
-            },
+        },
         (user, done) => {
             let smtpTransport = nodemailer.createTransport({
-                pool: true,
-                host: "smtp.domain.com",
-                port: 465,
-                secure: true,
+                service: 'Gmail',
                 auth: {
-                    user: keys.email.username,
-                    pass: keys.email.password
+                    user: keys.email2.username,
+                    pass: keys.email2.password
                 }
             });
             let mailOptions = {
