@@ -16,7 +16,8 @@ const keys = require('./config/keys');
 mongoose.connect(config.database, {
     useNewUrlParser: true
 });
-let db = mongoose.connection;
+const db = module.exports = mongoose.connection;
+db.useDb('test');
 
 //Check for DB errors
 db.on('error', (err) => {
@@ -103,6 +104,15 @@ let sprints = require('./routes/sprints')
 app.use('/sprints', sprints);
 app.use('/projects', projects);
 app.use('/members', members);
+
+let storiesapi = require('./routes/api/stories');
+app.use('/api/stories', storiesapi);
+// let membersapi = require('./routes/api/members');
+// app.use('/api/members', membersapi);
+// let sprintsapi = require('./routes/api/sprints');
+// app.use('/api/sprints', sprintsapi);
+// let projectsapi = require('./routes/api/projects');
+// app.use('/api/projects', projectsapi);
 
 
 //Index Route
