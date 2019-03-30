@@ -18,10 +18,10 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     const stories = await loadStoriesCollection();
     let newStory = new Story({
-        project: req.body.project,
-        sprint: req.body.sprint,
+        project: mongoose.Types.ObjectId(req.body.project),
+        sprint: mongoose.Types.ObjectId(req.body.sprint),
         status: req.body.status,
-        member: req.body.member,
+        member: mongoose.Types.ObjectId(req.body.member),
         title: req.body.title,
         description: req.body.description,
         estimatedTime: req.body.estimatedTime
@@ -39,10 +39,10 @@ router.put('/:id', async (req, res) => {
     stories.findOneAndUpdate(
         {_id: mongoose.Types.ObjectId(req.params.id)},
         {
-            project: req.body.project,
-            sprint: req.body.sprint,
+            project: mongoose.Types.ObjectId(req.body.project),
+            sprint: mongoose.Types.ObjectId(req.body.sprint),
             status: req.body.status,
-            member: req.body.member,
+            member: mongoose.Types.ObjectId(req.body.member),
             title: req.body.title,
             description: req.body.description,
             estimatedTime: req.body.estimatedTime
