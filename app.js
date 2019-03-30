@@ -107,12 +107,12 @@ app.use('/members', members);
 
 let storiesapi = require('./routes/api/stories');
 app.use('/api/stories', storiesapi);
-// let membersapi = require('./routes/api/members');
-// app.use('/api/members', membersapi);
-// let sprintsapi = require('./routes/api/sprints');
-// app.use('/api/sprints', sprintsapi);
-// let projectsapi = require('./routes/api/projects');
-// app.use('/api/projects', projectsapi);
+let membersapi = require('./routes/api/members');
+app.use('/api/members', membersapi);
+let sprintsapi = require('./routes/api/sprints');
+app.use('/api/sprints', sprintsapi);
+let projectsapi = require('./routes/api/projects');
+app.use('/api/projects', projectsapi);
 
 
 //Index Route

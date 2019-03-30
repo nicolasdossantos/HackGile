@@ -8,7 +8,8 @@ let storySchema = new Schema({
         ref: 'Project'
     },
     sprint: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Sprint'
     },
     status: {
         type: String,

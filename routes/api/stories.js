@@ -1,14 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const keys = require('../../config/keys.js');
 const app = require('../../app.js');
 let Story = require('../../models/story');
 
 const router = express.Router();
 
+//Member ID passed in
 router.get('/:id', async (req, res) => {
     const stories = await loadStoriesCollection();
-    res.send(await stories.find({member: mongoose.Types.ObjectId(req.params.id)}).toArray());
+    const list = await Story
+        .find({member: mongoose.Types.ObjectId(req.params.id)})
+        /*.populate('sprint')*/
+        .populate('member');
+    res.send(list);
 });
 
 router.post('/', async (req, res) => {
