@@ -75,10 +75,13 @@ router.get('/:pid/members/', async (req, res) => {
 //Tested
 //Puts a member into a project
 router.put('/:pid/members/:id', async (req, res) => {
-  //TODO: Check if member is already in array before updating
-    await Project.updateOne({_id: req.params.pid},
-        {$push: {members: mongoose.Types.ObjectId(req.params.id)}})
-    res.status(200).send();
+    await Project.findById(req.params.pid), async (err, project)=>{
+        if(project.members.indexOf(req.params.id) < 0){
+            await Project.updateOne({_id: req.params.pid},
+            {$push: {members: mongoose.Types.ObjectId(req.params.id)}})
+            res.status(200).send();
+        }
+    }
 })
 
 //Tested
