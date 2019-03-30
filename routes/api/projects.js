@@ -75,13 +75,15 @@ router.get('/:pid/members/', async (req, res) => {
 //Tested
 //Puts a member into a project
 router.put('/:pid/members/:id', async (req, res) => {
-    await Project.findById(req.params.pid), async (err, project)=>{
+  console.log("put request");
+    await Project.findById(req.params.pid, async (err, project)=>{
+      console.log("inside first await");
         if(project.members.indexOf(req.params.id) < 0){
             await Project.updateOne({_id: req.params.pid},
             {$push: {members: mongoose.Types.ObjectId(req.params.id)}})
             res.status(200).send();
         }
-    }
+    })
 })
 
 //Tested
@@ -112,10 +114,13 @@ router.get('/:pid/sprints/', async (req, res) => {
 //TODO: Test
 //Puts a sprint into a project
 router.put('/:pid/sprints/:id', async (req, res) => {
-//TODO: Check if story is already in array before updating
-  await Project.updateOne({_id: req.params.pid},
-      {$push: {sprints: mongoose.Types.ObjectId(req.params.id)}})
-  res.status(200).send();
+  await Project.findById(req.params.pid, async (err, project)=>{
+    if(project.sprints.indexOf(req.params.id) < 0){
+        await Project.updateOne({_id: req.params.pid},
+        {$push: {sprints: mongoose.Types.ObjectId(req.params.id)}})
+        res.status(200).send();
+    } 
+  })
 })
 
 //TODO: Test
@@ -146,10 +151,13 @@ router.get('/:pid/stories/', async (req, res) => {
 //TODO: Test
 //Puts a story into a project
 router.put('/:pid/stories/:id', async (req, res) => {
-//TODO: Check if story is already in array before updating
-  await Project.updateOne({_id: req.params.pid},
-      {$push: {stories: mongoose.Types.ObjectId(req.params.id)}})
-  res.status(200).send();
+  await Project.findById(req.params.pid, async (err, project)=>{
+    if(project.stories.indexOf(req.params.id) < 0){
+        await Project.updateOne({_id: req.params.pid},
+        {$push: {stories: mongoose.Types.ObjectId(req.params.id)}})
+        res.status(200).send();
+    }
+  })
 })
 
 //TODO: Test
