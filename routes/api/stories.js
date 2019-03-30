@@ -5,8 +5,8 @@ let Story = require('../../models/story');
 
 const router = express.Router();
 
-//Member ID passed in
 //Tested
+//Fetches all stories linked to member ID. Move to members.js?
 router.get('/:id', async (req, res) => {
     const list = await Story
         .find({member: mongoose.Types.ObjectId(req.params.id)})
@@ -35,6 +35,7 @@ router.post('/', async (req, res) => {
 });
 
 //TODO: Test
+//Updates Story by ID
 router.put('/:id', async (req, res) => {
     const stories = await loadStoriesCollection();
     stories.findOneAndUpdate(
@@ -52,6 +53,7 @@ router.put('/:id', async (req, res) => {
 })
 
 //TODO: Test
+//Deletes Story by ID
 router.delete('/:id', async (req, res) => {
     const posts = await loadStoriesCollection();
     await posts.deleteOne({_id: mongoose.Types.ObjectId(req.params.id)});
