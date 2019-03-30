@@ -5,9 +5,10 @@ let Project = require('../../models/project');
 
 const router = express.Router();
 
+//Tested
 router.get('/:id', async (req, res) => {
     const list = await Project
-        .find({member: mongoose.Types.ObjectId(req.params.id)})
+        .find({members: mongoose.Types.ObjectId(req.params.id)})
         .populate({
             path: "stories",
             populate: {
@@ -27,6 +28,7 @@ router.get('/:id', async (req, res) => {
     res.send(list);
 });
 
+//TODO: Test
 router.post('/', async (req, res) => {
     let newProject = new Project({
         name: res.body.name,
@@ -46,6 +48,7 @@ router.post('/', async (req, res) => {
     res.status(201).send();
 });
 
+//TODO: Test
 router.delete('/:id', async (req, res) => {
     const projects = await loadProjectsCollection();
     await projects.deleteOne({_id: mongoose.Types.ObjectId(req.params.id)});
@@ -55,6 +58,7 @@ router.delete('/:id', async (req, res) => {
 /*============================*/
 /*Project Members Modifier API*/
 /*============================*/
+//Tested
 router.get('/:pid/members/', async (req, res) => {
     await Project.findById(mongoose.Types.ObjectId(req.params.pid))
         .populate('members')
@@ -67,20 +71,18 @@ router.get('/:pid/members/', async (req, res) => {
         })
 })
 
+//Tested
 router.put('/:pid/members/:id', async (req, res) => {
-    //const projects = await loadProjectsCollection();
-    // await Project.update({_id: req.params.pid},
-    //     {$push: {members: mongoose.Types.ObjectId(req.params.id)}})
-    let project = await projects.findOne({_id: mongoose.Types.ObjectId(req.params.pid)});
-    //TODO: Don't know if should push object id or push populated bson
-    await project.members.push(mongoose.Types.ObjectId(req.params.id));
+  //TODO: Check if member is already in array before updating
+    await Project.updateOne({_id: req.params.pid},
+        {$push: {members: mongoose.Types.ObjectId(req.params.id)}})
     res.status(200).send();
 })
 
+//Tested
 router.delete('/:pid/members/:id', async (req, res) => {
-    const projects = await loadProjectsCollection();
-    let project = await projects.findOne({_id: mongoose.Types.ObjectId(req.params.pid)});
-    project.members.pull(mongoose.Types.ObjectId(req.params.id));
+    await Project.updateOne({_id: req.params.pid},
+      {$pull: {members: mongoose.Types.ObjectId(req.params.id)}})
     res.status(200).send();
 })
 

@@ -6,8 +6,8 @@ let Story = require('../../models/story');
 const router = express.Router();
 
 //Member ID passed in
+//Tested
 router.get('/:id', async (req, res) => {
-    const stories = await loadStoriesCollection();
     const list = await Story
         .find({member: mongoose.Types.ObjectId(req.params.id)})
         /*.populate('sprint')*/
@@ -15,8 +15,8 @@ router.get('/:id', async (req, res) => {
     res.send(list);
 });
 
+//TODO: Test
 router.post('/', async (req, res) => {
-    const stories = await loadStoriesCollection();
     let newStory = new Story({
         project: mongoose.Types.ObjectId(req.body.project),
         sprint: mongoose.Types.ObjectId(req.body.sprint),
@@ -34,6 +34,7 @@ router.post('/', async (req, res) => {
     res.status(201).send();
 });
 
+//TODO: Test
 router.put('/:id', async (req, res) => {
     const stories = await loadStoriesCollection();
     stories.findOneAndUpdate(
@@ -50,6 +51,7 @@ router.put('/:id', async (req, res) => {
     res.status(200).send();
 })
 
+//TODO: Test
 router.delete('/:id', async (req, res) => {
     const posts = await loadStoriesCollection();
     await posts.deleteOne({_id: mongoose.Types.ObjectId(req.params.id)});
