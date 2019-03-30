@@ -3,31 +3,35 @@ const router = express.Router();
 const flash = require("connect-flash");
 const nodemailer = require("nodemailer");
 const keys = require("../config/keys");
+const db = require("../app");
 
 //Bring in models
 let Member = require("../models/member");
 let Project = require("../models/project");
 
 //Home route
-router.get("/home", ensureAuthentication, (req, res) => {
+router.get("/home", ensureAuthentication, async (req, res) => {
   //Retrieve all current user's projects
-  Project.find(
-    {
-      members: {
-        $in: req.user._id
-      }
-    },
-    (err, projects) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.render("home", {
-          title: "Projects",
-          projects: projects
-        });
-      }
-    }
-  );
+    const members = await loadMemberCollection();
+    res.send(await members.find({}).toArray())
+
+//   Project.find(
+//     {
+//       members: {
+//         $in: req.user._id
+//       }
+//     },
+//     (err, projects) => {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         res.render("home", {
+//           title: "Projects",
+//           projects: projects
+//         });
+//       }
+//     }
+//   );
 });
 //New Project Route
 router.get("/new_project", ensureAuthentication, (req, res) => {
@@ -163,7 +167,7 @@ router.post("/add_member/:id", (req, res) => {
                     from: "Hackgile <noreply@hackgile.org>",
                     subject: "You Have Been Added To a New Project!",
                     text:
-                      "Hello there,\n" +
+                      "Hello there ,\n" +
                       "You have been added to the project " +
                       project.name +
                       "\nClick here to check out your new project:\n" +
@@ -199,6 +203,10 @@ function ensureAuthentication(req, res, next) {
     req.flash("cardError", "Please Login");
     res.redirect("/members/login");
   }
+}
+
+async function loadMemberCollection() {
+  return db.db.useDb("test").collection("members");
 }
 
 module.exports = router;
