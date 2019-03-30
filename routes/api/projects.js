@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
         deadline: res.body.deadline,
         description: res.body.description,
         git: res.body.git,
-        members: res.body.members, //Assuming it was passed in a members object ID array
+        members: [],
         sprints: [],
         stories: []
     });
@@ -46,26 +46,41 @@ router.post('/', async (req, res) => {
     res.status(201).send();
 });
 
-router.put('/:id', async (req, res) => {
-    const stories = await loadStoriesCollection();
-    stories.findOneAndUpdate(
-        {_id: mongoose.Types.ObjectId(req.params.id)},
-        {
-            name: res.body.name,
-            ishackathon: res.body.ishackathon,
-            deadline: res.body.deadline,
-            description: res.body.description,
-            git: res.body.git,
-            members: res.body.members, //Assuming it was passed in a members object ID array
-            sprints: res.body.sprints, //Assuming it was passed in a sprints object ID array
-            stories: res.body.stories  //Assuming it was passed in a stories object ID array
-        });
-    res.status(200).send();
-})
-
 router.delete('/:id', async (req, res) => {
     const projects = await loadProjectsCollection();
     await projects.deleteOne({_id: mongoose.Types.ObjectId(req.params.id)});
+    res.status(200).send();
+})
+
+/*============================*/
+/*Project Members Modifier API*/
+/*============================*/
+router.get('/:pid/members/', async (req, res) => {
+    await Project.findById(mongoose.Types.ObjectId(req.params.pid))
+        .populate('members')
+        .then((project) => {
+            let members = project.members;
+            res.send(members);
+        },
+        (err) => {
+            console.log(err);
+        })
+})
+
+router.put('/:pid/members/:id', async (req, res) => {
+    //const projects = await loadProjectsCollection();
+    // await Project.update({_id: req.params.pid},
+    //     {$push: {members: mongoose.Types.ObjectId(req.params.id)}})
+    let project = await projects.findOne({_id: mongoose.Types.ObjectId(req.params.pid)});
+    //TODO: Don't know if should push object id or push populated bson
+    await project.members.push(mongoose.Types.ObjectId(req.params.id));
+    res.status(200).send();
+})
+
+router.delete('/:pid/members/:id', async (req, res) => {
+    const projects = await loadProjectsCollection();
+    let project = await projects.findOne({_id: mongoose.Types.ObjectId(req.params.pid)});
+    project.members.pull(mongoose.Types.ObjectId(req.params.id));
     res.status(200).send();
 })
 
