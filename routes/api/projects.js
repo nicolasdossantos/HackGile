@@ -55,9 +55,9 @@ router.post('/', async (req, res) => {
 // })
 
 //TODO: Test
-router.delete('/:id', async (req, res) => {
+router.delete('/:pid', async (req, res) => {
     const projects = await loadProjectsCollection();
-    await projects.deleteOne({_id: mongoose.Types.ObjectId(req.params.id)});
+    await projects.deleteOne({_id: mongoose.Types.ObjectId(req.params.pid)});
     res.status(200).send();
 })
 
