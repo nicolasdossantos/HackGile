@@ -28,15 +28,16 @@ router.get('/:id', async (req, res) => {
     res.send(list);
 });
 
-//TODO: Test
+//Tested
 router.post('/', async (req, res) => {
     let newProject = new Project({
-        name: res.body.name,
-        ishackathon: res.body.ishackathon,
-        deadline: res.body.deadline,
-        description: res.body.description,
-        git: res.body.git,
-        members: [],
+        //TODO: Time manipulation for deadlline see /routes/projects/line 60
+        name: req.body.name,
+        ishackathon: req.body.ishackathon,
+        deadline: req.body.deadline,
+        description: req.body.description,
+        git: req.body.git,
+        members: [req.user._id],
         sprints: [],
         stories: []
     });
@@ -47,6 +48,11 @@ router.post('/', async (req, res) => {
       });
     res.status(201).send();
 });
+
+//For Testing purposes
+// router.get('/', (req, res)=>{
+//     res.render('new_project')
+// })
 
 //TODO: Test
 router.delete('/:id', async (req, res) => {
@@ -77,7 +83,6 @@ router.get('/:pid/members/', async (req, res) => {
 router.put('/:pid/members/:id', async (req, res) => {
   console.log("put request");
     await Project.findById(req.params.pid, async (err, project)=>{
-      console.log("inside first await");
         if(project.members.indexOf(req.params.id) < 0){
             await Project.updateOne({_id: req.params.pid},
             {$push: {members: mongoose.Types.ObjectId(req.params.id)}})
