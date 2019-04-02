@@ -54,7 +54,7 @@ router.post('/', async (req, res) => {
 //     res.render('new_project')
 // })
 
-//TODO: Test
+//Tested
 router.delete('/:pid', async (req, res) => {
     const projects = await loadProjectsCollection();
     await projects.deleteOne({_id: mongoose.Types.ObjectId(req.params.pid)});
@@ -102,7 +102,7 @@ router.delete('/:pid/members/:id', async (req, res) => {
 /*============================*/
 /* Project Sprints Array API  */
 /*============================*/
-//TODO: Test
+//Tested
 //Gets all Sprints from project ID
 router.get('/:pid/sprints/', async (req, res) => {
   await Project.findById(mongoose.Types.ObjectId(req.params.pid))
@@ -116,7 +116,7 @@ router.get('/:pid/sprints/', async (req, res) => {
       })
 })
 
-//TODO: Test
+//Tested
 //Puts a sprint into a project
 router.put('/:pid/sprints/:id', async (req, res) => {
   await Project.findById(req.params.pid, async (err, project)=>{
@@ -128,7 +128,7 @@ router.put('/:pid/sprints/:id', async (req, res) => {
   })
 })
 
-//TODO: Test
+//Tested
 //Deletes a sprint from project
 router.delete('/:pid/sprints/:id', async (req, res) => {
   await Project.updateOne({_id: req.params.pid},
@@ -139,7 +139,7 @@ router.delete('/:pid/sprints/:id', async (req, res) => {
 /*============================*/
 /* Project Stories Array API  */
 /*============================*/
-//TODO: Test
+//Tested
 //Gets all stories from project ID
 router.get('/:pid/stories/', async (req, res) => {
   await Project.findById(mongoose.Types.ObjectId(req.params.pid))
@@ -153,7 +153,7 @@ router.get('/:pid/stories/', async (req, res) => {
       })
 })
 
-//TODO: Test
+//Tested
 //Puts a story into a project
 router.put('/:pid/stories/:id', async (req, res) => {
   await Project.findById(req.params.pid, async (err, project)=>{
@@ -165,7 +165,7 @@ router.put('/:pid/stories/:id', async (req, res) => {
   })
 })
 
-//TODO: Test
+//Tested
 //Deletes a story from project
 router.delete('/:pid/stories/:id', async (req, res) => {
   await Project.updateOne({_id: req.params.pid},
