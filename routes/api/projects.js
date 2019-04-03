@@ -10,13 +10,13 @@ const Member = require("../../models/member");
 router.get("/:id", async (req, res) => {
   const list = await Project.find({
     members: mongoose.Types.ObjectId(req.params.id)
-  })
+  })/*
     .populate({
       path: "stories",
       populate: {
         path: "member"
       }
-    })
+    })*//*
     .populate({
       path: "sprints",
       populate: {
@@ -25,8 +25,10 @@ router.get("/:id", async (req, res) => {
           path: "member"
         }
       }
-    })
-    .populate("members");
+    })*/
+    .populate("members")
+    .populate("sprints")
+    .populate("stories");
   res.send(list);
 });
 
