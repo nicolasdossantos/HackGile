@@ -1,52 +1,69 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const app = require('../../app.js');
-let Project = require('../../models/project');
+const express = require("express");
+const mongoose = require("mongoose");
+const app = require("../../app.js");
+let Project = require("../../models/project");
+let Member = require('../../models/member');
 
 const router = express.Router();
 
 //Tested
-router.get('/:id', async (req, res) => {
-    const list = await Project
-        .find({members: mongoose.Types.ObjectId(req.params.id)})
-        .populate({
-            path: "stories",
-            populate: {
-              path: "member"
-            }
-          })
-          .populate({
-            path: "sprints",
-            populate: {
-              path: "stories",
-              populate: {
-                path: "member"
-              }
-            }
-          })
-          .populate("members");
-    res.send(list);
+router.get("/:id", async (req, res) => {
+  const list = await Project.find({
+    members: mongoose.Types.ObjectId(req.params.id)
+  })
+    .populate({
+      path: "stories",
+      populate: {
+        path: "member"
+      }
+    })
+    .populate({
+      path: "sprints",
+      populate: {
+        path: "stories",
+        populate: {
+          path: "member"
+        }
+      }
+    })
+    .populate("members");
+  res.send(list);
 });
 
 //Tested
-router.post('/', async (req, res) => {
-    let newProject = new Project({
-        //TODO: Time manipulation for deadlline see /routes/projects/line 60
-        name: req.body.name,
-        ishackathon: req.body.ishackathon,
-        deadline: req.body.deadline,
-        description: req.body.description,
-        git: req.body.git,
-        members: [req.user._id],
-        sprints: [],
-        stories: []
-    });
-    await newProject.save(err => {
-        if (err) {
-          console.log(err);
-        }
-      });
-    res.status(201).send();
+router.post("/", async (req, res) => {
+  let name = req.body.name;
+  let isHackathon = req.body.ishackathon;
+  let endDate = req.body.enddate;
+  let endTime = req.body.endtime;
+  let description = req.body.description;
+  let git = req.body.git;
+  let member = req.user._id;
+
+  //time manipulation
+  let splitTime = endTime.split(":");
+  let epochHour = parseInt(splitTime[0], 10) * 60 * 60;
+  let epochMin = parseInt(splitTime[1], 10) * 60;
+  let epochEndTime = epochHour + epochMin;
+
+  let deadLine = epochEndTime + Date.parse(endDate);
+
+  let newProject = new Project({
+    name: name,
+    ishackathon: isHackathon,
+    deadline: deadLine,
+    description: description,
+    git: git,
+    members: [member],
+    sprints: [],
+    stories: []
+  });
+  await newProject.save(err => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  res.status(201).send();
 });
 
 //For Testing purposes
@@ -55,126 +72,146 @@ router.post('/', async (req, res) => {
 // })
 
 //Tested
-router.delete('/:pid', async (req, res) => {
-    const projects = await loadProjectsCollection();
-    await projects.deleteOne({_id: mongoose.Types.ObjectId(req.params.pid)});
-    res.status(200).send();
-})
+router.delete("/:pid", async (req, res) => {
+  await Projects.deleteOne({ _id: mongoose.Types.ObjectId(req.params.pid) });
+  res.status(200).send();
+});
 
 /*============================*/
 /* Project Members Array API  */
 /*============================*/
 //Tested
 //Get's all members from project ID
-router.get('/:pid/members/', async (req, res) => {
-    await Project.findById(mongoose.Types.ObjectId(req.params.pid))
-        .populate('members')
-        .then((project) => {
-            let members = project.members;
-            res.send(members);
-        },
-        (err) => {
-            console.log(err);
-        })
-})
+router.get("/:pid/members/", async (req, res) => {
+  await Project.findById(mongoose.Types.ObjectId(req.params.pid))
+    .populate("members")
+    .then(
+      project => {
+        let members = project.members;
+        res.send(members);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+});
 
 //Tested
 //Puts a member into a project
-router.put('/:pid/members/:id', async (req, res) => {
+router.put("/:pid/members/:id", async (req, res) => {
   console.log("put request");
-    await Project.findById(req.params.pid, async (err, project)=>{
-        if(project.members.indexOf(req.params.id) < 0){
-            await Project.updateOne({_id: req.params.pid},
-            {$push: {members: mongoose.Types.ObjectId(req.params.id)}})
-            res.status(200).send();
-        }
+  await Project.findById(req.params.pid, async (err, project) => {
+    if (project.members.indexOf(req.params.id) < 0) {
+      await Project.updateOne(
+        { _id: req.params.pid },
+        { $push: { members: mongoose.Types.ObjectId(req.params.id) } }
+      );
+      res.status(200).send();
+    }
+    });
+    await Member.findById(req.params.id, async (err, member)=>{
+        
     })
-})
+});
 
 //Tested
 //Deletes a member from project
-router.delete('/:pid/members/:id', async (req, res) => {
-    await Project.updateOne({_id: req.params.pid},
-      {$pull: {members: mongoose.Types.ObjectId(req.params.id)}})
-    res.status(200).send();
-})
+router.delete("/:pid/members/:id", async (req, res) => {
+  await Project.updateOne(
+    { _id: req.params.pid },
+    { $pull: { members: mongoose.Types.ObjectId(req.params.id) } }
+  );
+  res.status(200).send();
+});
 
 /*============================*/
 /* Project Sprints Array API  */
 /*============================*/
 //Tested
 //Gets all Sprints from project ID
-router.get('/:pid/sprints/', async (req, res) => {
+router.get("/:pid/sprints/", async (req, res) => {
   await Project.findById(mongoose.Types.ObjectId(req.params.pid))
-      .populate('sprints')
-      .then((project) => {
-          let sprints = project.sprints;
-          res.send(sprints);
+    .populate("sprints")
+    .then(
+      project => {
+        let sprints = project.sprints;
+        res.send(sprints);
       },
-      (err) => {
-          console.log(err);
-      })
-})
+      err => {
+        console.log(err);
+      }
+    );
+});
 
 //Tested
 //Puts a sprint into a project
-router.put('/:pid/sprints/:id', async (req, res) => {
-  await Project.findById(req.params.pid, async (err, project)=>{
-    if(project.sprints.indexOf(req.params.id) < 0){
-        await Project.updateOne({_id: req.params.pid},
-        {$push: {sprints: mongoose.Types.ObjectId(req.params.id)}})
-        res.status(200).send();
-    } 
-  })
-})
+router.put("/:pid/sprints/:id", async (req, res) => {
+  await Project.findById(req.params.pid, async (err, project) => {
+    if (project.sprints.indexOf(req.params.id) < 0) {
+      await Project.updateOne(
+        { _id: req.params.pid },
+        { $push: { sprints: mongoose.Types.ObjectId(req.params.id) } }
+      );
+      res.status(200).send();
+    }
+  });
+});
 
 //Tested
 //Deletes a sprint from project
-router.delete('/:pid/sprints/:id', async (req, res) => {
-  await Project.updateOne({_id: req.params.pid},
-    {$pull: {sprints: mongoose.Types.ObjectId(req.params.id)}})
+router.delete("/:pid/sprints/:id", async (req, res) => {
+  await Project.updateOne(
+    { _id: req.params.pid },
+    { $pull: { sprints: mongoose.Types.ObjectId(req.params.id) } }
+  );
   res.status(200).send();
-})
+});
 
 /*============================*/
 /* Project Stories Array API  */
 /*============================*/
 //Tested
 //Gets all stories from project ID
-router.get('/:pid/stories/', async (req, res) => {
+router.get("/:pid/stories/", async (req, res) => {
   await Project.findById(mongoose.Types.ObjectId(req.params.pid))
-      .populate('stories')
-      .then((project) => {
-          let stories = project.stories;
-          res.send(stories);
+    .populate("stories")
+    .then(
+      project => {
+        let stories = project.stories;
+        res.send(stories);
       },
-      (err) => {
-          console.log(err);
-      })
-})
+      err => {
+        console.log(err);
+      }
+    );
+});
 
 //Tested
 //Puts a story into a project
-router.put('/:pid/stories/:id', async (req, res) => {
-  await Project.findById(req.params.pid, async (err, project)=>{
-    if(project.stories.indexOf(req.params.id) < 0){
-        await Project.updateOne({_id: req.params.pid},
-        {$push: {stories: mongoose.Types.ObjectId(req.params.id)}})
-        res.status(200).send();
+router.put("/:pid/stories/:id", async (req, res) => {
+  await Project.findById(req.params.pid, async (err, project) => {
+    if (project.stories.indexOf(req.params.id) < 0) {
+      await Project.updateOne(
+        { _id: req.params.pid },
+        { $push: { stories: mongoose.Types.ObjectId(req.params.id) } }
+      );
+      res.status(200).send();
     }
-  })
-})
+  });
+});
 
 //Tested
 //Deletes a story from project
-router.delete('/:pid/stories/:id', async (req, res) => {
-  await Project.updateOne({_id: req.params.pid},
-    {$pull: {stories: mongoose.Types.ObjectId(req.params.id)}})
+router.delete("/:pid/stories/:id", async (req, res) => {
+  await Project.updateOne(
+    { _id: req.params.pid },
+    { $pull: { stories: mongoose.Types.ObjectId(req.params.id) } }
+  );
   res.status(200).send();
-})
+});
 
-async function loadProjectsCollection(){
-    return app.collection('projects');
+async function loadProjectsCollection() {
+  return app.collection("projects");
 }
 
 module.exports = router;
