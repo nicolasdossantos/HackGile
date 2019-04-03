@@ -3,10 +3,6 @@ let Schema = mongoose.Schema;
 
 //Story Schema
 let storySchema = new Schema({
-    project: {
-        type: Schema.Types.ObjectId,
-        ref: 'Project'
-    },
     sprint: {
         type: Schema.Types.ObjectId,
         ref: 'Sprint'
