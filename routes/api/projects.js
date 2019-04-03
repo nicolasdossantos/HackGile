@@ -1,11 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = require("../../app.js");
-let Project = require("../../models/project");
-let Member = require("../../models/member");
-let Story = require("../../models/story");
-
+const Story = require("../../models/story");
 const router = express.Router();
+const Project = require("../../models/project");
+const Member = require("../../models/member");
 
 //Tested
 router.get("/:id", async (req, res) => {
