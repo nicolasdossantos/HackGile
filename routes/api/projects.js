@@ -2,7 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = require("../../app.js");
 let Project = require("../../models/project");
-let Member = require('../../models/member');
+let Member = require("../../models/member");
+let Story = require("../../models/story");
 
 const router = express.Router();
 
@@ -97,29 +98,33 @@ router.get("/:pid/members/", async (req, res) => {
 });
 
 //Tested
-//Puts a member into a project
+//Puts a member into a project and project into a member
 router.put("/:pid/members/:id", async (req, res) => {
-  console.log("put request");
   await Project.findById(req.params.pid, async (err, project) => {
     if (project.members.indexOf(req.params.id) < 0) {
       await Project.updateOne(
         { _id: req.params.pid },
         { $push: { members: mongoose.Types.ObjectId(req.params.id) } }
       );
+      await Member.updateOne(
+        { _id: req.params.id },
+        { $push: { projects: mongoose.Types.ObjectId(req.params.pid) } }
+      );
       res.status(200).send();
     }
-    });
-    await Member.findById(req.params.id, async (err, member)=>{
-        
-    })
+  });
 });
 
 //Tested
-//Deletes a member from project
+//Deletes a member from project and a project from member
 router.delete("/:pid/members/:id", async (req, res) => {
   await Project.updateOne(
     { _id: req.params.pid },
     { $pull: { members: mongoose.Types.ObjectId(req.params.id) } }
+  );
+  await Member.updateOne(
+    { _id: req.params.id },
+    { $pull: { projects: mongoose.Types.ObjectId(req.params.pid) } }
   );
   res.status(200).send();
 });
@@ -209,9 +214,5 @@ router.delete("/:pid/stories/:id", async (req, res) => {
   );
   res.status(200).send();
 });
-
-async function loadProjectsCollection() {
-  return app.collection("projects");
-}
 
 module.exports = router;
