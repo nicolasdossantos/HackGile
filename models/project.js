@@ -13,7 +13,7 @@ let projectSchema = new Schema({
     },
     deadline: {
         type: Number,
-        required: true
+    
     },
 
     description: {
