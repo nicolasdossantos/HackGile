@@ -5,17 +5,19 @@ let Story = require('../../models/story');
 
 const router = express.Router();
 
-// -- Tested --
-//Fetches all stories linked to member ID. Move to members.js?
-router.get('/:id', async (req, res) => {
+
+//Tested
+//Gets Story JSON by story id
+router.get('/:sid', async (req, res) => {
     const list = await Story
-        .find({member: mongoose.Types.ObjectId(req.params.id)})
+        .findOne({_id: mongoose.Types.ObjectId(req.params.sid)})
         /*.populate('sprint')*/
         .populate('member');
     res.send(list);
 });
 
-//Post new story -- Tested -- 
+//Tested
+//Post new story 
 router.post('/', async (req, res) => {
     let newStory = new Story({
         sprint: undefined,
@@ -50,12 +52,27 @@ router.put('/:sid', async (req, res) => {
     res.status(200).send();
 })
 
+//Add story to sprint
+
 //TODO: Test
 //Deletes Story by ID
-router.delete('/:sid', async (req, res) => {
-    
-    await Story.deleteOne({_id: mongoose.Types.ObjectId(req.params.sid)});
-    res.status(200).send();
-})
+// router.delete('/:sid', async (req, res) => {
+//     await Project.updateMany(
+//         {
+//           stories: {
+//             $in: req.user.pid
+//           }
+//         },(err, projects)=>{
+//             if(err){
+//                 console.log(err)
+//             }else{
+//                 proj
+//             }
+//         });
+//     await Story.deleteOne({_id: mongoose.Types.ObjectId(req.params.sid)});
+//     res.status(200).send();
+// });
+
+
 
 module.exports = router;

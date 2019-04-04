@@ -10,6 +10,7 @@ const config = require('./config/database');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
+const cors = require('cors');
 
 //Mongoose midleware
 //Setup DB
@@ -35,6 +36,7 @@ let Member = require('./models/member');
 let Sprint = require('./models/sprint');
 let Story = require('./models/story');
 
+
 // //For Testing. This will remove all members from database
 // Member.deleteMany({}, (err)=>{
 //     if(err){
@@ -46,6 +48,10 @@ let Story = require('./models/story');
 //Load View engine / Pug
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+//API middleware
+app.use(express.json());
+app.use(cors());
 
 //Body Parser middleware parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -139,3 +145,4 @@ function ensureSecure(req, res, next) {
         res.redirect('https://' + req.hostname + req.url);
     }
 }
+exports.db = db;
