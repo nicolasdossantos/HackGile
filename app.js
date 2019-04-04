@@ -17,7 +17,8 @@ const cors = require('cors');
 mongoose.connect(config.database, {
     useNewUrlParser: true
 });
-let db = mongoose.connection;
+const db = module.exports = mongoose.connection;
+db.useDb('test');
 
 //Check for DB errors
 db.on('error', (err) => {
@@ -35,6 +36,7 @@ let Member = require('./models/member');
 let Sprint = require('./models/sprint');
 let Story = require('./models/story');
 
+
 // //For Testing. This will remove all members from database
 // Member.deleteMany({}, (err)=>{
 //     if(err){
@@ -47,6 +49,10 @@ let Story = require('./models/story');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+//API middleware
+app.use(express.json());
+app.use(cors());
+
 //Body Parser middleware parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
     extended: false
@@ -54,7 +60,6 @@ app.use(bodyParser.urlencoded({
 
 // parse application/json
 app.use(bodyParser.json());
-app.use(cors());
 
 //Cookie Session init
 app.use(cookieSession({
@@ -93,7 +98,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Create global variable user
-app.get('*', (req, res, next) => {
+app.get('*', ensureSecure, (req, res, next) => {
     res.locals.user = req.user || null;
     next();
 });
@@ -117,7 +122,7 @@ app.use('/api/projects', projectsapi);
 
 
 //Index Route
-app.get("/", (req, res) => {
+app.get("/", ensureSecure, (req, res) => {
     res.render('index');
 });
 
@@ -129,3 +134,15 @@ app.listen(8080, () => {
     console.log("Listening on port 8080...");
 });
 
+//HTTPS redirect middleware
+function ensureSecure(req, res, next) {
+    //Heroku stores the origin protocol in a header variable. The app itself is isolated within the dyno and all request objects have an HTTP protocol.
+    if (req.get('X-Forwarded-Proto') == 'https' || req.hostname == 'localhost') {
+        //Serve Angular App by passing control to the next middleware
+        next();
+    } else if (req.get('X-Forwarded-Proto') != 'https' && req.get('X-Forwarded-Port') != '443') {
+        //Redirect if not HTTP with original request URL
+        res.redirect('https://' + req.hostname + req.url);
+    }
+}
+exports.db = db;
