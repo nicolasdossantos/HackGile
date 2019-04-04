@@ -6,6 +6,26 @@ const router = express.Router();
 const Project = require("../../models/project");
 const Member = require("../../models/member");
 
+//TODO: Test
+//Get Projects for current user
+router.get("/", async (req, res) => {
+  //Retrieve all current user's projects
+  await Project.find(
+    {
+      members: {
+        $in: req.user._id
+      }
+    },
+    (err, projects) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(projects);
+      }
+    }
+  );
+});
+
 //Tested
 // Get all projects for that member id
 router.get("/:id", async (req, res) => {
