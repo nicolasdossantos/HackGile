@@ -71,6 +71,10 @@ class DatabaseService {
             }
         });
     }
+
+    static getSprintById(id){
+        
+    }
 }
 
 export default DatabaseService;
