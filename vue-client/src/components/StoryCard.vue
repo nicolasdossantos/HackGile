@@ -42,6 +42,7 @@ export default {
                 this.error = err;
             }
         },
+        //TODO: Test
         modifyStory: async function(){
             await DatabaseService.updateStory(this.$props.id, {
                 title: this.title,

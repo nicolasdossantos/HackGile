@@ -5,17 +5,23 @@
 <script>
 export default {
     name: ProjectCard,
+    props: {
+        id: String
+    },
     data: function(){
         return {
 
         }
     },
-    async created(){
+    created: function(){
         updateProject();
     },
     methods: {
-        async updateProject(){
+        updateProject: function(){
 
+        },
+        modifyProject: function(){
+            
         }
     }
 }
