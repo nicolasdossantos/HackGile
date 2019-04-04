@@ -1,5 +1,26 @@
 <template>
-    <div class="StoryCard"></div>
+    <div class="StoryCard" v-bind:id="this.$props.id">
+        <v-card>
+            <v-card-title primary-title>
+                <h1>
+                    {{this.title}}
+                </h1>
+            </v-card-title>
+            <v-card-text>
+                <p>
+                    {{this.description}}
+                </p>
+            </v-card-text>
+            <v-card-actions>
+                <v-img
+                    v-bind:src="fetchImageURL()"
+                    max-height=40px
+                    max-width=40px
+                >
+                </v-img>
+            </v-card-actions>
+        </v-card>
+    </div>
 </template>
 
 <script>
@@ -30,6 +51,7 @@ export default {
         updateStory: async function(){
             try {
                 this.json = await DatabaseService.getStoryById(this.$props.id);
+                console.log(this.json);
                 this.title = this.json.title;
                 this.status = this.json.status;
                 this.description = this.json.description;
@@ -54,11 +76,20 @@ export default {
                 estimatedTime: this.estimatedTime
             });
             this.updateStory();
+        },
+        fetchImageURL: function(){
+            if (this.member.provider == 'local'){
+                let string = 'require(\''+this.memberPicture+'\')'
+                return (string);
+            }
+            else{
+                return this.memberPicture;
+            }
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
