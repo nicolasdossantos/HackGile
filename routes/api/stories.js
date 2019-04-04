@@ -5,7 +5,7 @@ let Story = require('../../models/story');
 
 const router = express.Router();
 
-//Tested
+// -- Tested --
 //Fetches all stories linked to member ID. Move to members.js?
 router.get('/:id', async (req, res) => {
     const list = await Story
@@ -15,15 +15,15 @@ router.get('/:id', async (req, res) => {
     res.send(list);
 });
 
-//TODO: Test
+//Post new story -- Tested -- 
 router.post('/', async (req, res) => {
     let newStory = new Story({
-        sprint: mongoose.Types.ObjectId(""),
+        sprint: undefined,
         status: "Backlog",
-        member: mongoose.Types.ObjectId(""),
-        title: "This is just a Test",
-        description: "This is the description",
-        estimatedTime: "10"
+        member: undefined,
+        title: req.body.title,
+        description: req.body.description,
+        estimatedTime: req.body.estimatedTime
     });
     await newStory.save(err => {
         if (err) {
@@ -35,10 +35,10 @@ router.post('/', async (req, res) => {
 
 //TODO: Test
 //Updates Story by ID
-router.put('/:id', async (req, res) => {
+router.put('/:sid', async (req, res) => {
     const stories = await loadStoriesCollection();
     stories.findOneAndUpdate(
-        {_id: mongoose.Types.ObjectId(req.params.id)},
+        {_id: mongoose.Types.ObjectId(req.params.sid)},
         {
             sprint: mongoose.Types.ObjectId(req.body.sprint),
             status: req.body.status,
@@ -52,14 +52,10 @@ router.put('/:id', async (req, res) => {
 
 //TODO: Test
 //Deletes Story by ID
-router.delete('/:id', async (req, res) => {
-    const posts = await loadStoriesCollection();
-    await posts.deleteOne({_id: mongoose.Types.ObjectId(req.params.id)});
+router.delete('/:sid', async (req, res) => {
+    
+    await Story.deleteOne({_id: mongoose.Types.ObjectId(req.params.sid)});
     res.status(200).send();
 })
-
-async function loadStoriesCollection(){
-    return app.collection('stories');
-}
 
 module.exports = router;
