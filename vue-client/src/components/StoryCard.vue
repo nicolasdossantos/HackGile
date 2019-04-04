@@ -36,12 +36,13 @@ export default {
                 this.project = this.json.project;
                 this.sprint = this.json.sprint;
                 //this.json.estimatedTime = estimatedTime;
-                this.member = this.json.member.memberPicture;
+                this.member = this.json.member;
                 this.memberPicture = this.json.member.image;
             }catch (err){
                 this.error = err;
             }
         },
+        //TODO: Test
         modifyStory: async function(){
             await DatabaseService.updateStory(this.$props.id, {
                 title: this.title,
