@@ -7,6 +7,7 @@ const Project = require("../../models/project");
 const Member = require("../../models/member");
 
 //Tested
+// Get all projects for that member id
 router.get("/:id", async (req, res) => {
   const list = await Project.find({
     members: mongoose.Types.ObjectId(req.params.id)
@@ -32,7 +33,7 @@ router.get("/:id", async (req, res) => {
   res.send(list);
 });
 
-//Tested
+//Post -> Create a new project
 router.post("/", async (req, res) => {
   let name = req.body.name;
   let isHackathon = req.body.ishackathon;
@@ -74,6 +75,7 @@ router.post("/", async (req, res) => {
 // })
 
 //Tested
+//Delete project linked to this pid
 router.delete("/:pid", async (req, res) => {
   await Projects.deleteOne({ _id: mongoose.Types.ObjectId(req.params.pid) });
   res.status(200).send();
@@ -194,12 +196,12 @@ router.get("/:pid/stories/", async (req, res) => {
 
 //Tested
 //Puts a story into a project
-router.put("/:pid/stories/:id", async (req, res) => {
+router.put("/:pid/stories/:sid", async (req, res) => {
   await Project.findById(req.params.pid, async (err, project) => {
-    if (project.stories.indexOf(req.params.id) < 0) {
+    if (project.stories.indexOf(req.params.sid) < 0) {
       await Project.updateOne(
         { _id: req.params.pid },
-        { $push: { stories: mongoose.Types.ObjectId(req.params.id) } }
+        { $push: { stories: mongoose.Types.ObjectId(req.params.sid) } }
       );
       res.status(200).send();
     }
@@ -207,12 +209,15 @@ router.put("/:pid/stories/:id", async (req, res) => {
 });
 
 //Tested
-//Deletes a story from project
-router.delete("/:pid/stories/:id", async (req, res) => {
+//Deletes a story from project -> story is removed from database
+router.delete("/:pid/stories/:sid", async (req, res) => {
   await Project.updateOne(
     { _id: req.params.pid },
-    { $pull: { stories: mongoose.Types.ObjectId(req.params.id) } }
+    { $pull: { stories: mongoose.Types.ObjectId(req.params.sid) } }
   );
+  //Needs Testing
+  await Story.deleteOne({_id: req.params.sid});
+  
   res.status(200).send();
 });
 

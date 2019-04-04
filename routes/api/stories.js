@@ -18,13 +18,12 @@ router.get('/:id', async (req, res) => {
 //TODO: Test
 router.post('/', async (req, res) => {
     let newStory = new Story({
-        project: mongoose.Types.ObjectId(req.body.project),
-        sprint: mongoose.Types.ObjectId(req.body.sprint),
-        status: req.body.status,
-        member: mongoose.Types.ObjectId(req.body.member),
-        title: req.body.title,
-        description: req.body.description,
-        estimatedTime: req.body.estimatedTime
+        sprint: mongoose.Types.ObjectId(""),
+        status: "Backlog",
+        member: mongoose.Types.ObjectId(""),
+        title: "This is just a Test",
+        description: "This is the description",
+        estimatedTime: "10"
     });
     await newStory.save(err => {
         if (err) {
@@ -41,7 +40,6 @@ router.put('/:id', async (req, res) => {
     stories.findOneAndUpdate(
         {_id: mongoose.Types.ObjectId(req.params.id)},
         {
-            project: mongoose.Types.ObjectId(req.body.project),
             sprint: mongoose.Types.ObjectId(req.body.sprint),
             status: req.body.status,
             member: mongoose.Types.ObjectId(req.body.member),
