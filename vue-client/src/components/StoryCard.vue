@@ -1,5 +1,5 @@
 <template>
-    
+    <div class="StoryCard"></div>
 </template>
 
 <script>
@@ -7,10 +7,11 @@ import DatabaseService from '../DatabaseService.js';
 export default {
     name: 'StoryCard',
     props: {
-        id: number
+        id: String
     },
     data: function(){
         return {
+            error: String,
             json: null,
             title: String,
             status: String,
@@ -22,26 +23,26 @@ export default {
             memberPicture: ''
         }
     },
-    async created(){
-        updateStory();
+    created: async function(){
+        this.updateStory();
     },
     methods: {
-        async updateStory(){
+        updateStory: async function(){
             try {
                 this.json = await DatabaseService.getStoryById(this.$props.id);
-                this.json.title = this.title;
-                this.json.status = this.status;
-                this.json.description = this.description;
-                this.json.project = this.project;
-                this.json.sprint = this.sprint;
+                this.title = this.json.title;
+                this.status = this.json.status;
+                this.description = this.json.description;
+                this.project = this.json.project;
+                this.sprint = this.json.sprint;
                 //this.json.estimatedTime = estimatedTime;
-                this.member = await DatabaseService.getStoryMember(this.project, this.$props.id);
-                memberPicture = member.image;
+                this.member = this.json.member.memberPicture;
+                this.memberPicture = this.json.member.image;
             }catch (err){
-                this.title = 'error fetching story';
+                this.error = err;
             }
         },
-        async modifyStory(){
+        modifyStory: async function(){
             await DatabaseService.updateStory(this.$props.id, {
                 title: this.title,
                 status: this.status,
@@ -49,9 +50,9 @@ export default {
                 project: this.project,
                 sprint: this.sprint,
                 member: this.member,
-                estimatedTime = this.estimatedTime
+                estimatedTime: this.estimatedTime
             });
-            updateStory();
+            this.updateStory();
         }
     }
 }

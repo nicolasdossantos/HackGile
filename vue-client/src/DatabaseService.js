@@ -58,10 +58,11 @@ class DatabaseService {
         return new Promise(async (resolve, reject) => {
             try{
                 const res = await axios.get(url + 'projects/' + pid + '/members/');
-                const data = null;
+                let data = null;
                 res.forEach(member => {
                     if (member._id == id){
                         data = member;
+                        resolve(data);
                     }
                 });
                 resolve(data);

@@ -10,14 +10,14 @@ const config = require('./config/database');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
+const cors = require('cors');
 
 //Mongoose midleware
 //Setup DB
 mongoose.connect(config.database, {
     useNewUrlParser: true
 });
-const db = module.exports = mongoose.connection;
-db.useDb('test');
+let db = mongoose.connection;
 
 //Check for DB errors
 db.on('error', (err) => {
@@ -54,6 +54,7 @@ app.use(bodyParser.urlencoded({
 
 // parse application/json
 app.use(bodyParser.json());
+app.use(cors());
 
 //Cookie Session init
 app.use(cookieSession({
@@ -92,7 +93,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Create global variable user
-app.get('*', ensureSecure, (req, res, next) => {
+app.get('*', (req, res, next) => {
     res.locals.user = req.user || null;
     next();
 });
@@ -116,7 +117,7 @@ app.use('/api/projects', projectsapi);
 
 
 //Index Route
-app.get("/", ensureSecure, (req, res) => {
+app.get("/", (req, res) => {
     res.render('index');
 });
 
@@ -128,14 +129,3 @@ app.listen(8080, () => {
     console.log("Listening on port 8080...");
 });
 
-//HTTPS redirect middleware
-function ensureSecure(req, res, next) {
-    //Heroku stores the origin protocol in a header variable. The app itself is isolated within the dyno and all request objects have an HTTP protocol.
-    if (req.get('X-Forwarded-Proto') == 'https' || req.hostname == 'localhost') {
-        //Serve Angular App by passing control to the next middleware
-        next();
-    } else if (req.get('X-Forwarded-Proto') != 'https' && req.get('X-Forwarded-Port') != '443') {
-        //Redirect if not HTTP with original request URL
-        res.redirect('https://' + req.hostname + req.url);
-    }
-}

@@ -9,7 +9,7 @@ const router = express.Router();
 //Gets Story JSON by story id
 router.get('/:id', async (req, res) => {
     const list = await Story
-        .find({_id: mongoose.Types.ObjectId(req.params.id)})
+        .findOne({_id: mongoose.Types.ObjectId(req.params.id)})
         /*.populate('sprint')*/
         .populate('member');
     res.send(list);
