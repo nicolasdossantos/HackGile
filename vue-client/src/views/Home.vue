@@ -1,15 +1,13 @@
 <template>
-<v-app>
-  <StoryCard id="5ca40c1a1c9d44000004e05a"></StoryCard>
-</v-app>
+  <SprintCard id="5c969d081c9d4400005681aa"></SprintCard>
 </template>
 
 <script>
-  import StoryCard from '../components/StoryCard'
+  import SprintCard from '../components/SprintCard'
 
   export default {
     components: {
-      StoryCard
+      SprintCard
     }
   }
 </script>

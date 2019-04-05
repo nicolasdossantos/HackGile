@@ -13,6 +13,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-img
+                    v-if="typeof member !== undefined"
                     v-bind:src="fetchImageURL()"
                     max-height=40px
                     max-width=40px
@@ -40,7 +41,7 @@ export default {
             estimatedTime: '',
             sprint: Number,
             project: Number,
-            member: null,
+            member: undefined,
             memberPicture: ''
         }
     },
@@ -78,12 +79,17 @@ export default {
             this.updateStory();
         },
         fetchImageURL: function(){
-            if (this.member.provider == 'local'){
-                let string = 'require(\''+this.memberPicture+'\')'
+            if (typeof member == undefined){
+                let string = 'require(\'/images/default-user.jpg\')'
                 return (string);
-            }
-            else{
-                return this.memberPicture;
+            }else{
+                if (this.member.provider == 'local'){
+                    let string = 'require(\''+this.memberPicture+'\')'
+                    return (string);
+                }
+                else{
+                    return this.memberPicture;
+                }
             }
         }
     }

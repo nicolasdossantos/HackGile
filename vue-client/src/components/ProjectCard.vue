@@ -4,7 +4,7 @@
 
 <script>
 export default {
-    name: ProjectCard,
+    name: 'ProjectCard',
     props: {
         id: String
     },

@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <!--
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span>Vuetify</span>
@@ -14,7 +15,7 @@
         <span class="mr-2">Latest Release</span>
       </v-btn>
     </v-toolbar>
-
+    -->
     <v-content>
       <!--<HelloWorld/>-->
       <Home/>
@@ -23,13 +24,13 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+//import HelloWorld from './components/HelloWorld'
 import Home from './views/Home'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    //HelloWorld,
     Home
   },
   data () {

@@ -9,7 +9,7 @@ const router = express.Router();
 //Tested
 //Gets Sprint JSON by sprint id
 router.get("/:zid", async (req, res) => {
-  const list = await Story.findOne({
+  const list = await Sprint.findOne({
     _id: mongoose.Types.ObjectId(req.params.zid)
   })
     /*.populate('sprint')*/
