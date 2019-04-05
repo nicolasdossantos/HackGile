@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = require("../../app.js");
 let Story = require("../../models/story");
+let Project = require("../../models/project");
+let Member = require("../../models/member");
+let Sprint = require("../../models/sprint");
 
 const router = express.Router();
 
@@ -47,26 +50,25 @@ router.put("/:sid", async (req, res) => {
       member: mongoose.Types.ObjectId(req.body.member),
       title: req.body.title,
       description: req.body.description,
+      priority: req.params.priority,
       estimatedTime: req.body.estimatedTime
     }
   );
   res.status(200).send();
 });
 
-//Add story to sprint
-//TODO: Test
 //Deletes Story by ID -> Removes story from Project, Sprint, Member
 router.delete("/:sid", async (req, res) => {
   await Project.updateMany(
-    { stories: { $in: req.user.sid } },
+    { stories: { $in: req.params.sid } },
     { $pull: { stories: mongoose.Types.ObjectId(req.params.sid) } }
   );
   await Member.updateMany(
-    { stories: { $in: req.user.sid } },
+    { stories: { $in: req.params.sid } },
     { $pull: { stories: mongoose.Types.ObjectId(req.params.sid) } }
   );
   await Sprint.updateOne(
-    { stories: { $in: req.user.sid } },
+    { stories: { $in: req.params.sid } },
     { $pull: { stories: mongoose.Types.ObjectId(req.params.sid) } }
   );
 

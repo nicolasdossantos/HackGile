@@ -223,6 +223,7 @@ router.put("/:pid/stories/:sid", async (req, res) => {
         { _id: req.params.pid },
         { $push: { stories: mongoose.Types.ObjectId(req.params.sid) } }
       );
+      
       res.status(200).send();
     }
   });

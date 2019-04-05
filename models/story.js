@@ -22,6 +22,12 @@ let storySchema = new Schema({
         type: String,
         required: true
     },
+
+    priority: {
+        type: String
+    },
+
+
     estimatedTime: {
         type: String
     }
