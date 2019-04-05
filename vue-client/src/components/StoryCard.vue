@@ -12,13 +12,17 @@
                 </p>
             </v-card-text>
             <v-card-actions>
-                <v-img
-                    v-if="typeof member !== undefined"
-                    v-bind:src="fetchImageURL()"
-                    max-height=40px
-                    max-width=40px
-                >
-                </v-img>
+                <v-list-tile>
+                    <v-list-tile-avatar>
+                        <v-img
+                            v-if="typeof member !== undefined"
+                            v-bind:src="fetchImageURL()"
+                            max-height=40px
+                            max-width=40px
+                        >
+                        </v-img>
+                    </v-list-tile-avatar>
+                </v-list-tile>
             </v-card-actions>
         </v-card>
     </div>
@@ -40,7 +44,6 @@ export default {
             description: String,
             estimatedTime: '',
             sprint: Number,
-            project: Number,
             member: undefined,
             memberPicture: ''
         }
@@ -56,7 +59,6 @@ export default {
                 this.title = this.json.title;
                 this.status = this.json.status;
                 this.description = this.json.description;
-                this.project = this.json.project;
                 this.sprint = this.json.sprint;
                 //this.json.estimatedTime = estimatedTime;
                 this.member = this.json.member;
