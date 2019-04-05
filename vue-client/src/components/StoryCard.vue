@@ -1,5 +1,5 @@
 <template>
-    <div class="StoryCard" v-bind:id="this.$props.id">
+    <div class="StoryCard pa-2" v-bind:id="this.$props.id">
         <v-card>
             <v-card-title primary-title>
                 <h1>

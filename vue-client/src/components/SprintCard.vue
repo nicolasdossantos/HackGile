@@ -39,8 +39,8 @@
                             <v-flex md2 v-for="s in status" :key="s">
                                 <div>
                                     <v-sheet
-                                        class=""
                                         color="grey lighten-3"
+                                        min-height="250px"
                                     >
                                     <h1
                                         class="text-xs-center"
