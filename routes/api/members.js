@@ -28,7 +28,7 @@ router.put("/:id/stories/:sid", async (req, res) => {
 });
 
 //Gets all stories assigned to member id
-router.get("/:id/members/", async (req, res) => {
+router.get("/:id/stories/", async (req, res) => {
   await Member.findById(mongoose.Types.ObjectId(req.params.id))
     .populate("stories")
     .then(

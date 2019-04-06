@@ -26,9 +26,11 @@ router.get("/", async (req, res) => {
   );
 });
 
+
+
 //Tested
 // Get all projects for that member id
-router.get("/:id", async (req, res) => {
+router.get("/members/:id", async (req, res) => {
   const list = await Project.find({
     members: mongoose.Types.ObjectId(req.params.id)
   })/*

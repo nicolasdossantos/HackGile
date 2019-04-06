@@ -6,6 +6,18 @@ class DatabaseService {
     static getProjectById(id){
         return new Promise(async (resolve, reject) => {
             try{
+                const res = await axios.get(url + 'projects/members' + id);
+                const data = res.data;
+                resolve(data);
+            }catch(err){
+                reject(err);
+            }
+        });
+    }
+
+    static getProjectByMemberId(id){
+        return new Promise(async (resolve, reject) => {
+            try{
                 const res = await axios.get(url + 'projects/' + id);
                 const data = res.data;
                 resolve(data);
@@ -15,17 +27,16 @@ class DatabaseService {
         });
     }
 
-    static getProjectsByMemberId(id){
+    
 
-    }
-
-    static insertProject(name, isHackathon, endDate, endTime, description, git){
+    static insertProject(name, projectType, endDate, endTime, description, hackathonName, git){
         return axios.post(url + 'projects/', {
             name: name,
-            isHackathon: isHackathon,
+            projectType: projectType,
             endDate: endDate,
             endTime: endTime,
             description: description,
+            hackathonName: hackathonName,
             git: git
         });
     }
@@ -35,7 +46,15 @@ class DatabaseService {
     }
 
     static getStoriesByMemberId(id){
-
+        return new Promise(async (resolve, reject) => {
+            try{
+                const res = await axios.get(url + 'members/' + id + '/stories/');
+                const data = res.data;
+                resolve(data);
+            }catch(err){
+                reject(err);
+            }
+        });
     }
 
     static getStoryById(id){
