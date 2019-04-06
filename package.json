@@ -41,6 +41,7 @@
     "passport-local": "^1.0.0",
     "pug": "^2.0.3",
     "react": "^16.8.5",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.4",
+    "vue-smooth-dnd": "^0.7.0"
   }
 }
