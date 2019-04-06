@@ -3,6 +3,8 @@ const router = express.Router();
 const flash = require("connect-flash");
 const nodemailer = require("nodemailer");
 const keys = require("../config/keys");
+let cheerio = require("cheerio");
+const rp = require("request-promise");
 
 //Bring in models
 let Member = require("../models/member");
@@ -32,6 +34,26 @@ router.get("/home", ensureAuthentication, (req, res) => {
 //New Project Route
 router.get("/new_project", ensureAuthentication, (req, res) => {
   res.render("new_project");
+});
+
+//Get a json file with all mls hackathons
+router.get("/scrape", (req, res) => {
+  rp("https://mlh.io/seasons/na-2019/events")
+    .then(html => {
+      let $ = cheerio.load(html);
+      var hackathonList = [];
+      // console.log(html);
+      $(".event-wrapper").each(function(index, element) {
+        hackathonList.push(
+          $(this)
+            .find(".event-link")
+            .attr("title")
+        );
+      });
+      res.send(hackathonList).json();
+    })
+
+    .catch(console.error.bind(console));
 });
 
 //
