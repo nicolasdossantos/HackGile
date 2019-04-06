@@ -56,10 +56,11 @@ router.get("/:id", async (req, res) => {
 //Post -> Create a new project
 router.post("/", async (req, res) => {
   let name = req.body.name;
-  let isHackathon = req.body.ishackathon;
+  let projectType = req.body.projectType;
   let endDate = req.body.enddate;
   let endTime = req.body.endtime;
   let description = req.body.description;
+  let hackathonName = req.body.hackathonName;
   let git = req.body.git;
   let member = req.user._id;
 
@@ -73,13 +74,15 @@ router.post("/", async (req, res) => {
 
   let newProject = new Project({
     name: name,
-    ishackathon: isHackathon,
+    projectType: projectType,
+    hackathonName: hackathonName,
     deadline: deadLine,
     description: description,
     git: git,
     members: [member],
     sprints: [],
-    stories: []
+    stories: [],
+    owners: [member]
   });
   await newProject.save(err => {
     if (err) {
@@ -136,6 +139,28 @@ router.put("/:pid/members/:id", async (req, res) => {
       res.status(200).send();
     }
   });
+});
+
+//Puts a member as a owner in project
+router.put("/:pid/members/:id", async (req, res) => {
+  await Project.findById(req.params.pid, async (err, project) => {
+    if (project.members.indexOf(req.params.id) < 0) {
+      await Project.updateOne(
+        { _id: req.params.pid },
+        { $push: { owners: mongoose.Types.ObjectId(req.params.id) } }
+      );
+      res.status(200).send();
+    }
+  });
+});
+
+//Delete - Remove member from owners
+router.delete("/:pid/members/:id", async (req, res) => {
+  await Project.updateOne(
+    { _id: req.params.pid },
+    { $pull: { owners: mongoose.Types.ObjectId(req.params.id) } }
+  );
+  res.status(200).send();
 });
 
 //Tested

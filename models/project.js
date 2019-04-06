@@ -7,21 +7,26 @@ let projectSchema = new Schema({
         type: String,
         required: true
     },
-    ishackathon: {
+    projectType: {
         type: String,
         required: true
     },
     deadline: {
         type: Number,
-    
     },
-
+    hackathonName: {
+        type: String
+    },
     description: {
         type: String
     },
     git: {
         type: String
     },
+    owners: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Member'
+    }],
     members: [{
         type: Schema.Types.ObjectId,
         ref: 'Member'

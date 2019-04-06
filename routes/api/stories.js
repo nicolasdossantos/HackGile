@@ -28,6 +28,7 @@ router.post("/", async (req, res) => {
     member: undefined,
     title: req.body.title,
     description: req.body.description,
+    priority: req.body.priority,
     estimatedTime: req.body.estimatedTime
   });
   await newStory.save(err => {

@@ -38,7 +38,7 @@ let Story = require('./models/story');
 
 
 // //For Testing. This will remove all members from database
-// Member.deleteMany({}, (err)=>{
+// Project.deleteMany({}, (err)=>{
 //     if(err){
 //         console.log(err);
 //     }
@@ -145,4 +145,6 @@ function ensureSecure(req, res, next) {
         res.redirect('https://' + req.hostname + req.url);
     }
 }
+
+
 exports.db = db;

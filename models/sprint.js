@@ -4,11 +4,9 @@ let Schema = mongoose.Schema;
 const sprintSchema = new Schema({
     name: {
         type: String,
-        required: true
     },
     time: {
         type: Number,
-        required: true
     },
     stories: [{
         type: Schema.Types.ObjectId,

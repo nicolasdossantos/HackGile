@@ -8,8 +8,7 @@ let storySchema = new Schema({
         ref: 'Sprint'
     },
     status: {
-        type: String,
-        required: true
+        type: String
     },
     member: {
         type: Schema.Types.ObjectId,
@@ -20,16 +19,12 @@ let storySchema = new Schema({
     },
     description: {
         type: String,
-        required: true
     },
-
     priority: {
         type: String
     },
-
-
     estimatedTime: {
-        type: String
+        type: Number
     }
 });
 
