@@ -50,10 +50,16 @@
           </v-list-tile>
         </v-list>
       </v-navigation-drawer>
+    
         <v-list>
+          
             <v-list-tile>
+               <NewProjectForm></NewProjectForm>
+               <br>
                 <v-list-tile-title class="title">
                     Projects
+                   
+
                 </v-list-tile-title>
             </v-list-tile>
             <v-divider></v-divider>
@@ -65,11 +71,15 @@
                 </v-list-tile>
             </v-list>
         </v-list>
+        
     </v-layout>
   </v-navigation-drawer>
 </template>
 
 <script>
+
+  import NewProjectForm from '../components/NewProjectForm'
+
   export default {
     data () {
       return {
@@ -82,6 +92,9 @@
         mini: true,
         right: null
       }
+    },
+    components:{
+      NewProjectForm
     }
   }
 </script>

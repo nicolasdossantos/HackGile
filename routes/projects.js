@@ -47,10 +47,11 @@ router.get("/scrape", (req, res) => {
         hackathonList.push(
           $(this)
             .find(".event-link")
-            .attr("title")
+            .attr("title").trim()
         );
       });
-      res.send(hackathonList).json();
+      res.send(hackathonList.toString());
+      console.log(hackathonList);
     })
 
     .catch(console.error.bind(console));
