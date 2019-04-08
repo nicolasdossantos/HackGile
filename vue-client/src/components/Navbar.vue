@@ -6,10 +6,11 @@
     hide-overlay
     stateless
     width="300"
+    
   >
     <v-layout fill-height>
       <v-navigation-drawer
-        dark
+        class = "red lighten-2"
         mini-variant
         stateless
         value="true"
@@ -41,7 +42,7 @@
             @click=""
           >
             <v-list-tile-action>
-              <v-icon>{{ item.icon }}</v-icon>
+              <v-icon>{{ item.icon }}</v-icon>  
             </v-list-tile-action>
 
             <v-list-tile-content>
@@ -57,9 +58,7 @@
                <NewProjectForm></NewProjectForm>
                <br>
                 <v-list-tile-title class="title">
-                    Projects
-                   
-
+                     &nbsp; Projects
                 </v-list-tile-title>
             </v-list-tile>
             <v-divider></v-divider>

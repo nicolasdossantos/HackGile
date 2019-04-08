@@ -38,10 +38,11 @@ router.get("/new_project", ensureAuthentication, (req, res) => {
 
 //Get a json file with all mls hackathons
 router.get("/scrape", (req, res) => {
+  let hackathonList = [];
   rp("https://mlh.io/seasons/na-2019/events")
     .then(html => {
       let $ = cheerio.load(html);
-      var hackathonList = [];
+      
       // console.log(html);
       $(".event-wrapper").each(function(index, element) {
         hackathonList.push(
@@ -50,11 +51,12 @@ router.get("/scrape", (req, res) => {
             .attr("title").trim()
         );
       });
-      res.send(hackathonList.toString());
-      console.log(hackathonList);
+      res.send(hackathonList);
+      
     })
 
     .catch(console.error.bind(console));
+    
 });
 
 //

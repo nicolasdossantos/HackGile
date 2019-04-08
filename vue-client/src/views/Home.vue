@@ -2,6 +2,7 @@
     <v-layout
     wrap
     fill-height
+    class= "light-green lighten-4"
     
   >
     <Navbar></Navbar>

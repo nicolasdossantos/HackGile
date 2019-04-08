@@ -3,6 +3,8 @@
         <v-dialog
         v-model="open"
         fullscreen
+        class="green"
+        
         >
             <template v-slot:activator="{ on }">
                 <v-btn
@@ -16,7 +18,7 @@
 
             <v-card>
                 <v-card-title
-                class="headline grey lighten-2"
+                class="headline red lighten-2"
                 primary-title
                 >
                     <v-btn
@@ -116,6 +118,4 @@ export default {
 }
 </script>
 
-<style>
 
-</style>
