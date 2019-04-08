@@ -27,6 +27,7 @@ class DatabaseService {
         });
     }
 
+
     
 
     static insertProject(name, projectType, endDate, endTime, description, hackathonName, git){
