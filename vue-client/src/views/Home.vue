@@ -23,8 +23,10 @@
       SprintCard,
       Navbar
     },
-    data: {
-      projects: []
+    data: function() {
+      return {
+        projects: []
+      }
     },
     created: async function() {
       //TODO: change to logged in user ID
@@ -33,8 +35,8 @@
     },
     methods: {
       getProjects: async function(){
-        projects = DatabaseService.getProjectsByMemberId(this.$store.state.user);
-        this.$store.dispatch('updateProject', projects);
+        this.projects = DatabaseService.getProjectsByMemberId(this.$store.state.user);
+        this.$store.dispatch('updateProject', this.projects);
       }
     }
   }

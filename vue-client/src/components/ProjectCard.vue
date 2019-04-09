@@ -36,10 +36,10 @@
                         >
                             Sprints
                         </h1>
-                            <div v-for="story in filterStories()" :key="story._id">
-                                <StoryCard
-                                    v-bind:id="story._id"
-                                ></StoryCard>
+                            <div v-for="sprints in sprints" :key="sprints._id">
+                                <SprintCard
+                                    v-bind:id="sprint._id"
+                                ></SprintCard>
                             </div>
                         </v-sheet>
                     </div>
@@ -63,7 +63,17 @@ export default {
     },
     data: function(){
         return {
-
+            json: null,
+            name: String,
+            projectType: String,
+            deadline: Number,
+            hackathonName: String,
+            description: String,
+            git: String,
+            owners: [],
+            members: [],
+            sprints: [],
+            stories: []
         }
     },
     created: function(){

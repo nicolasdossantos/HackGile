@@ -80,7 +80,7 @@ export default {
         return {
             json: null,
             name: String,
-            stories: null,
+            stories: [],
             time: Number,
             open: false,
             status: [
