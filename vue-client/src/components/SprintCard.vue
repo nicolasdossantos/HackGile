@@ -109,15 +109,16 @@ export default {
         },
         addStory: function(){
 
-        }
-        //TODO: Implement Draggable
-    },
-    computed:{
+        },
         filterStories: function(s){
             return this.stories.filter(function(story){
                 return story.status == s;
             });
         }
+        //TODO: Implement Draggable
+    },
+    computed:{
+
     }
 }
 </script>

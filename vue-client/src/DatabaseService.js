@@ -3,10 +3,10 @@ import axios from 'axios';
 const url = 'http://localhost:8080/api/';
 
 class DatabaseService {
-    static getProjectById(id){
+    static getProjectsByMemberId(id){
         return new Promise(async (resolve, reject) => {
             try{
-                const res = await axios.get(url + 'projects/members' + id);
+                const res = await axios.get(url + 'projects/members/' + id);
                 const data = res.data;
                 resolve(data);
             }catch(err){
@@ -15,10 +15,10 @@ class DatabaseService {
         });
     }
 
-    static getProjectByMemberId(id){
+    static getProjectsFromUser(){
         return new Promise(async (resolve, reject) => {
             try{
-                const res = await axios.get(url + 'projects/' + id);
+                const res = await axios.get(url + 'projects/');
                 const data = res.data;
                 resolve(data);
             }catch(err){
