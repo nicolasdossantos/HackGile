@@ -15,8 +15,8 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-form class="px3">
-                <v-flex xs12 sm12 md12>
+              <v-form md12 sm12>
+                <v-flex>
                   <v-text-field label="Project Name*" name="name" v-model="name"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md6>
@@ -28,7 +28,7 @@
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm6 md6>
-                  <v-autocomplete
+                  <v-autocomplete v-if="projectType == 'Hackathon Project'"
                     v-bind:items="hackathons"
                     label="Hackathon Name*"
                     name="hackathonName"
@@ -63,7 +63,7 @@
                 </v-layout>
 
                 <v-layout row wrap>
-                  <v-flex xs11 sm6 md6>
+                  <v-flex xs12 sm6 md6 lg6>
                     <v-menu
                       ref="menu"
                       v-model="menu3"
@@ -101,7 +101,7 @@
                   <v-text-field name="git" v-model="git" label="Git Repository"></v-text-field>
                 </v-flex>
 
-                <v-flex xs12>
+                <v-flex xs12 md12>
                   <v-textarea
                     name="description"
                     v-model="description"
@@ -111,7 +111,7 @@
                 </v-flex>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
-                <v-btn flat class="success mx-0 mt-3" @click="submit">Add Project</v-btn>
+                <v-btn color="blue darken-1" flat @click="submit">Add Project</v-btn>
               </v-form>
             </v-layout>
           </v-container>
@@ -153,7 +153,6 @@ export default {
   },
   methods: {
     submit: async function() {
-      console.log("HERE");
       let proprties = {
         name: this.name,
         projectType: this.projectType,
@@ -163,35 +162,18 @@ export default {
         description: this.description,
         git: this.git
       };
-
+      //Creates New Project witth fields above
       await DatabaseService.insertProject(proprties);
+      
+      //Clear form
       this.dialog = false;
-    },
-
-    newProject: async function(
-      name,
-      projectType,
-      endDate,
-      endTime,
-      hackathonName,
-      description,
-      git
-    ) {
-      try {
-        let proprties = {
-          name: name,
-          projectType: prototype,
-          endDate: endDate,
-          endTime: endTime,
-          hackathonName: hackathonName,
-          description: description,
-          git: git
-        };
-
-        this.json = await DatabaseService.insertProject(proprties);
-      } catch (err) {
-        this.error = err;
-      }
+      this.name = '';
+      this.projectType = '';
+      this.endDate = '';
+      this.endTime = '';
+      this.git = '';
+      this.projectType = '';
+      this.description = '';
     }
   }
 };
