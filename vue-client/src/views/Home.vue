@@ -16,11 +16,26 @@
 <script>
   import SprintCard from '../components/SprintCard'
   import Navbar from '../components/Navbar'
+  import DatabaseService from '../DatabaseService'
 
   export default {
     components: {
       SprintCard,
       Navbar
+    },
+    data: {
+      projects: []
+    },
+    created: async function() {
+      //TODO: change to logged in user ID
+      this.$store.dispatch('updateUser', "5ca7a535dfbbba4a40857710");
+      this.getProjects();
+    },
+    methods: {
+      getProjects: async function(){
+        projects = DatabaseService.getProjectsByMemberId(this.$store.state.user);
+        this.$store.dispatch('updateProject', projects);
+      }
     }
   }
 </script>
