@@ -50,7 +50,9 @@
                                         {{s}}
                                     </h1>
                                     <div v-for="story in filterStories(s)" :key="story._id">
-                                        <StoryCard v-bind:id="story._id"></StoryCard>
+                                        <StoryCard
+                                            v-bind:id="story._id"
+                                        ></StoryCard>
                                     </div>
                                     </v-sheet>
                                 </div>
