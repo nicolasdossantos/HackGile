@@ -57,14 +57,17 @@ router.get("/members/:id", async (req, res) => {
 
 //Post -> Create a new project
 router.post("/", async (req, res) => {
+  console.log(req.body.name)
   let name = req.body.name;
   let projectType = req.body.projectType;
-  let endDate = req.body.enddate;
-  let endTime = req.body.endtime;
+  let endDate = req.body.endDate;
+  let endTime = req.body.endTime;
   let description = req.body.description;
   let hackathonName = req.body.hackathonName;
   let git = req.body.git;
-  let member = req.user._id;
+  // if(req.user._id){
+  //   let member = req.user._id;
+  //}
 
   //time manipulation
   let splitTime = endTime.split(":");
@@ -81,16 +84,17 @@ router.post("/", async (req, res) => {
     deadline: deadLine,
     description: description,
     git: git,
-    members: [member],
+    members: [],
     sprints: [],
     stories: [],
-    owners: [member]
+    owners: []
   });
   await newProject.save(err => {
     if (err) {
       console.log(err);
     }
   });
+  console.log("SUCCESS")
   res.status(201).send();
 });
 

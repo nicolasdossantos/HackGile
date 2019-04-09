@@ -30,15 +30,16 @@ class DatabaseService {
 
     
 
-    static insertProject(name, projectType, endDate, endTime, description, hackathonName, git){
+    static insertProject(properties){
+        
         return axios.post(url + 'projects/', {
-            name: name,
-            projectType: projectType,
-            endDate: endDate,
-            endTime: endTime,
-            description: description,
-            hackathonName: hackathonName,
-            git: git
+            name: properties.name,
+            projectType: properties.projectType,
+            endDate: properties.endDate,
+            endTime: properties.endTime,
+            description: properties.description,
+            hackathonName: properties.hackathonName,
+            git: properties.git
         });
     }
 
