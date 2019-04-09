@@ -75,7 +75,9 @@ export default {
         },
         modifyProject: function(){
             
-        },
+        }
+    },
+    computed:{
         filterStories: function(){
             return this.stories.filter(function(story){
                 return story.status == 'Backlog';
