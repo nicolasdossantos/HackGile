@@ -67,6 +67,7 @@
                 <v-list-tile
                   v-for="project in this.$store.state.projects"
                   :key="project._id"
+                  v-on:click="$emit('change-project-page', project._id)"
                 >
                     <v-list-tile-title>
                         {{project.name}}

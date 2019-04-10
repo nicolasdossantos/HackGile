@@ -36,7 +36,7 @@
                         >
                             Sprints
                         </h1>
-                            <div v-for="sprints in sprints" :key="sprints._id">
+                            <div v-for="sprint in sprints" :key="sprint._id">
                                 <SprintCard
                                     v-bind:id="sprint._id"
                                 ></SprintCard>
@@ -52,6 +52,7 @@
 <script>
 import StoryCard from './StoryCard'
 import SprintCard from './SprintCard'
+import DatabaseService from '../DatabaseService';
 export default {
     name: 'ProjectCard',
     components: {
@@ -76,12 +77,12 @@ export default {
             stories: []
         }
     },
-    created: function(){
-        updateProject();
+    mounted: function(){
+        this.updateProject();
     },
     methods: {
         updateProject: function(){
-
+            console.log(this.$store.state.projects);
         },
         modifyProject: function(){
             
@@ -92,8 +93,31 @@ export default {
             });
         }
     },
-    computed:{
-
+    computed: {
+        //Watches for a change in the vuex projects value
+        //Needed because the store isn't retrieved fast enough before mounted is called
+        jsonUpdate: function (){
+            let id = this.$props.id; //Bringing id into scope
+            return this.$store.state.projects.filter(function(obj) {
+                return obj._id === id;
+            })[0];
+        }
+    },
+    watch:{
+        //Watches for a changed in the computed property and executes code
+        //Needed because component is instantiated with blank data that isn't instantly filled
+        jsonUpdate: function(){
+            this.json = this.jsonUpdate;
+            this.name = this.json.name;
+            this.projectType = this.json.projectType;
+            this.deadline = this.json.deadline;
+            this.hackathonName = this.json.hackathonName;
+            this.git = this.json.git;
+            this.stories = this.json.stories;
+            this.sprints = this.json.sprints;
+            this.members = this.json.members;
+            this.owners = this.json.owners;
+        }
     }
 }
 </script>

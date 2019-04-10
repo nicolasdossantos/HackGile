@@ -48,7 +48,7 @@ export default {
             memberPicture: ''
         }
     },
-    created: async function(){
+    mounted: async function(){
         this.updateStory();
     },
     methods: {
