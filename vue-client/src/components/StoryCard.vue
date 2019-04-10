@@ -55,7 +55,7 @@ export default {
         updateStory: async function(){
             try {
                 this.json = await DatabaseService.getStoryById(this.$props.id);
-                console.log(this.json);
+                //console.log(this.json);
                 this.title = this.json.title;
                 this.status = this.json.status;
                 this.description = this.json.description;

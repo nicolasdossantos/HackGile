@@ -5,6 +5,7 @@
     floating
     hide-overlay
     stateless
+    app
     width="300"
     
   >
@@ -63,9 +64,12 @@
             </v-list-tile>
             <v-divider></v-divider>
             <v-list>
-                <v-list-tile>
+                <v-list-tile
+                  v-for="project in this.$store.state.projects"
+                  :key="project._id"
+                >
                     <v-list-tile-title>
-                        Test
+                        {{project.name}}
                     </v-list-tile-title>
                 </v-list-tile>
             </v-list>
@@ -87,9 +91,9 @@
           { title: 'Home', icon: 'dashboard' },
           { title: 'About', icon: 'question_answer' }
         ],
-        links: ['Home', 'Contacts', 'Settings'],
         mini: true,
-        right: null
+        right: null,
+        window: 0
       }
     },
     components:{
