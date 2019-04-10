@@ -117,7 +117,10 @@ export default {
         }
         //TODO: Implement Draggable
     },
-    computed:{
+    computed: {
+
+    },
+    watch: {
 
     }
 }

@@ -16,7 +16,7 @@
                     <v-list-tile-avatar>
                         <v-img
                             v-if="typeof member !== undefined"
-                            v-bind:src="fetchImageURL()"
+                            v-bind:src="fetchImageURL"
                             max-height=40px
                             max-width=40px
                         >
@@ -79,9 +79,11 @@ export default {
                 estimatedTime: this.estimatedTime
             });
             this.updateStory();
-        },
+        }
+    },
+    computed: {
         fetchImageURL: function(){
-            if (typeof member == undefined){
+            if (this.member == undefined){
                 let string = 'require(\'/images/default-user.jpg\')'
                 return (string);
             }else{
@@ -94,6 +96,9 @@ export default {
                 }
             }
         }
+    },
+    watch: {
+
     }
 }
 </script>
