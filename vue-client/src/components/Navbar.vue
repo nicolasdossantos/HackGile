@@ -106,7 +106,7 @@
       }
     },
     mounted:async function () {
-     this.test =  DatabaseService.getCurrentUserId();
+     this.test =  await DatabaseService.getCurrentUserId();
     },
     methods:{
       getUserId: async function() {
