@@ -6,6 +6,7 @@
   >
     <Navbar
       v-on:change-project-page="switchProject"
+      v-on:project-form-complete="getProjects"
     ></Navbar>
     <!-- <SprintCard id="5ca7ab051c9d44000043c95f"></SprintCard>
     <SprintCard id="5ca7afcf1c9d4400008ef9d2"></SprintCard> -->

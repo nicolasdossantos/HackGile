@@ -42,6 +42,12 @@ router.get("/:id/stories/", async (req, res) => {
     );
 });
 
+//get current member id
+router.get("/", (req, res)=>{
+  console.log(req.user._id)
+  return req.user._id;
+})
+
 //Removes one story from member's story array - Changes story status to backlog - Set story's member to undefined
 router.delete("/:id/stories/:sid", async (req, res) => {
   await Member.updateOne(

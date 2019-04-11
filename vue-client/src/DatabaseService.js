@@ -75,16 +75,19 @@ class DatabaseService {
         return axios.put(url + 'stories/' + id, json);
     }
 
-    static getStoryMember(pid, id){
+    static getCurrentUserId(){
+        return axios.get(url + 'members/');
+    }
+
+
+    static getMembersinProject(pid){
         return new Promise(async (resolve, reject) => {
             try{
                 const res = await axios.get(url + 'projects/' + pid + '/members/');
                 let data = null;
                 res.forEach(member => {
-                    if (member._id == id){
                         data = member;
                         resolve(data);
-                    }
                 });
                 resolve(data);
             }catch(err){

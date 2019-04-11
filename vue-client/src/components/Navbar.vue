@@ -56,7 +56,8 @@
         <v-list>
           
             <v-list-tile>
-               <NewProjectForm></NewProjectForm>
+               <!-- <NewProjectForm></NewProjectForm> -->
+               <NewStoryForm></NewStoryForm>
                <br>
                 <v-list-tile-title class="title">
                      &nbsp; Projects
@@ -64,6 +65,11 @@
             </v-list-tile>
             <v-divider></v-divider>
             <v-list>
+              <v-list-tile>
+                <v-list-tile-title>
+                  {{test}}
+                </v-list-tile-title>
+              </v-list-tile>
                 <v-list-tile
                   v-for="project in this.$store.state.projects"
                   :key="project._id"
@@ -81,8 +87,9 @@
 </template>
 
 <script>
-
-  import NewProjectForm from '../components/NewProjectForm'
+  import DatabaseService from '../DatabaseService'
+  import NewProjectForm from './NewProjectForm'
+  import NewStoryForm from './NewStoryForm'
 
   export default {
     data () {
@@ -94,11 +101,21 @@
         ],
         mini: true,
         right: null,
-        window: 0
+        window: 0,
+        test: ''
+      }
+    },
+    mounted:async function () {
+     this.test =  DatabaseService.getCurrentUserId();
+    },
+    methods:{
+      getUserId: async function() {
+        
       }
     },
     components:{
-      NewProjectForm
+      NewProjectForm,
+      NewStoryForm
     }
   }
 </script>

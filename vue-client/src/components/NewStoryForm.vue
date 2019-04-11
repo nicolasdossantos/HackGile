@@ -9,7 +9,7 @@
 
       <v-card>
         <v-card-title>
-          <span class="headline">New Project</span>
+          <span class="headline">New Story</span>
         </v-card-title>
 
         <v-card-text>
@@ -17,19 +17,19 @@
             <v-layout wrap>
               <v-form md12 sm12>
                 <v-flex>
-                  <v-text-field label="Project Name*" name="name" v-model="name"></v-text-field>
+                  <v-text-field label="Story Title*" name="title" v-model="title"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md6>
                   <v-select
-                    label="Project Type*"
-                    :items="['Hackathon Project', 'School Project', 'Personal Project']"
-                    name="projectType"
-                    v-model="projectType"
+                    label="Priority*"
+                    :items="['High', 'Moderate', 'Low']"
+                    name="priority"
+                    v-model="priority"
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm6 md6>
-                  <v-autocomplete v-if="projectType == 'Hackathon Project'"
-                    v-bind:items="hackathons"
+                  <v-autocomplete
+                    v-bind:items="members"
                     label="Hackathon Name*"
                     name="hackathonName"
                     v-model="hackathonName"
@@ -128,53 +128,59 @@ import DatabaseService from "../DatabaseService";
 export default {
   data: () => ({
     dialog: false,
-    hackathons: null,
+    members: [],
     isHackathon: false,
     time: null,
     menu2: false,
     menu3: false,
     modal2: false,
 
-    name: "",
-    projectType: "",
-    endTime: "",
-    endDate: "",
-    hackathonName: "",
-    description: "",
-    git: ""
+    sprint: undefined,
+    status: '',
+    member: undefined,
+    title: '',
+    description: '',
+    priority: '',
+    estimatedTime: 0
   }),
+
   mounted: function() {
-    fetch("http://localhost:8080/projects/scrape")
-      .then(response => response.json())
+    fetch("http://localhost:8080/api/projects/5ca7a58c1c9d4400006b8cfa/members")
       .then(data => {
-        this.hackathons = data;
+        console.log(data);
+        data.forEach((member) => {
+            this.members.push(member.firstname)
+        })
+        
       })
       .then();
+      
   },
+  
   methods: {
     submit: async function() {
       let proprties = {
-        name: this.name,
-        projectType: this.projectType,
-        endDate: this.endDate,
-        endTime: this.endTime,
-        hackathonName: this.hackathonName,
+        sprint: this.sprint,
+        status: this.status,
+        member: this.member,
+        title: this.title,
+        priority: this.priority,
         description: this.description,
-        git: this.git
+        estimatedTime: this.estimatedTime
       };
-      //Creates New Project witth fields above
-      await DatabaseService.insertProject(proprties);
-      this.$emit('project-form-complete');
+      //Creates New Story witth fields above
+      await DatabaseService.insertStory(proprties);
       
       //Clear form
       this.dialog = false;
-      this.name = '';
-      this.projectType = '';
-      this.endDate = '';
-      this.endTime = '';
-      this.git = '';
-      this.projectType = '';
+      this.sprint = undefined;
+      this.status = '';
+      this.estimatedTime = '';
+      this.priority = '';
       this.description = '';
+      this.title = '';
+      this.member = undefined;
+
     }
   }
 };
