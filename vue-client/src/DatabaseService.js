@@ -39,7 +39,9 @@ class DatabaseService {
             endTime: properties.endTime,
             description: properties.description,
             hackathonName: properties.hackathonName,
-            git: properties.git
+            git: properties.git,
+            members: properties.members,
+            owners: properties.members
         });
     }
 

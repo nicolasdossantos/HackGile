@@ -56,8 +56,8 @@
         <v-list>
           
             <v-list-tile>
-               <!-- <NewProjectForm></NewProjectForm> -->
-               <NewStoryForm></NewStoryForm>
+               <NewProjectForm></NewProjectForm>
+               <!-- <NewStoryForm></NewStoryForm> -->
                <br>
                 <v-list-tile-title class="title">
                      &nbsp; Projects

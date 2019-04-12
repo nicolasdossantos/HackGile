@@ -100,7 +100,12 @@
                 <v-flex xs12>
                   <v-text-field name="git" v-model="git" label="Git Repository"></v-text-field>
                 </v-flex>
-
+                
+                <v-flex>
+                  <span>
+                    {{member}}
+                  </span>
+                </v-flex>
                 <v-flex xs12 md12>
                   <v-textarea
                     name="description"
@@ -141,15 +146,19 @@ export default {
     endDate: "",
     hackathonName: "",
     description: "",
-    git: ""
+    git: "",
+    member: undefined
+
   }),
-  mounted: function() {
+  mounted: async function() {
     fetch("http://localhost:8080/projects/scrape")
       .then(response => response.json())
       .then(data => {
         this.hackathons = data;
+       
       })
       .then();
+       this.member = await DatabaseService.getCurrentUserId()
   },
   methods: {
     submit: async function() {
@@ -160,7 +169,9 @@ export default {
         endTime: this.endTime,
         hackathonName: this.hackathonName,
         description: this.description,
-        git: this.git
+        git: this.git,
+        members:[this.member],
+        owners:[this.member]
       };
       //Creates New Project witth fields above
       await DatabaseService.insertProject(proprties);

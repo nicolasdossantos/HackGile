@@ -65,9 +65,8 @@ router.post("/", async (req, res) => {
   let description = req.body.description;
   let hackathonName = req.body.hackathonName;
   let git = req.body.git;
-  // if(req.user._id){
-  //   let member = req.user._id;
-  //}
+  let owners = req.body.owners;
+  let members = req.body.members;
 
   //time manipulation
   let splitTime = endTime.split(":");
@@ -84,10 +83,10 @@ router.post("/", async (req, res) => {
     deadline: deadLine,
     description: description,
     git: git,
-    members: [],
+    members: members,
     sprints: [],
     stories: [],
-    owners: []
+    owners: owners
   });
   await newProject.save(err => {
     if (err) {
