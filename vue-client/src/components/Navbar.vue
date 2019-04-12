@@ -25,7 +25,8 @@
               <v-list-tile-action>
                 <v-btn
                   icon
-                  @click.native.stop="mini = !mini"
+                  @click.native.stop="mini = !mini, drawer = false"
+                
                 >
                   <v-icon>chevron_left</v-icon>
                 </v-btn>
@@ -56,6 +57,7 @@
         <v-list>
           
             <v-list-tile>
+              
                <NewProjectForm></NewProjectForm>
                <!-- <NewStoryForm></NewStoryForm> -->
                <br>
@@ -65,11 +67,6 @@
             </v-list-tile>
             <v-divider></v-divider>
             <v-list>
-              <v-list-tile>
-                <v-list-tile-title>
-                  {{test}}
-                </v-list-tile-title>
-              </v-list-tile>
                 <v-list-tile
                   v-for="project in this.$store.state.projects"
                   :key="project._id"
