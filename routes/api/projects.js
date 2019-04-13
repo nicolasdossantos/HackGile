@@ -136,6 +136,20 @@ router.get("/:pid/memberNames", async (req, res) => {
       res.send(names);
     })
 });
+//Get members Pictures
+router.get("/:pid/memberPictures", async (req, res) => {
+  var images = [];
+  await Project.findById(req.params.pid)
+    .populate("members")
+    .exec((err, project) => {
+      project.members.forEach((member) => {
+        images.push(member.image);
+        
+      })
+     
+      res.send(images);
+    })
+});
 
 /*============================*/
 /* Project Members Array API  */
