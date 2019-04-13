@@ -101,6 +101,7 @@
                   v-if="menu2"
                   v-model="endTime"
                   @click:minute="$refs.menu.save(endTime)"
+                  format="ampm"
                 ></v-time-picker>
               </v-menu>
               <transition
