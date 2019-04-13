@@ -10,19 +10,21 @@
 
       <v-card-text>
         <v-form class="px-3">
-          
-          <v-text-field 
-          v-validate="'required|max:20'" 
-          label="Project Name*" 
-          name="name" 
-          v-model="name" 
-          prepend-icon="folder">
-          </v-text-field>
+          <v-text-field
+            v-validate="'required|max:20'"
+            label="Project Name*"
+            name="name"
+            v-model="name"
+            prepend-icon="folder"
+          ></v-text-field>
 
-          <transition name="alert-in" enter-active-class="animated flipInX" leave-active-class="animated flipOutX">
-          <p class="alert" v-if="errors.has('name')">{{ errors.first('name') }}</p>
+          <transition
+            name="alert-in"
+            enter-active-class="animated flipInX"
+            leave-active-class="animated flipOutX"
+          >
+            <p class="alert" v-if="errors.has('name')">{{ errors.first('name') }}</p>
           </transition>
-
 
           <v-select
             label="Project Type*"
@@ -32,8 +34,12 @@
             prepend-icon="assignment"
             v-validate="'required'"
           ></v-select>
-           <transition name="alert-in" enter-active-class="animated flipInX" leave-active-class="animated flipOutX">
-          <p class="alert" v-if="errors.has('projectType')">{{ errors.first('projectType') }}</p>
+          <transition
+            name="alert-in"
+            enter-active-class="animated flipInX"
+            leave-active-class="animated flipOutX"
+          >
+            <p class="alert" v-if="errors.has('projectType')">{{ errors.first('projectType') }}</p>
           </transition>
 
           <v-autocomplete
@@ -45,79 +51,71 @@
             prepend-icon="laptop"
           ></v-autocomplete>
 
-          <v-menu>
-            
-            <v-text-field
-              slot="activator"
-              label="End Date*"
-              prepend-icon="date_range"
-              :value="formattedDate"
-              left
-              
-              flat
-              v-validate="'required'"
-            
-            
-              name="endDate"
-            ></v-text-field>
-         
+          <v-layout row>
+            <v-flex xs12 md6>
+              <v-menu>
+                <v-text-field
+                  slot="activator"
+                  label="End Date*"
+                  prepend-icon="date_range"
+                  :value="formattedDate"
+                  left
+                  flat
+                  v-validate="'required'"
+                  name="endDate"
+                ></v-text-field>
 
-            <v-date-picker 
-            v-model="endDate" 
-            color="green white--text" 
-            flat
-            ></v-date-picker>
-             <transition name="alert-in" enter-active-class="animated flipInX" leave-active-class="animated flipOutX">
-             <p class="alert" v-if="errors.has('endDate')">{{ errors.first('endDate') }}</p>
-            </transition>
-            
-          </v-menu>
-              
-         
-          
-          <v-menu
-            ref="menu"
-            v-model="menu2"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            :return-value.sync="endTime"
-            lazy
-            transition="scale-transition"
-            offset-y
-         
-          >
-            <template v-slot:activator="{ on }">
-              
-              <v-text-field
-                v-model="endTime"
-                label="End Time*"
-                prepend-icon="access_time"
-                v-on="on"
-                :value="formattedTime"
-                right
-                v-validate="'required'"
-                
-              ></v-text-field>
-             
-            </template>
-            <v-time-picker
-              v-if="menu2"
-              v-model="endTime"
-              @click:minute="$refs.menu.save(endTime)"
-            ></v-time-picker>
-          </v-menu>
-           <transition name="alert-in" enter-active-class="animated flipInX" leave-active-class="animated flipOutX">
-             <p class="alert" v-if="errors.has('endTime')">{{ errors.first('endTime') }}</p>
-          </transition>
-      
+                <v-date-picker v-model="endDate" color="green white--text" flat></v-date-picker>
+                <transition
+                  name="alert-in"
+                  enter-active-class="animated flipInX"
+                  leave-active-class="animated flipOutX"
+                >
+                  <p class="alert" v-if="errors.has('endDate')">{{ errors.first('endDate') }}</p>
+                </transition>
+              </v-menu>
+            </v-flex>
+            <v-flex xs12 md6>
+              <v-menu
+                ref="menu"
+                v-model="menu2"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="endTime"
+                lazy
+                transition="scale-transition"
+                offset-y
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="endTime"
+                    label="End Time*"
+                    prepend-icon="access_time"
+                    v-on="on"
+                    :value="formattedTime"
+                    right
+                    v-validate="'required'"
+                  ></v-text-field>
+                </template>
+                <v-time-picker
+                  v-if="menu2"
+                  v-model="endTime"
+                  @click:minute="$refs.menu.save(endTime)"
+                ></v-time-picker>
+              </v-menu>
+              <transition
+                name="alert-in"
+                enter-active-class="animated flipInX"
+                leave-active-class="animated flipOutX"
+              >
+                <p class="alert" v-if="errors.has('endTime')">{{ errors.first('endTime') }}</p>
+              </transition>
+            </v-flex>
+          </v-layout>
+
           <!-- TODO: Implement time picker -->
 
-          <v-text-field 
-          prepend-icon="code" 
-          name="git" 
-          v-model="git" 
-          label="Git Repository">
-          </v-text-field>
+          <v-text-field prepend-icon="code" name="git" v-model="git" label="Git Repository"></v-text-field>
 
           <v-textarea
             name="description"
@@ -136,7 +134,6 @@
             Add Project
             <v-icon dark right>check_circle</v-icon>
           </v-btn>
-
         </v-form>
       </v-card-text>
     </v-card>
@@ -181,26 +178,26 @@ export default {
     },
     formattedTime() {
       let hours;
-      let amPM = 'AM'
-      if(this.endTime){
+      let amPM = "AM";
+      if (this.endTime) {
         let splitTime = this.endTime.split(":");
-        if(splitTime[0] <= 12){
+        if (splitTime[0] <= 12) {
           hours = splitTime[0];
-        }else{
+        } else {
           hours = parseInt(splitTime[0], 10) - 12;
-          amPM = 'PM'
+          amPM = "PM";
         }
 
-        
-        return (hours+':'+splitTime[1] + " "+amPM)
-      }else{
-        return ''
-      };
+        let text = hours + ":" + splitTime[1] + " " + amPM;
+        console.log(text);
+        return text;
+      } else {
+        return "";
+      }
     }
   },
   methods: {
     submit: async function() {
-      
       let proprties = {
         name: this.name,
         projectType: this.projectType,
@@ -212,15 +209,12 @@ export default {
         members: [this.member],
         owners: [this.member]
       };
-      
-        
+
       //Creates New Project witth fields above
       await DatabaseService.insertProject(proprties);
       this.clearForm();
-      
-      this.$emit("project-form-complete");
 
-      
+      this.$emit("project-form-complete");
     },
 
     clearForm: function() {
@@ -238,32 +232,29 @@ export default {
 </script>
 <style scoped>
 @import "https://cdn.jsdelivr.net/npm/animate.css@3.5.1";
-  .alert {
-   color: red;
-   margin: -10px;
-   padding-left: 10px;
-   padding-bottom: 10px;
+.alert {
+  color: red;
+  margin: -10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+}
+.alert-in-enter-active {
+  animation: bounce-in 0.5s;
+}
 
-  }
-  .alert-in-enter-active {
-     animation: bounce-in .5s;
+.alert-in-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
 
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
   }
-
-  .alert-in-leave-active {
-     animation: bounce-in .5s reverse; 
+  50% {
+    transform: scale(1.5);
   }
-
-  @keyframes bounce-in {
-    0% {
-      transform: scale(0);
-    }
-    50% {
-      transform: scale(1.5);
-    }
-    100% {
-      transform: scale(1);
-    }
-    
+  100% {
+    transform: scale(1);
   }
+}
 </style>
