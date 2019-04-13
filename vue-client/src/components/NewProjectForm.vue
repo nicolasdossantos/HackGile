@@ -53,11 +53,8 @@
               prepend-icon="date_range"
               :value="formattedDate"
               left
-              
               flat
               v-validate="'required'"
-            
-            
               name="endDate"
             ></v-text-field>
          

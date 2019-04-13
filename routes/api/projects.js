@@ -115,9 +115,36 @@ router.post("/", async (req, res) => {
 //Tested
 //Delete project linked to this pid
 router.delete("/:pid", async (req, res) => {
-  await Projects.deleteOne({ _id: mongoose.Types.ObjectId(req.params.pid) });
+  await Project.deleteOne({ _id: mongoose.Types.ObjectId(req.params.pid) });
   res.status(200).send();
 });
+
+//Get First and last name of members
+router.get("/:pid/memberNames", async (req, res)=>{
+  var names = [];
+  await Project.findById(req.params.pid, async (err, project) => {
+
+    let members = project.members;
+   
+    members.forEach( function(element){
+     
+      Member.findById(element, async (err, member)=>{
+        if(err){
+          console.log(err)
+        }
+        names.push(member.firstname +" "+member.lastname);
+        console.log(names)
+      }) 
+    })
+    res.send(names)
+    console.log(names)
+   
+}
+
+)
+console.log(names);
+
+})
 
 /*============================*/
 /* Project Members Array API  */
