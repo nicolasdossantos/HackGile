@@ -9,22 +9,15 @@
       </v-card-title>
 
       <v-card-text>
-        <v-form class="px-3">
+        <v-form class="px-3" ref="form">
           <v-text-field
-            v-validate="'required|max:20'"
             label="Project Name*"
             name="name"
             v-model="name"
             prepend-icon="folder"
+            :rules="inputRules"
           ></v-text-field>
 
-          <transition
-            name="alert-in"
-            enter-active-class="animated flipInX"
-            leave-active-class="animated flipOutX"
-          >
-            <p class="alert" v-if="errors.has('name')">{{ errors.first('name') }}</p>
-          </transition>
 
           <v-select
             label="Project Type*"
@@ -32,7 +25,7 @@
             name="projectType"
             v-model="projectType"
             prepend-icon="assignment"
-            v-validate="'required'"
+           :rules="inputRules"
           ></v-select>
           <transition
             name="alert-in"
@@ -59,22 +52,16 @@
                   label="End Date*"
                   prepend-icon="date_range"
                   :value="formattedDate"
-                  left
-                  
-                  v-validate="'required'"
+                  :rules="inputRules"
+                
                   name="endDate"
                 ></v-text-field>
 
                 <v-date-picker
                  v-model="endDate" 
-                 light header-color="green lighten-1"></v-date-picker>
-                <transition
-                  name="alert-in"
-                  enter-active-class="animated flipInX"
-                  leave-active-class="animated flipOutX"
-                >
-                  <p class="alert" v-if="errors.has('endDate')">{{ errors.first('endDate') }}</p>
-                </transition>
+                 light color="light-green lighten-2"
+                 ></v-date-picker>
+              
               </v-menu>
             </v-flex>
             <v-flex xs12 md6>
@@ -95,28 +82,21 @@
                     prepend-icon="access_time"
                     v-on="on"
                     :value="formattedTime"
-                    right
-                    v-validate="'required'"
+                   :rules="inputRules"
                   ></v-text-field>
                 </template>
                 <v-time-picker
                   v-if="menu2"
                   v-model="endTime"
                   @click:minute="$refs.menu.save(endTime)"
+                  color="light-green lighten-2"
                   format="ampm"
                 ></v-time-picker>
               </v-menu>
-              <transition
-                name="alert-in"
-                enter-active-class="animated flipInX"
-                leave-active-class="animated flipOutX"
-              >
-                <p class="alert" v-if="errors.has('endTime')">{{ errors.first('endTime') }}</p>
-              </transition>
             </v-flex>
           </v-layout>
 
-          <!-- TODO: Implement time picker -->
+      
 
           <v-text-field prepend-icon="code" name="git" v-model="git" label="Git Repository"></v-text-field>
 
@@ -146,7 +126,6 @@
 
 <script>
 import DatabaseService from "../DatabaseService";
-import ClickOutside from "vue-click-outside";
 import format from "date-fns/format";
 
 export default {
@@ -154,17 +133,20 @@ export default {
     dialog: false,
     hackathons: null,
     isHackathon: false,
-    time: null,
     menu2: false,
 
     name: "",
     projectType: "",
-    endTime: null,
+    endTime: "",
     endDate: "",
     hackathonName: "",
     description: "",
     git: "",
-    member: undefined
+    member: undefined,
+    inputRules: [
+      v=> v.length >= 1 || 'Field is required.'
+      
+    ]
   }),
   mounted: async function() {
     fetch("http://localhost:8080/projects/scrape")
@@ -201,6 +183,7 @@ export default {
   },
   methods: {
     submit: async function() {
+      if(this.$refs.form.validate()){
       let proprties = {
         name: this.name,
         projectType: this.projectType,
@@ -218,6 +201,7 @@ export default {
       this.clearForm();
 
       this.$emit("project-form-complete");
+      }
     },
 
     clearForm: function() {
@@ -247,6 +231,10 @@ export default {
 
 .alert-in-leave-active {
   animation: bounce-in 0.5s reverse;
+}
+
+v-date-picker {
+  color: red
 }
 
 @keyframes bounce-in {

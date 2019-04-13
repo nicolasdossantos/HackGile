@@ -3,7 +3,7 @@
         <v-dialog
         v-model="open"
         fullscreen
-        class="green"
+
         
         >
             <template v-slot:activator="{ on }">
@@ -22,7 +22,7 @@
                 primary-title
                 >
                     <v-btn
-                        color="primary"
+                        
                         flat
                         @click="open = false"
                     >
