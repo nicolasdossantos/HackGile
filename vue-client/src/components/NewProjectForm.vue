@@ -60,12 +60,14 @@
                   prepend-icon="date_range"
                   :value="formattedDate"
                   left
-                  flat
+                  
                   v-validate="'required'"
                   name="endDate"
                 ></v-text-field>
 
-                <v-date-picker v-model="endDate" color="green white--text" flat></v-date-picker>
+                <v-date-picker
+                 v-model="endDate" 
+                 light header-color="green lighten-1"></v-date-picker>
                 <transition
                   name="alert-in"
                   enter-active-class="animated flipInX"
@@ -124,7 +126,7 @@
             hint="Plese describe your project."
             prepend-icon="edit"
           ></v-textarea>
-
+         
           <v-spacer></v-spacer>
           <v-btn round color="red lighten-2 white--text" @click="clearForm">
             Cancel
