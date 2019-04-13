@@ -10,8 +10,7 @@ const Member = require("../../models/member");
 //Get Projects for current user
 router.get("/", async (req, res) => {
   //Retrieve all current user's projects
-  await Project.find(
-    {
+  await Project.find({
       members: {
         $in: req.user._id
       }
@@ -32,23 +31,25 @@ router.get("/", async (req, res) => {
 // Get all projects for that member id
 router.get("/members/:id", async (req, res) => {
   const list = await Project.find({
-    members: mongoose.Types.ObjectId(req.params.id)
-  })/*
-    .populate({
-      path: "stories",
-      populate: {
-        path: "member"
-      }
-    })*//*
-    .populate({
-      path: "sprints",
-      populate: {
-        path: "stories",
-        populate: {
-          path: "member"
-        }
-      }
-    })*/
+      members: mongoose.Types.ObjectId(req.params.id)
+    })
+    /*
+        .populate({
+          path: "stories",
+          populate: {
+            path: "member"
+          }
+        })*/
+    /*
+        .populate({
+          path: "sprints",
+          populate: {
+            path: "stories",
+            populate: {
+              path: "member"
+            }
+          }
+        })*/
     .populate("members")
     .populate("sprints")
     .populate("stories");
@@ -57,7 +58,7 @@ router.get("/members/:id", async (req, res) => {
 
 //Post -> Create a new project
 router.post("/", async (req, res) => {
-  
+
   req.checkBody("name", "Name field is required").notEmpty();
   req.checkBody("projectType", "Hackathon field is required").notEmpty();
   req.checkBody("endDate", "End Date field is required").notEmpty();
@@ -67,44 +68,44 @@ router.post("/", async (req, res) => {
 
   if (!errors) {
 
-  let name = req.body.name;
-  let projectType = req.body.projectType;
-  let endDate = req.body.endDate;
-  let endTime = req.body.endTime;
-  let description = req.body.description;
-  let hackathonName = req.body.hackathonName;
-  let git = req.body.git;
-  let owners = req.body.owners;
-  let members = req.body.members;
+    let name = req.body.name;
+    let projectType = req.body.projectType;
+    let endDate = req.body.endDate;
+    let endTime = req.body.endTime;
+    let description = req.body.description;
+    let hackathonName = req.body.hackathonName;
+    let git = req.body.git;
+    let owners = req.body.owners;
+    let members = req.body.members;
 
-  //time manipulation
-  let splitTime = endTime.split(":");
-  let epochHour = parseInt(splitTime[0], 10) * 60 * 60;
-  let epochMin = parseInt(splitTime[1], 10) * 60;
-  let epochEndTime = epochHour + epochMin;
+    //time manipulation
+    let splitTime = endTime.split(":");
+    let epochHour = parseInt(splitTime[0], 10) * 60 * 60;
+    let epochMin = parseInt(splitTime[1], 10) * 60;
+    let epochEndTime = epochHour + epochMin;
 
-  let deadLine = epochEndTime + Date.parse(endDate);
+    let deadLine = epochEndTime + Date.parse(endDate);
 
-  let newProject = new Project({
-    name: name,
-    projectType: projectType,
-    hackathonName: hackathonName,
-    deadline: deadLine,
-    description: description,
-    git: git,
-    members: members,
-    sprints: [],
-    stories: [],
-    owners: owners
-  });
-  await newProject.save(err => {
-    if (err) {
-      console.log(err);
-    }
-  });
-  console.log("SUCCESS")
-  res.status(201).send();
-}
+    let newProject = new Project({
+      name: name,
+      projectType: projectType,
+      hackathonName: hackathonName,
+      deadline: deadLine,
+      description: description,
+      git: git,
+      members: members,
+      sprints: [],
+      stories: [],
+      owners: owners
+    });
+    await newProject.save(err => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    console.log("SUCCESS")
+    res.status(201).send();
+  }
 });
 
 //For Testing purposes
@@ -115,36 +116,26 @@ router.post("/", async (req, res) => {
 //Tested
 //Delete project linked to this pid
 router.delete("/:pid", async (req, res) => {
-  await Project.deleteOne({ _id: mongoose.Types.ObjectId(req.params.pid) });
+  await Project.deleteOne({
+    _id: mongoose.Types.ObjectId(req.params.pid)
+  });
   res.status(200).send();
 });
 
 //Get First and last name of members
-router.get("/:pid/memberNames", async (req, res)=>{
+router.get("/:pid/memberNames", async (req, res) => {
   var names = [];
-  await Project.findById(req.params.pid, async (err, project) => {
-
-    let members = project.members;
-   
-    members.forEach( function(element){
-     
-      Member.findById(element, async (err, member)=>{
-        if(err){
-          console.log(err)
-        }
-        names.push(member.firstname +" "+member.lastname);
-        console.log(names)
-      }) 
+  await Project.findById(req.params.pid)
+    .populate("members")
+    .exec((err, project) => {
+      project.members.forEach((member) => {
+        names.push(member.firstname + " " + member.lastname);
+        console.log('pushed names:' + names)
+      })
+      console.log('returned:' + names)
+      res.send(names);
     })
-    res.send(names)
-    console.log(names)
-   
-}
-
-)
-console.log(names);
-
-})
+});
 
 /*============================*/
 /* Project Members Array API  */
@@ -170,14 +161,20 @@ router.get("/:pid/members/", async (req, res) => {
 router.put("/:pid/members/:id", async (req, res) => {
   await Project.findById(req.params.pid, async (err, project) => {
     if (project.members.indexOf(req.params.id) < 0) {
-      await Project.updateOne(
-        { _id: req.params.pid },
-        { $push: { members: mongoose.Types.ObjectId(req.params.id) } }
-      );
-      await Member.updateOne(
-        { _id: req.params.id },
-        { $push: { projects: mongoose.Types.ObjectId(req.params.pid) } }
-      );
+      await Project.updateOne({
+        _id: req.params.pid
+      }, {
+        $push: {
+          members: mongoose.Types.ObjectId(req.params.id)
+        }
+      });
+      await Member.updateOne({
+        _id: req.params.id
+      }, {
+        $push: {
+          projects: mongoose.Types.ObjectId(req.params.pid)
+        }
+      });
       res.status(200).send();
     }
   });
@@ -187,10 +184,13 @@ router.put("/:pid/members/:id", async (req, res) => {
 router.put("/:pid/members/:id", async (req, res) => {
   await Project.findById(req.params.pid, async (err, project) => {
     if (project.members.indexOf(req.params.id) < 0) {
-      await Project.updateOne(
-        { _id: req.params.pid },
-        { $push: { owners: mongoose.Types.ObjectId(req.params.id) } }
-      );
+      await Project.updateOne({
+        _id: req.params.pid
+      }, {
+        $push: {
+          owners: mongoose.Types.ObjectId(req.params.id)
+        }
+      });
       res.status(200).send();
     }
   });
@@ -198,24 +198,33 @@ router.put("/:pid/members/:id", async (req, res) => {
 
 //Delete - Remove member from owners
 router.delete("/:pid/members/:id", async (req, res) => {
-  await Project.updateOne(
-    { _id: req.params.pid },
-    { $pull: { owners: mongoose.Types.ObjectId(req.params.id) } }
-  );
+  await Project.updateOne({
+    _id: req.params.pid
+  }, {
+    $pull: {
+      owners: mongoose.Types.ObjectId(req.params.id)
+    }
+  });
   res.status(200).send();
 });
 
 //Tested
 //Deletes a member from project and a project from member
 router.delete("/:pid/members/:id", async (req, res) => {
-  await Project.updateOne(
-    { _id: req.params.pid },
-    { $pull: { members: mongoose.Types.ObjectId(req.params.id) } }
-  );
-  await Member.updateOne(
-    { _id: req.params.id },
-    { $pull: { projects: mongoose.Types.ObjectId(req.params.pid) } }
-  );
+  await Project.updateOne({
+    _id: req.params.pid
+  }, {
+    $pull: {
+      members: mongoose.Types.ObjectId(req.params.id)
+    }
+  });
+  await Member.updateOne({
+    _id: req.params.id
+  }, {
+    $pull: {
+      projects: mongoose.Types.ObjectId(req.params.pid)
+    }
+  });
   res.status(200).send();
 });
 
@@ -243,10 +252,13 @@ router.get("/:pid/sprints/", async (req, res) => {
 router.put("/:pid/sprints/:id", async (req, res) => {
   await Project.findById(req.params.pid, async (err, project) => {
     if (project.sprints.indexOf(req.params.id) < 0) {
-      await Project.updateOne(
-        { _id: req.params.pid },
-        { $push: { sprints: mongoose.Types.ObjectId(req.params.id) } }
-      );
+      await Project.updateOne({
+        _id: req.params.pid
+      }, {
+        $push: {
+          sprints: mongoose.Types.ObjectId(req.params.id)
+        }
+      });
       res.status(200).send();
     }
   });
@@ -255,10 +267,13 @@ router.put("/:pid/sprints/:id", async (req, res) => {
 //Tested
 //Deletes a sprint from project
 router.delete("/:pid/sprints/:id", async (req, res) => {
-  await Project.updateOne(
-    { _id: req.params.pid },
-    { $pull: { sprints: mongoose.Types.ObjectId(req.params.id) } }
-  );
+  await Project.updateOne({
+    _id: req.params.pid
+  }, {
+    $pull: {
+      sprints: mongoose.Types.ObjectId(req.params.id)
+    }
+  });
   res.status(200).send();
 });
 
@@ -286,11 +301,14 @@ router.get("/:pid/stories/", async (req, res) => {
 router.put("/:pid/stories/:sid", async (req, res) => {
   await Project.findById(req.params.pid, async (err, project) => {
     if (project.stories.indexOf(req.params.sid) < 0) {
-      await Project.updateOne(
-        { _id: req.params.pid },
-        { $push: { stories: mongoose.Types.ObjectId(req.params.sid) } }
-      );
-      
+      await Project.updateOne({
+        _id: req.params.pid
+      }, {
+        $push: {
+          stories: mongoose.Types.ObjectId(req.params.sid)
+        }
+      });
+
       res.status(200).send();
     }
   });
@@ -299,13 +317,18 @@ router.put("/:pid/stories/:sid", async (req, res) => {
 //Tested
 //Deletes a story from project -> story is removed from database
 router.delete("/:pid/stories/:sid", async (req, res) => {
-  await Project.updateOne(
-    { _id: req.params.pid },
-    { $pull: { stories: mongoose.Types.ObjectId(req.params.sid) } }
-  );
+  await Project.updateOne({
+    _id: req.params.pid
+  }, {
+    $pull: {
+      stories: mongoose.Types.ObjectId(req.params.sid)
+    }
+  });
   //Needs Testing
-  await Story.deleteOne({_id: req.params.sid});
-  
+  await Story.deleteOne({
+    _id: req.params.sid
+  });
+
   res.status(200).send();
 });
 
