@@ -59,10 +59,6 @@ router.get("/members/:id", async (req, res) => {
 //Post -> Create a new project
 router.post("/", async (req, res) => {
 
-  req.checkBody("name", "Name field is required").notEmpty();
-  req.checkBody("projectType", "Hackathon field is required").notEmpty();
-  req.checkBody("endDate", "End Date field is required").notEmpty();
-  req.checkBody("endTime", "End Time field is required").notEmpty();
 
   let errors = req.validationErrors();
 

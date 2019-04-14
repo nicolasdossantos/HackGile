@@ -22,10 +22,25 @@ router.get("/:sid", async (req, res) => {
 //Tested
 //Post new story
 router.post("/", async (req, res) => {
+  let status = "";
+
+  if(req.body.sprint === undefined){
+    status = "Backlog";
+  }
+
+  else if(req.body.sprint !== undefined && req.body.member === undefined){
+    status= "Unassigned";
+  }
+  else{
+    status = "Assigned";
+  }
+  
+  
+  
   let newStory = new Story({
-    sprint: undefined,
-    status: "Backlog",
-    member: undefined,
+    sprint: req.body.sprint,
+    status: status,
+    member: req.body.member,
     title: req.body.title,
     description: req.body.description,
     priority: req.body.priority,

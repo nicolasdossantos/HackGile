@@ -30,12 +30,12 @@
           ></v-select>
    
          <v-select
-            label="Sprint*"
-            :items="sprints.length"
+            label="Sprint"
+            :items="sprintNumbers"
             name="sprint"
             v-model="sprint"
             prepend-icon="directions_run"
-           :rules="inputRules"
+           
           ></v-select>
 
           <v-select 
@@ -43,7 +43,7 @@
             :items="names"
             name="assignedMember"
             v-model="assignedMember"
-            prepend-icon="directions_run"
+            prepend-icon="face"
             @change="getChip"
            :rules="inputRules"
           ></v-select>
@@ -54,6 +54,9 @@
             v-model="estimatedTime"
             prepend-icon="access_time"
             :rules="inputRules"
+            placeholder="1.5"
+            suffix="Hours"
+            hint="Enter time in hours"
           ></v-text-field>
        
           <v-textarea
@@ -63,6 +66,7 @@
             hint="Plese describe your story."
             prepend-icon="edit"
           ></v-textarea>
+         
 
          <v-spacer></v-spacer>
        
@@ -121,33 +125,56 @@ export default {
     },
 
   data: () => ({
+    dialog: false,
     members:[],
-    assignedMember: '',
-    assignedMemberInfo:'',
-    sprints:[],
-    names: []
+    assignedMember: "",
+    assignedMemberInfo:"",
+    sprints: [],
+    names: [],
+    sprintNumbers: [],
 
-
-
-
-
+    title: "",
+    priority: "",
+    status: "",
+    sprint: undefined,
+    member: undefined,
+    estimatedTime: "",
+    description: "",
+    inputRules: [
+      v=> v.length >= 1 || 'Field is required.'
+      
+    ]
   }),
   created:async function() {
+    
+    this.sprints = await DatabaseService.getSprints(this.$props.pid);
+
+     for(let i = 1; i <= this.sprints.length; i++){
+      await this.sprintNumbers.push(i);
+    }
+    await this.sprintNumbers.push("Assign it later")
+
+    
     fetch("http://localhost:8080/api/projects/"+this.$props.pid+"/members/")
       .then(response => response.json())
       .then(data => {
         this.members = data;
+        
+        console.log(this.sprints)
       })
       .then();
   },
 
 
   mounted: async function(){
+
+   
+
     fetch("http://localhost:8080/api/projects/"+this.$props.pid+"/memberNames/")
       .then(response => response.json())
       .then(data => {
         this.names = data;
-        this.names.push("Assign it later...")
+        this.names.push("Assign it later")
       })
       .then()
   },
@@ -159,6 +186,9 @@ export default {
   methods: {
     getChip: async function(){
       
+      let assigned = await this.assignedMember;
+
+      if(assigned !== "Assign it later"){
       let name = await this.assignedMember.split(" ");
       let firstname= "";
       let lastname = "";
@@ -168,42 +198,45 @@ export default {
       }else{
         firstname = name[0]
         lastname = name[1];
+      } 
+      this.assignedMemberInfo = this.members.find(o => o.firstname === firstname && o.lastname === lastname);
+      }else{
+        this.assignedMemberInfo = "";
       }
-      
-    this.assignedMemberInfo = this.members.find(o => o.firstname === firstname && o.lastname === lastname);
     
 
     },
     submit: async function() {
-      if(this.$refs.form.validate()){
-      let proprties = {
-        name: this.name,
-        projectType: this.projectType,
-        endDate: this.endDate,
-        endTime: this.endTime,
-        hackathonName: this.hackathonName,
+     if(this.$refs.form.validate()){
+      let properties = {
+        title: this.title,
+        priority: this.priority,
+        status: this.status,
+        sprint: this.sprint === ("Assign it later" || "") ? undefined : this.sprints[this.sprint-1]._id ,
+        estimatedTime: this.estimatedTime,
         description: this.description,
-        git: this.git,
-        members: [this.member],
-        owners: [this.member]
+        member: this.assignedMemberInfo !== (undefined || "") ? this.assignedMemberInfo._id : undefined,
+       
       };
+      console.log(properties)
 
-      //Creates New Project witth fields above
-      await DatabaseService.insertProject(proprties);
+      //Creates New Story witth fields above
+      await DatabaseService.insertStory(properties);
       this.clearForm();
 
-      this.$emit("project-form-complete");
+      this.$emit("story-form-complete");
       }
     },
 
     clearForm: function() {
       this.dialog = false;
-      this.name = "";
-      this.projectType = "";
-      this.endDate = "";
-      this.endTime = "";
-      this.git = "";
-      this.projectType = "";
+      this.title = "";
+      this.priority = "";
+      this.status = "";
+      this.sprint = undefined;
+      this.member = undefined;
+
+      this.estimatedTime = "";
       this.description = "";
     }
   }

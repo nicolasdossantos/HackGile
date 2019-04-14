@@ -45,6 +45,20 @@ class DatabaseService {
         });
     }
 
+    static insertStory(properties){
+        
+        return axios.post(url + 'stories', {
+            title: properties.title,
+            status: properties.status,
+            sprint: properties.sprint,
+            estimatedTime: properties.estimatedTime,
+            description: properties.description,
+            member: properties.member,
+            priority: properties.priority
+        });
+    }
+   
+
     static deleteProjectById(id){
         return axios.delete(url + 'projects/' + id);
     }
@@ -131,6 +145,18 @@ class DatabaseService {
         });
 
 
+    }
+
+    static getSprints(pid){
+        return new Promise(async (resolve, reject) => {
+            try{
+                const res = await axios.get(url + 'projects/' + pid + '/sprints');
+                const data = res.data;
+                resolve(data);
+            }catch(err){
+                reject(err);
+            }
+        });
     }
 }
 
