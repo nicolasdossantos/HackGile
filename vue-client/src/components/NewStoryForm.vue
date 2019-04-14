@@ -116,7 +116,7 @@
 import DatabaseService from "../DatabaseService";
 import format from "date-fns/format";
 import MemberChip from "./MemberChip"
-import { futimes } from 'fs';
+
 
 export default {
  name: 'NewStoryForm',
@@ -154,7 +154,7 @@ export default {
     }
     await this.sprintNumbers.push("Assign it later")
 
-    
+    //TODO: Change on deployment
     fetch("http://localhost:8080/api/projects/"+this.$props.pid+"/members/")
       .then(response => response.json())
       .then(data => {
@@ -169,7 +169,7 @@ export default {
   mounted: async function(){
 
    
-
+    //TODO: Change on deployment
     fetch("http://localhost:8080/api/projects/"+this.$props.pid+"/memberNames/")
       .then(response => response.json())
       .then(data => {
@@ -213,7 +213,7 @@ export default {
         priority: this.priority,
         status: this.status,
         sprint: this.sprint === ("Assign it later" || "") ? undefined : this.sprints[this.sprint-1]._id ,
-        estimatedTime: this.estimatedTime,
+        estimatedTime: parseInt(this.estimatedTime, 10) * 60 * 60,
         description: this.description,
         member: this.assignedMemberInfo !== (undefined || "") ? this.assignedMemberInfo._id : undefined,
        

@@ -59,7 +59,6 @@ router.get("/members/:id", async (req, res) => {
 //Post -> Create a new project
 router.post("/", async (req, res) => {
 
-
   let errors = req.validationErrors();
 
   if (!errors) {
