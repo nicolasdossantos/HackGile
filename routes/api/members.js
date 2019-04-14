@@ -61,4 +61,11 @@ router.delete("/:id/stories/:sid", async (req, res) => {
   res.status(200).send();
 });
 
+router.get("/:pid/:ln/:fn", async(req, res)=>{
+  await Member.findOne({lastname: req.params.ln, firstname: req.params.fn, projects: {
+    $in: req.params.pid
+  } })
+  res.status(200).send();
+})
+
 module.exports = router;

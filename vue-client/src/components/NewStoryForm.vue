@@ -28,13 +28,23 @@
             prepend-icon="announcement"
            :rules="inputRules"
           ></v-select>
-         
+   
          <v-select
             label="Sprint*"
-            :items="['1', '2', '3', 'No Sprint']"
+            :items="sprints.length"
             name="sprint"
             v-model="sprint"
             prepend-icon="directions_run"
+           :rules="inputRules"
+          ></v-select>
+
+          <v-select 
+            label="Member"
+            :items="names"
+            name="assignedMember"
+            v-model="assignedMember"
+            prepend-icon="directions_run"
+            @change="getChip"
            :rules="inputRules"
           ></v-select>
 
@@ -46,9 +56,6 @@
             :rules="inputRules"
           ></v-text-field>
        
-
-         
-
           <v-textarea
             name="description"
             v-model="description"
@@ -59,25 +66,26 @@
 
          <v-spacer></v-spacer>
        
-
+        <v-flex v-if="assignedMemberInfo.firstname">
         <v-item-group multiple center>
         <v-subheader>Assigned Member:</v-subheader>
         <v-item
-          v-for="member in members"
-          :key="member"
         >
           <v-chip
             slot-scope="{ active, toggle }"
             :selected="active"
             @click="toggle"
+            v-model="assignedMemberInfo"
+            
           >
             <v-avatar>
-                <img :src="member.image">
+                <img :src="assignedMemberInfo.image">
               </v-avatar>
-              {{member.firstname + ' ' + member.lastname}}
+              {{assignedMemberInfo.firstname + ' ' + assignedMemberInfo.lastname}}
           </v-chip>
         </v-item>
       </v-item-group>
+      </v-flex>
 
 
     <br>
@@ -104,33 +112,68 @@
 import DatabaseService from "../DatabaseService";
 import format from "date-fns/format";
 import MemberChip from "./MemberChip"
+import { futimes } from 'fs';
 
 export default {
-  components:{
-    MemberChip
-  },
+ name: 'NewStoryForm',
+    props: {
+        pid: String
+    },
 
   data: () => ({
     members:[],
-    assignedMember: ''
+    assignedMember: '',
+    assignedMemberInfo:'',
+    sprints:[],
+    names: []
 
 
 
 
 
   }),
-  mounted: async function() {
-    fetch("http://localhost:8080/api/projects/5ca7a58c1c9d4400006b8cfa/members/")
+  created:async function() {
+    fetch("http://localhost:8080/api/projects/"+this.$props.pid+"/members/")
       .then(response => response.json())
       .then(data => {
         this.members = data;
       })
       .then();
   },
+
+
+  mounted: async function(){
+    fetch("http://localhost:8080/api/projects/"+this.$props.pid+"/memberNames/")
+      .then(response => response.json())
+      .then(data => {
+        this.names = data;
+        this.names.push("Assign it later...")
+      })
+      .then()
+  },
+  
+
   computed: {
     
   },
   methods: {
+    getChip: async function(){
+      
+      let name = await this.assignedMember.split(" ");
+      let firstname= "";
+      let lastname = "";
+      if(name.length > 2){
+        firstname = name[0];
+        lastname = name[1] + " " + name[2];
+      }else{
+        firstname = name[0]
+        lastname = name[1];
+      }
+      
+    this.assignedMemberInfo = this.members.find(o => o.firstname === firstname && o.lastname === lastname);
+    
+
+    },
     submit: async function() {
       if(this.$refs.form.validate()){
       let proprties = {
