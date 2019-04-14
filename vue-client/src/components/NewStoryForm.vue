@@ -28,10 +28,10 @@
             prepend-icon="announcement"
            :rules="inputRules"
           ></v-select>
-         
+   
          <v-select
             label="Sprint*"
-            :items="['1', '2', '3', 'No Sprint']"
+            :items="sprints.length"
             name="sprint"
             v-model="sprint"
             prepend-icon="directions_run"
@@ -46,9 +46,6 @@
             :rules="inputRules"
           ></v-text-field>
        
-
-         
-
           <v-textarea
             name="description"
             v-model="description"
@@ -106,13 +103,15 @@ import format from "date-fns/format";
 import MemberChip from "./MemberChip"
 
 export default {
-  components:{
-    MemberChip
-  },
+ name: 'NewStoryForm',
+    props: {
+        pid: String
+    },
 
   data: () => ({
     members:[],
-    assignedMember: ''
+    assignedMember: '',
+    sprints:[]
 
 
 
@@ -120,13 +119,18 @@ export default {
 
   }),
   mounted: async function() {
-    fetch("http://localhost:8080/api/projects/5ca7a58c1c9d4400006b8cfa/members/")
-      .then(response => response.json())
-      .then(data => {
-        this.members = data;
-      })
-      .then();
+    this.members = await DatabaseService.getMembersinProject(this.$props.pid);
+    console.log(this.members)
+    
+    // fetch("http://localhost:8080/api/projects/"+this.$props.pid+"/members/")
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     this.members = data;
+    //   })
+    //   .then();
   },
+  
+
   computed: {
     
   },
