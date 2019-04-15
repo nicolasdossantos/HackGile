@@ -169,18 +169,6 @@ class DatabaseService {
             }
         });
     }
-
-    static getLoggedInMember(){
-        return new Promise(async (resolve, reject) => {
-            try{
-                const res = await axios.get(url + 'members/');
-                const data = res.data;
-                resolve(data);
-            }catch(err){
-                reject(err);
-            }
-        });
-    }
 }
 
 export default DatabaseService;
