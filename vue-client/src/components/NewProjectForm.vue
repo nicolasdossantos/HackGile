@@ -99,8 +99,13 @@
 
       
 
-          <v-text-field prepend-icon="code" name="git" v-model="git" label="Git Repository"></v-text-field>
-          <p>{{member}}</p>
+          <v-text-field 
+          prepend-icon="code" 
+          name="git" 
+          v-model="git" 
+          label="Git Repository">
+          </v-text-field>
+         
           <v-textarea
             name="description"
             v-model="description"
@@ -175,7 +180,7 @@ export default {
         }
 
         let text = hours + ":" + splitTime[1] + " " + amPM;
-        console.log(text);
+        
         return text;
       } else {
         return "";

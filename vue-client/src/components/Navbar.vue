@@ -20,7 +20,7 @@
           <v-list class="pa-0">
             <v-list-tile>
               <v-list-tile-avatar>
-                <img src="https://randomuser.me/api/portraits/men/85.jpg">
+                <img src="https://scontent.fphl2-1.fna.fbcdn.net/v/t1.0-9/57485407_10219343553004681_3561234131331317760_n.jpg?_nc_cat=103&_nc_ht=scontent.fphl2-1.fna&oh=4267c10bb43dd49f3864bcf1c18cfd1e&oe=5D3055E5">
               </v-list-tile-avatar>
               <v-list-tile-action>
                 <v-btn
@@ -59,7 +59,7 @@
             <v-list-tile>
               
                <NewProjectForm></NewProjectForm>
-               <!-- <NewStoryForm pid="5ca7a58c1c9d4400006b8cfa"></NewStoryForm> -->
+               <NewStoryForm pid="5ca7a58c1c9d4400006b8cfa"></NewStoryForm>
                <br>
                 <v-list-tile-title class="title">
                      &nbsp; Projects
