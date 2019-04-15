@@ -75,8 +75,8 @@ router.post("/", async (req, res) => {
 
     //time manipulation
     let splitTime = endTime.split(":");
-    let epochHour = parseInt(splitTime[0], 10) * 60 * 60;
-    let epochMin = parseInt(splitTime[1], 10) * 60;
+    let epochHour = parseFloat(splitTime[0]) * 60 * 60;
+    let epochMin = parseFloat(splitTime[1]) * 60;
     let epochEndTime = epochHour + epochMin;
 
     let deadLine = epochEndTime + Date.parse(endDate);

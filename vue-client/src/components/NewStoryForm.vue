@@ -148,6 +148,7 @@ export default {
     this.names = data;
     this.names.push("Assign it later");
     this.members = this.$store.state.currentProject.members;
+    this.project = this.$store.state.currentProject._id;
   },
 
 

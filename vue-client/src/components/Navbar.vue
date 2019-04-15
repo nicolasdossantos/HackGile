@@ -59,8 +59,8 @@
             <v-list-tile>
               
                <!-- <NewProjectForm></NewProjectForm> -->
-               <NewSprintForm pid="5ca7a58c1c9d4400006b8cfa"></NewSprintForm>
-               <!-- <NewStoryForm pid="5ca7a58c1c9d4400006b8cfa"></NewStoryForm> -->
+               <NewSprintForm></NewSprintForm>
+               <NewStoryForm pid="5ca7a58c1c9d4400006b8cfa"></NewStoryForm>
                <br>
                 <v-list-tile-title class="title">
                      &nbsp; Projects
