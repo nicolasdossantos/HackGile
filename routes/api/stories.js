@@ -46,10 +46,24 @@ router.post("/", async (req, res) => {
     priority: req.body.priority,
     estimatedTime: req.body.estimatedTime
   });
-  await newStory.save(err => {
+  await newStory.save(async(err, story) => {
     if (err) {
       console.log(err);
     }
+    if(story.member !== undefined){
+      await Member.updateOne({_id: story.member}, 
+        {$push:{stories:mongoose.Types.ObjectId(story._id) }})
+    }
+    if(story.sprint !== undefined){
+      await Sprint.updateOne({_id: story.sprint}, 
+        {$push:{stories:mongoose.Types.ObjectId(story._id) }})
+    }
+
+
+
+
+
+
   });
   res.status(201).send();
 });
