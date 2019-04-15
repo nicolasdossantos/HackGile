@@ -16,6 +16,8 @@
                             class="text-xs-center"
                         >
                             Backlog
+                            <NewStoryForm  pid="5ca7a58c1c9d4400006b8cfa" />
+                            
                         </h1>
                             <div v-for="story in filterStories()" :key="story._id">
                                 <StoryCard
@@ -35,7 +37,10 @@
                             class="text-xs-center"
                         >
                             Sprints
+                            
+                            <NewSprintForm />
                         </h1>
+                        
                             <div v-for="sprint in sprints" :key="sprint._id">
                                 <SprintCard
                                     v-bind:id="sprint._id"
@@ -53,11 +58,15 @@
 import StoryCard from './StoryCard'
 import SprintCard from './SprintCard'
 import DatabaseService from '../DatabaseService';
+import NewSprintForm from './NewSprintForm'
+import NewStoryForm from './NewStoryForm'
 export default {
     name: 'ProjectCard',
     components: {
         StoryCard,
-        SprintCard
+        SprintCard,
+        NewSprintForm,
+        NewStoryForm
     },
     props: {
         id: String
