@@ -169,6 +169,15 @@ class DatabaseService {
             }
         });
     }
+
+    static insertSprint(properties){
+        
+        return axios.post(url + 'sprints', {
+            duration: properties.duration,
+            project: properties.project
+        });
+    }
+
 }
 
 export default DatabaseService;

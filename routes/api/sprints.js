@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const app = require("../../app.js");
 let Sprint = require("../../models/sprint");
 let Story = require("../../models/story");
+let Project = require("../../models/project")
 
 const router = express.Router();
 
@@ -20,19 +21,28 @@ router.get("/:zid", async (req, res) => {
 //TODO: Test
 //Post new sprint
 router.post("/", async (req, res) => {
-  let name = req.body.name;
-  let time = req.body.time;
+  
+  let project = req.body.project;
+  let duration = req.body.duration;
+  let startTime = undefined;
   let stories = [];
+  let isStarted = false;
+
+
 
   let newSprint = new Sprint({
-    name: name,
-    time: time,
-    stories: stories
+    duration: duration,
+    startTime: startTime,
+    stories: stories,
+    isStarted: isStarted
   });
-  await newSprint.save(err => {
+  await newSprint.save(async(err, sprint) => {
     if (err) {
       console.log(err);
     }
+    await Project.updateOne(
+      { _id:  req.body.project }, 
+      { $push: {sprints:  mongoose.Types.ObjectId(sprint._id) }} )
   });
   res.status(201).send();
 });

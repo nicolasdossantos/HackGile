@@ -58,8 +58,9 @@
           
             <v-list-tile>
               
-               <NewProjectForm></NewProjectForm>
-               <NewStoryForm pid="5ca7a58c1c9d4400006b8cfa"></NewStoryForm>
+               <!-- <NewProjectForm></NewProjectForm> -->
+               <NewSprintForm pid="5ca7a58c1c9d4400006b8cfa"></NewSprintForm>
+               <!-- <NewStoryForm pid="5ca7a58c1c9d4400006b8cfa"></NewStoryForm> -->
                <br>
                 <v-list-tile-title class="title">
                      &nbsp; Projects
@@ -88,6 +89,7 @@
   import DatabaseService from '../DatabaseService'
   import NewProjectForm from './NewProjectForm'
   import NewStoryForm from './NewStoryForm'
+  import NewSprintForm from './NewSprintForm'
 
   export default {
     data () {
@@ -113,7 +115,8 @@
     },
     components:{
       NewProjectForm,
-      NewStoryForm
+      NewStoryForm,
+      NewSprintForm
     }
   }
 </script>
