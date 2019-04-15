@@ -63,6 +63,7 @@
             hint="Plese describe your story."
             prepend-icon="edit"
           ></v-textarea>
+        
 
           <v-spacer></v-spacer>
 
@@ -133,36 +134,25 @@ export default {
     description: "",
     inputRules: [v => v.length >= 1 || "Field is required."]
   }),
-  created: async function() {
+  created:async function() {
     this.sprints = await DatabaseService.getSprints(this.$props.pid);
 
     for (let i = 1; i <= this.sprints.length; i++) {
       await this.sprintNumbers.push(i);
     }
-    await this.sprintNumbers.push("Assign it later");
-
-    //TODO: Change on deployment
-    fetch("http://localhost:8080/api/projects/" + this.$props.pid + "/members/")
-      .then(response => response.json())
-      .then(data => {
-        this.members = data;
-
-        console.log(this.sprints);
-      })
-      .then();
+    await this.sprintNumbers.push("Assign it later")
+ 
+    let data = await DatabaseService.getMemberNames(
+      this.$props.pid
+    );
+    this.names = data;
+    this.names.push("Assign it later");
+    this.members = this.$store.state.currentProject.members;
   },
 
-  mounted: async function() {
-    //TODO: Change on deployment
-    fetch(
-      "http://localhost:8080/api/projects/" + this.$props.pid + "/memberNames/"
-    )
-      .then(response => response.json())
-      .then(data => {
-        this.names = data;
-        this.names.push("Assign it later");
-      })
-      .then();
+
+  mounted: async function(){
+
   },
 
   computed: {},

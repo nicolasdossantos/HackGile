@@ -3,8 +3,6 @@
         <v-dialog
         v-model="open"
         fullscreen
-
-        
         >
             <template v-slot:activator="{ on }">
                 <v-btn
@@ -79,7 +77,7 @@ export default {
     data: function(){
         return {
             json: null,
-            name: String,
+            name: Number,
             stories: [],
             time: Number,
             open: false,
@@ -100,11 +98,20 @@ export default {
         updateSprint: async function(){
             try {
                 this.json = await DatabaseService.getSprintById(this.$props.id);
-                this.name = this.json.name;
                 this.stories = this.json.stories;
                 this.time = this.json.time;
             }catch (err){
                 this.error = err;
+            }
+            let sprints = await this.$store.state.currentProject.sprints;
+
+            for(let i = 0; i < sprints.length; i++){
+                if (sprints[i]._id == this.$props.id){
+                    this.name = i+1;
+                    break;
+                }else{
+                    this.name = ""
+                }
             }
         },
         addStory: function(){

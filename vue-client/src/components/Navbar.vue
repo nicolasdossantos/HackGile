@@ -58,11 +58,12 @@
           
             <v-list-tile>
               
-               <!-- <NewProjectForm></NewProjectForm> -->
-               <NewStoryForm pid="5ca7a58c1c9d4400006b8cfa"></NewStoryForm>
+               <NewProjectForm></NewProjectForm>
+               <!-- <NewStoryForm pid="5ca7a58c1c9d4400006b8cfa"></NewStoryForm> -->
                <br>
                 <v-list-tile-title class="title">
                      &nbsp; Projects
+                     
                 </v-list-tile-title>
             </v-list-tile>
             <v-divider></v-divider>

@@ -99,8 +99,13 @@
 
       
 
-          <v-text-field prepend-icon="code" name="git" v-model="git" label="Git Repository"></v-text-field>
-
+          <v-text-field 
+          prepend-icon="code"
+          name="git"
+          v-model="git"
+          label="Git Repository">
+          </v-text-field>
+         
           <v-textarea
             name="description"
             v-model="description"
