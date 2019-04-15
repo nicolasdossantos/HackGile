@@ -129,9 +129,9 @@ router.get("/:pid/memberNames", async (req, res) => {
       }else{
         await project.members.forEach((member) => {
           names.push(member.firstname + " " + member.lastname);
-          console.log('pushed names:' + names)
+         
         })
-        console.log('returned:' + names)
+       
         res.send(names);
       }
     })

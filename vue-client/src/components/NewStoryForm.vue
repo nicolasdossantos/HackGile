@@ -66,7 +66,7 @@
             hint="Plese describe your story."
             prepend-icon="edit"
           ></v-textarea>
-         
+        
 
          <v-spacer></v-spacer>
        
@@ -146,7 +146,6 @@ export default {
     ]
   }),
   created:async function() {
-    
     this.sprints = await DatabaseService.getSprints(this.$props.pid);
 
      for(let i = 1; i <= this.sprints.length; i++){
@@ -159,6 +158,7 @@ export default {
     );
     this.names = data;
     this.names.push("Assign it later");
+    this.members = this.$store.state.currentProject.members;
   },
 
 
