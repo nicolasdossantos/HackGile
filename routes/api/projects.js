@@ -122,12 +122,12 @@ router.get("/:pid/memberNames", async (req, res) => {
   var names = [];
   await Project.findById(req.params.pid)
     .populate("members")
-    .exec((err, project) => {
+    .exec(async (err, project) => {
       if (err) {
         //console.log(err)
         res.status(500).send();
       }else{
-        project.members.forEach((member) => {
+        await project.members.forEach((member) => {
           names.push(member.firstname + " " + member.lastname);
           console.log('pushed names:' + names)
         })

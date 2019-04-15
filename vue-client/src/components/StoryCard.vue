@@ -10,11 +10,7 @@
       <v-card-actions>
         <v-list-tile>
           <v-list-tile-avatar>
-            <v-img
-              v-bind:src="this.memberPicture"
-              max-height="40px"
-              max-width="40px"
-            ></v-img>
+            <v-img v-bind:src="this.memberPicture" max-height="40px" max-width="40px"></v-img>
           </v-list-tile-avatar>
         </v-list-tile>
       </v-card-actions>
@@ -49,7 +45,7 @@
               label="Sprint"
               :items="sprintNumbers"
               name="sprint"
-              v-model="sprint"
+              v-model="sprintNum"
               prepend-icon="directions_run"
               :rules="inputRules"
             ></v-select>
@@ -118,7 +114,7 @@
             </v-btn>
             <v-btn round color="red white--text" @click="dialog = false">
               Delete Story
-            <v-icon dark right>clear</v-icon>
+              <v-icon dark right>clear</v-icon>
             </v-btn>
           </v-form>
         </v-card-text>
@@ -136,54 +132,51 @@ export default {
   props: {
     id: String
   },
-  data: function() {
-    return {
-      dialog: false,
-      members: [],
-      assignedMemberInfo: "",
-      sprints: [],
-      names: [],
-      sprintNumbers: [],
-      currentProject: "",
-      timeInSeconds: "",
+  data: () => ({
+    dialog: false,
+    members: [],
+    assignedMemberInfo: "",
+    sprints: [],
+    names: [],
+    sprintNumbers: [],
+    currentProject: "",
+    timeInSeconds: "",
 
-      error: String,
-      json: null,
-      title: "",
-      status: "",
-      description: "",
-      estimatedTime: "",
-      sprint: undefined,
-      priority: "",
-      assignedMember: undefined,
-      memberPicture: "",
-      inputRules: [v=> v.length >= 1 || 'Field is required.']
-    };
-  },
+    sprintNum: "",
+    error: String,
+    json: null,
+    title: "",
+    status: "",
+    description: "",
+    estimatedTime: "",
+    sprint: undefined,
+    priority: "",
+    assignedMember: undefined,
+    memberPicture: "",
+    inputRules: []
+  }),
   created: async function() {
     await this.updateStory();
     this.currentProject = await this.$store.state.currentProject._id;
-    this.sprints = await DatabaseService.getSprints(this.currentProject);
+    this.sprints = await this.$store.state.currentProject.sprints;
 
-    for (let i = 1; i <= this.sprints.length; i++) {
-      await this.sprintNumbers.push(i);
+    for (let i = 0; i < this.sprints.length; i++) {
+      await this.sprintNumbers.push(i+1);
+      if (this.sprints[i]._id == this.sprint) {
+        this.sprintNum = i + 1;
+      }
     }
     await this.sprintNumbers.push("Assign it later");
+    let data = await DatabaseService.getMemberNames(
+      this.currentProject
+    );
+    this.names = data;
+    this.names.push("Assign it later");
 
     this.members = this.$store.state.currentProject.members;
+    [v => v.length >= 1 || "Field is required."];
   },
-  mounted: async function() {
-    fetch(
-      "http://localhost:8080/api/projects/" +
-        this.$store.state.currentProject._id +
-        "/memberNames/"
-    )
-      .then(data => {
-        this.names = data;
-        this.names.push("Assign it later");
-      })
-      .then();
-  },
+  mounted: async function() {},
   methods: {
     updateStory: async function() {
       try {
@@ -198,7 +191,8 @@ export default {
         this.member = this.json.member;
         this.memberPicture = this.json.member.image;
         this.estimatedTime = this.timeInSeconds / 60 / 60;
-        this.assignedMember = this.member.firstname + " " + this.member.lastname;
+        this.assignedMember =
+          this.member.firstname + " " + this.member.lastname;
       } catch (err) {
         this.error = err;
       }
@@ -210,7 +204,7 @@ export default {
           priority: this.priority,
           status: this.status,
           sprint:
-            this.sprint === ("Assign it later" || "")
+            this.sprintNum === ("Assign it later" || "")
               ? undefined
               : this.sprints[this.sprint - 1]._id,
           estimatedTime: parseInt(this.estimatedTime, 10) * 60 * 60,

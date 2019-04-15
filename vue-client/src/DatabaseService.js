@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'api/';
+const url = 'http://localhost:8080/api/';
 
 class DatabaseService {
     static getProjectsByMemberId(id){
@@ -151,6 +151,29 @@ class DatabaseService {
         return new Promise(async (resolve, reject) => {
             try{
                 const res = await axios.get(url + 'projects/' + pid + '/sprints');
+                const data = res.data;
+                resolve(data);
+            }catch(err){
+                reject(err);
+            }
+        });
+    }
+    static getMemberNames(pid){
+        return new Promise(async (resolve, reject) => {
+            try{
+                const res = await axios.get(url + 'projects/' + pid + '/membernames');
+                const data = res.data;
+                resolve(data);
+            }catch(err){
+                reject(err);
+            }
+        });
+    }
+
+    static getLoggedInMember(){
+        return new Promise(async (resolve, reject) => {
+            try{
+                const res = await axios.get(url + 'members/');
                 const data = res.data;
                 resolve(data);
             }catch(err){
