@@ -10,7 +10,9 @@
     ></Navbar>
     <!-- <SprintCard id="5ca7ab051c9d44000043c95f"></SprintCard>
     <SprintCard id="5ca7afcf1c9d4400008ef9d2"></SprintCard> -->
-    <ProjectCard id="5ca7a58c1c9d4400006b8cfa"></ProjectCard>
+    <v-flex xs12>
+      <ProjectCard id="5ca7a58c1c9d4400006b8cfa"></ProjectCard>
+    </v-flex>
     
   </v-layout>
 </template>

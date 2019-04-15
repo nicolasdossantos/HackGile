@@ -3,8 +3,6 @@
         <v-dialog
         v-model="open"
         fullscreen
-
-        
         >
             <template v-slot:activator="{ on }">
                 <v-btn
