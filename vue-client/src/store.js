@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     projects: [],
+    currentProject: String,
     user: String
   },
   getters: {
@@ -17,19 +18,25 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    updateProject (state, projects){
+    updateProjects (state, projects){
       state.projects = projects;
     },
     updateUser (state, user){
       state.user = user;
+    },
+    updateCurrentProject (state, project){
+      state.currentProject = project;
     }
   },
   actions: {
-    updateProject({commit}, projects){
-      commit('updateProject', projects);
+    updateProjects({commit}, projects){
+      commit('updateProjects', projects);
     },
     updateUser({commit}, user){
       commit('updateUser', user);
+    },
+    updateCurrentProject({commit}, project){
+      commit('updateCurrentProject', project);
     }
   }
 })

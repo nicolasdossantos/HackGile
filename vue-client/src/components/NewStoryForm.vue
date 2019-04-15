@@ -153,7 +153,7 @@ export default {
       await this.sprintNumbers.push(i);
     }
     await this.sprintNumbers.push("Assign it later")
-
+ 
     //TODO: Change on deployment
     fetch("http://localhost:8080/api/projects/"+this.$props.pid+"/members/")
       .then(response => response.json())

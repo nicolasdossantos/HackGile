@@ -39,19 +39,21 @@
       this.$store.dispatch('updateUser', "5ca7a535dfbbba4a40857710");
       this.projects = await this.getProjects().then(() => {
         this.currentProject = this.$store.state.projects[0];
+        this.$store.dispatch('updateCurrentProject', this.currentProject);
       });
     },
     methods: {
       getProjects: async function(){
         await DatabaseService.getProjectsByMemberId(this.$store.state.user)
         .then((projects) => {
-          this.$store.dispatch('updateProject', projects);
+          this.$store.dispatch('updateProjects', projects);
         })
       },
       switchProject: function(projectID){
         alert(projectID);
         if(this.currentProject != projectID){
           this.currentProject = projectID;
+          this.$store.dispatch('updateCurrentProject', this.currentProject);
         }
       }
     }

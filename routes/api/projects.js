@@ -123,12 +123,17 @@ router.get("/:pid/memberNames", async (req, res) => {
   await Project.findById(req.params.pid)
     .populate("members")
     .exec((err, project) => {
-      project.members.forEach((member) => {
-        names.push(member.firstname + " " + member.lastname);
-        console.log('pushed names:' + names)
-      })
-      console.log('returned:' + names)
-      res.send(names);
+      if (err) {
+        //console.log(err)
+        res.status(500).send();
+      }else{
+        project.members.forEach((member) => {
+          names.push(member.firstname + " " + member.lastname);
+          console.log('pushed names:' + names)
+        })
+        console.log('returned:' + names)
+        res.send(names);
+      }
     })
 });
 //Get members Pictures
@@ -251,9 +256,12 @@ router.get("/:pid/sprints/", async (req, res) => {
         res.send(sprints);
       },
       err => {
-        console.log(err);
+        //console.log(err);
+        res.status(500).send();
       }
-    );
+    ).catch(err => {
+      res.status(500).send();
+    });
 });
 
 //Tested
