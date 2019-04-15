@@ -9,7 +9,6 @@
       </v-card-title>
 
       <v-card-text>
-  
         <v-form class="px-3" ref="form">
           <v-text-field
             label="Story Title*"
@@ -19,36 +18,34 @@
             :rules="inputRules"
           ></v-text-field>
 
-        
           <v-select
             label="Priority*"
             :items="['High', 'Medium', 'Low']"
             name="priority"
             v-model="priority"
             prepend-icon="announcement"
-           :rules="inputRules"
+            :rules="inputRules"
           ></v-select>
-   
-         <v-select
+
+          <v-select
             label="Sprint"
             :items="sprintNumbers"
             name="sprint"
             v-model="sprint"
             prepend-icon="directions_run"
-           
           ></v-select>
 
-          <v-select 
+          <v-select
             label="Member"
             :items="names"
             name="assignedMember"
             v-model="assignedMember"
             prepend-icon="face"
             @change="getChip"
-           :rules="inputRules"
+            :rules="inputRules"
           ></v-select>
 
-         <v-text-field
+          <v-text-field
             label="Estimated Time*"
             name="estimatedTIme"
             v-model="estimatedTime"
@@ -58,7 +55,7 @@
             suffix="Hours"
             hint="Enter time in hours"
           ></v-text-field>
-       
+
           <v-textarea
             name="description"
             v-model="description"
@@ -66,36 +63,31 @@
             hint="Plese describe your story."
             prepend-icon="edit"
           ></v-textarea>
-         
 
-         <v-spacer></v-spacer>
-       
-        <v-flex v-if="assignedMemberInfo.firstname">
-        <v-item-group multiple center>
-        <v-subheader>Assigned Member:</v-subheader>
-        <v-item
-        >
-          <v-chip
-            slot-scope="{ active, toggle }"
-            :selected="active"
-            @click="toggle"
-            v-model="assignedMemberInfo"
-            
-          >
-            <v-avatar>
-                <img :src="assignedMemberInfo.image">
-              </v-avatar>
-              {{assignedMemberInfo.firstname + ' ' + assignedMemberInfo.lastname}}
-          </v-chip>
-        </v-item>
-      </v-item-group>
-      </v-flex>
+          <v-spacer></v-spacer>
 
+          <v-flex v-if="assignedMemberInfo.firstname">
+            <v-item-group multiple center>
+              <v-subheader>Assigned Member:</v-subheader>
+              <v-item>
+                <v-chip
+                  slot-scope="{ active, toggle }"
+                  :selected="active"
+                  @click="toggle"
+                  v-model="assignedMemberInfo"
+                >
+                  <v-avatar>
+                    <img :src="assignedMemberInfo.image">
+                  </v-avatar>
+                  {{assignedMemberInfo.firstname + ' ' + assignedMemberInfo.lastname}}
+                </v-chip>
+              </v-item>
+            </v-item-group>
+          </v-flex>
 
-    <br>
-    <br>
-  
-         
+          <br>
+          <br>
+
           <v-spacer></v-spacer>
           <v-btn round color="red lighten-2 white--text" @click="clearForm">
             Cancel
@@ -115,20 +107,19 @@
 <script>
 import DatabaseService from "../DatabaseService";
 import format from "date-fns/format";
-import MemberChip from "./MemberChip"
-
+import MemberChip from "./MemberChip";
 
 export default {
- name: 'NewStoryForm',
-    props: {
-        pid: String
-    },
+  name: "NewStoryForm",
+  props: {
+    pid: String
+  },
 
   data: () => ({
     dialog: false,
-    members:[],
+    members: [],
     assignedMember: "",
-    assignedMemberInfo:"",
+    assignedMemberInfo: "",
     sprints: [],
     names: [],
     sprintNumbers: [],
@@ -140,91 +131,87 @@ export default {
     member: undefined,
     estimatedTime: "",
     description: "",
-    inputRules: [
-      v=> v.length >= 1 || 'Field is required.'
-      
-    ]
+    inputRules: [v => v.length >= 1 || "Field is required."]
   }),
-  created:async function() {
-    
+  created: async function() {
     this.sprints = await DatabaseService.getSprints(this.$props.pid);
 
-     for(let i = 1; i <= this.sprints.length; i++){
+    for (let i = 1; i <= this.sprints.length; i++) {
       await this.sprintNumbers.push(i);
     }
-    await this.sprintNumbers.push("Assign it later")
+    await this.sprintNumbers.push("Assign it later");
 
     //TODO: Change on deployment
-    fetch("http://localhost:8080/api/projects/"+this.$props.pid+"/members/")
+    fetch("http://localhost:8080/api/projects/" + this.$props.pid + "/members/")
       .then(response => response.json())
       .then(data => {
         this.members = data;
-        
-        console.log(this.sprints)
+
+        console.log(this.sprints);
       })
       .then();
   },
 
-
-  mounted: async function(){
-
-   
+  mounted: async function() {
     //TODO: Change on deployment
-    fetch("http://localhost:8080/api/projects/"+this.$props.pid+"/memberNames/")
+    fetch(
+      "http://localhost:8080/api/projects/" + this.$props.pid + "/memberNames/"
+    )
       .then(response => response.json())
       .then(data => {
         this.names = data;
-        this.names.push("Assign it later")
+        this.names.push("Assign it later");
       })
-      .then()
+      .then();
   },
-  
 
-  computed: {
-    
-  },
+  computed: {},
   methods: {
-    getChip: async function(){
-      
+    getChip: async function() {
       let assigned = await this.assignedMember;
 
-      if(assigned !== "Assign it later"){
-      let name = await this.assignedMember.split(" ");
-      let firstname= "";
-      let lastname = "";
-      if(name.length > 2){
-        firstname = name[0];
-        lastname = name[1] + " " + name[2];
-      }else{
-        firstname = name[0]
-        lastname = name[1];
-      } 
-      this.assignedMemberInfo = this.members.find(o => o.firstname === firstname && o.lastname === lastname);
-      }else{
+      if (assigned !== "Assign it later") {
+        let name = await this.assignedMember.split(" ");
+        let firstname = "";
+        let lastname = "";
+        if (name.length > 2) {
+          firstname = name[0];
+          lastname = name[1] + " " + name[2];
+        } else {
+          firstname = name[0];
+          lastname = name[1];
+        }
+        this.assignedMemberInfo = this.members.find(
+          o => o.firstname === firstname && o.lastname === lastname
+        );
+      } else {
         this.assignedMemberInfo = "";
       }
-    
-
     },
     submit: async function() {
-     if(this.$refs.form.validate()){
-      let properties = {
-        title: this.title,
-        priority: this.priority,
-        status: this.status,
-        sprint: this.sprint === ("Assign it later" || "") ? undefined : this.sprints[this.sprint-1]._id ,
-        estimatedTime: parseInt(this.estimatedTime, 10) * 60 * 60,
-        description: this.description,
-        member: this.assignedMemberInfo !== (undefined || "") ? this.assignedMemberInfo._id : undefined,
-       
-      };
-      console.log(properties)
+      if (this.$refs.form.validate()) {
+        let properties = {
+          title: this.title,
+          priority: this.priority,
+          status: this.status,
+          sprint:
+            this.sprint === ("Assign it later" || "")
+              ? undefined
+              : this.sprints[this.sprint - 1]._id,
+          estimatedTime: parseInt(this.estimatedTime, 10) * 60 * 60,
+          description: this.description,
+          member:
+            this.assignedMemberInfo !== (undefined || "")
+              ? this.assignedMemberInfo._id
+              : undefined
+        };
+        console.log(properties);
 
-      //Creates New Story witth fields above
-      await DatabaseService.insertStory(properties);
-      this.clearForm();
+        //Creates New Story witth fields above
+        await DatabaseService.insertStory(properties);
+        this.clearForm();
 
-      this.$emit("story-form-complete");
+        this.$emit("story-form-complete");
       }
     },
 
@@ -235,7 +222,6 @@ export default {
       this.status = "";
       this.sprint = undefined;
       this.member = undefined;
-
       this.estimatedTime = "";
       this.description = "";
     }
@@ -259,7 +245,7 @@ export default {
 }
 
 v-date-picker {
-  color: red
+  color: red;
 }
 
 @keyframes bounce-in {
