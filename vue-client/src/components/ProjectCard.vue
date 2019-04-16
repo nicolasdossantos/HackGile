@@ -9,9 +9,15 @@
                 Backlog
                 <NewStoryForm pid="5ca7a58c1c9d4400006b8cfa"/>
               </h1>
-              <div v-for="story in filterStories()" :key="story._id">
-                <StoryCard v-bind:id="story._id"></StoryCard>
-              </div>
+              <Container
+                :get-child-payload="getChildPayload"
+                @drag-start="onDragStart"
+                group-name="containers"
+              >
+                  <Draggable v-for="story in filterStories()" :key="story._id">
+                    <StoryCard v-bind:id="story._id"></StoryCard>
+                  </Draggable>
+              </Container>
             </v-sheet>
           </div>
         </v-flex>
@@ -24,9 +30,14 @@
                   <NewSprintForm/>
                 </h1>
 
-                <div v-for="sprint in sprints" :key="sprint._id">
+                <Container v-for="sprint in sprints" :key="sprint._id"
+                    :get-child-payload="index => getChildPayload(index, sprint._id)"
+                    @drag-start="onDragStart"
+                    @drop="dropResult => onDrop(dropResult, sprint._id)"
+                    group-name="containers"
+                >
                   <SprintCard v-bind:id="sprint._id"></SprintCard>
-                </div>
+                </Container>
               </v-sheet>
             </v-flex>
             <v-flex md8>
@@ -86,13 +97,17 @@ import SprintCard from "./SprintCard";
 import DatabaseService from "../DatabaseService";
 import NewSprintForm from "./NewSprintForm";
 import NewStoryForm from "./NewStoryForm";
+import { Container, Draggable } from 'vue-smooth-dnd'
+import { applyDrag, generateItems } from '../utils/helpers'
 export default {
   name: "ProjectCard",
   components: {
     StoryCard,
     SprintCard,
     NewSprintForm,
-    NewStoryForm
+    NewStoryForm,
+    Container,
+    Draggable
   },
   props: {
     id: String
@@ -124,6 +139,31 @@ export default {
       return this.stories.filter(function(story) {
         return story.status == "Backlog";
       });
+    },
+    getChildPayload: function (index){
+    return this.stories.filter(function(story) {
+        return story.status == "Backlog";
+      })[index];
+    },
+    onDragStart: function({index, payload}) {
+        console.log(payload);
+    },
+    onDrop: function(dropResult, id) {
+      if (dropResult.addedIndex !== null){
+        console.log(dropResult.payload._id + " " + id);
+        let story = this.stories.find(elem => elem._id == dropResult.payload._id);
+        if (story.member){
+            story.status = 'Assigned'
+        }else{
+            story.status = 'Unassigned'
+        }
+        // Should Modify Database instead of doing this
+        story.sprint = id;
+        let sprint = this.sprints.find(elem => elem._id == id);
+        sprint.stories.push(story._id);
+        console.log(story)
+        console.log(sprint)
+      }  
     }
   },
   computed: {

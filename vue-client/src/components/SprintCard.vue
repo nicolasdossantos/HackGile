@@ -1,30 +1,24 @@
 <template>
   <div class="SprintCard pa-2" v-bind:id="this.$props.id">
-    <v-card
-        @dblclick="open = true"
-    >
+    <v-card @dblclick="open = true">
       <v-card-title primary-title>
-          <v-layout row justify-space-between>
-              <v-flex>
-                <h1>Sprint {{name}}</h1>
-              </v-flex>
-              <v-flex align-self-center>
-                  <v-sheet 
-                  color='red lighten-3' 
-                  elevation='4' 
-                  class='d-flex'
-                  >
-                      <h1 class='text-xs-center'>Timer</h1>
-                  </v-sheet>
-              </v-flex>
-              <v-flex align-self-end>
-                  <div class='text-xs-right'>
-                <v-btn flat class="green white--text">
-              <h1>Start</h1>    
-                        </v-btn>                  
-                  </div>
-              </v-flex>
-          </v-layout>
+        <v-layout row justify-space-between>
+          <v-flex>
+            <h1>Sprint {{name}}</h1>
+          </v-flex>
+          <v-flex align-self-center>
+            <v-sheet color="red lighten-3" elevation="4" class="d-flex">
+              <h1 class="text-xs-center">Timer</h1>
+            </v-sheet>
+          </v-flex>
+          <v-flex align-self-end>
+            <div class="text-xs-right">
+              <v-btn flat class="green white--text">
+                <h1>Start</h1>
+              </v-btn>
+            </div>
+          </v-flex>
+        </v-layout>
       </v-card-title>
     </v-card>
     <v-dialog v-model="open" fullscreen>
@@ -32,7 +26,7 @@
         <v-btn color="red lighten-2" dark v-on="on">
           <h1>Sprint {{name}}</h1>
         </v-btn>
-      </template> -->
+      </template>-->
 
       <v-card>
         <v-card-title class="headline red lighten-2" primary-title>
@@ -49,9 +43,17 @@
                 <div>
                   <v-sheet color="grey lighten-3" min-height="250px">
                     <h1 class="text-xs-center">{{s}}</h1>
-                    <div v-for="story in filterStories(s)" :key="story._id">
-                      <StoryCard v-bind:id="story._id"></StoryCard>
-                    </div>
+                    <Container
+                      :get-child-payload="index => getChildPayload(index, s)"
+                      @drag-start="onDragStart"
+                      @drop="dropResult => onDrop(dropResult, s)"
+                      group-name="status-containers"
+                      style="min-height: 200px;"
+                    >
+                      <Draggable v-for="story in filterStories(s)" :key="story._id">
+                        <StoryCard v-bind:id="story._id"></StoryCard>
+                      </Draggable>
+                    </Container>
                   </v-sheet>
                 </div>
               </v-flex>
@@ -66,10 +68,14 @@
 <script>
 import DatabaseService from "../DatabaseService.js";
 import StoryCard from "./StoryCard";
+import { Container, Draggable } from "vue-smooth-dnd";
+import { applyDrag, generateItems } from "../utils/helpers";
 export default {
   name: "SprintCard",
   components: {
-    StoryCard
+    StoryCard,
+    Container,
+    Draggable
   },
   props: {
     id: String
@@ -119,8 +125,21 @@ export default {
       return this.stories.filter(function(story) {
         return story.status == s;
       });
+    },
+    getChildPayload: function(index, status) {
+      return this.stories.filter(function(story) {
+        return story.status == status;
+      })[index];
+    },
+    onDragStart: function({ index, payload }) {
+      //console.log(payload);
+    },
+    onDrop: function(dropResult, status) {
+      if (dropResult.addedIndex !== null){
+        console.log(dropResult.payload._id + " " + status);
+        this.stories.find(elem => elem._id == dropResult.payload._id).status = status;
+      }  
     }
-    //TODO: Implement Draggable
   },
   computed: {},
   watch: {}
