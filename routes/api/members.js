@@ -68,4 +68,10 @@ router.get("/:pid/:ln/:fn", async(req, res)=>{
   res.status(200).send();
 })
 
+router.get("/info", async(req, res)=>{
+  console.log(req.user)
+  res.send(req.user);
+})
+
+
 module.exports = router;

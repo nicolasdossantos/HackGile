@@ -187,6 +187,19 @@ class DatabaseService {
         });
     }
 
+    static getMember(){
+        return new Promise(async (resolve, reject) => {
+            try{
+                const res = await axios.get(url + 'members/info');
+                const data = res.data;
+                resolve(data);
+            }catch(err){
+                reject(err);
+            }
+        });
+    
+    }
+
 }
 
 export default DatabaseService;

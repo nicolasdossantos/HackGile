@@ -6,7 +6,11 @@ const router = express.Router();
 const Project = require("../../models/project");
 const Member = require("../../models/member");
 const nodemailer = require('nodemailer');
+<<<<<<< HEAD
 const keys = require('../../config/keys')
+=======
+const keys = require('../../config/keys');
+>>>>>>> b191496a5a82a751eac9794f2c8641a09a5bca83
 
 //TODO: Test
 //Get Projects for current user
@@ -361,6 +365,8 @@ router.post("/add_member", (req, res) => {
   let email = req.body.email;
   let projectId = req.body.project;
 
+  console.log(projectId)
+
   Member.findOne(
     {
       email: email
@@ -377,6 +383,7 @@ router.post("/add_member", (req, res) => {
           if (err) {
             console.log(err);
           } else {
+            console.log(project)
             if (project.members.indexOf(member.id) < 0) {
               project.members.push(member.id);
               project.save(err => {
