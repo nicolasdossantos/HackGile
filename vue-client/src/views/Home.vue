@@ -47,6 +47,7 @@
     },
     methods: {
       getProjects: async function(){
+        console.log("project form completed.")
         await DatabaseService.getProjectsByMemberId(this.$store.state.user)
         .then((projects) => {
           this.$store.dispatch('updateProjects', projects);

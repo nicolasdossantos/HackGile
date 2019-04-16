@@ -72,7 +72,9 @@
             </v-list-tile>
             <v-divider></v-divider>
             <v-flex right>
-            <NewProjectForm />
+            <NewProjectForm
+              v-on:project-form-complete="$emit('project-form-complete')"
+            ></NewProjectForm>
             </v-flex>
              
             
