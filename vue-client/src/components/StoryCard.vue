@@ -277,7 +277,14 @@ export default {
       return color;
     }
   },
-  watch: {}
+  watch: {
+    dialog: function(){
+      if (this.dialog == false){
+        //revert back to store
+        console.log('dialog closed')
+      }
+    }
+  }
 };
 </script>
 

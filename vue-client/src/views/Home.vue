@@ -38,7 +38,8 @@
     },
     created: async function() {
       //TODO: change to logged in user ID
-      this.$store.dispatch('updateUser', "5ca7a535dfbbba4a40857710");
+      let member = await DatabaseService.getCurrentUserId();
+      this.$store.dispatch('updateUser', member);
       this.projects = await this.getProjects().then(() => {
         this.currentProject = this.$store.state.projects[0];
         this.$store.dispatch('updateCurrentProject', this.currentProject);
