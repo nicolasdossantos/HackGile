@@ -41,7 +41,8 @@ class DatabaseService {
             hackathonName: properties.hackathonName,
             git: properties.git,
             members: properties.members,
-            owners: properties.members
+            owners: properties.members,
+            member: properties.member
         });
     }
 
@@ -175,6 +176,15 @@ class DatabaseService {
         return axios.post(url + 'sprints', {
             duration: properties.duration,
             project: properties.project
+        });
+    }
+
+    static addMember(properties){
+        
+        return axios.post(url + 'projects/add_member', {
+            project: properties.project,
+            email: properties.email
+
         });
     }
 

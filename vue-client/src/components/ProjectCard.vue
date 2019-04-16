@@ -57,6 +57,7 @@
       <v-card class="flex green lighten-3" flat tile>
         <v-card-title>
           <strong class="title">Members</strong>
+          <AddMemberForm :id="id"/>
         </v-card-title>
         <v-card-actions>
           <v-layout row>
@@ -97,6 +98,7 @@
 <script>
 import StoryCard from "./StoryCard";
 import SprintCard from "./SprintCard";
+import AddMemberForm from "./AddMemberForm";
 import DatabaseService from "../DatabaseService";
 import NewSprintForm from "./NewSprintForm";
 import NewStoryForm from "./NewStoryForm";
@@ -110,7 +112,8 @@ export default {
     NewSprintForm,
     NewStoryForm,
     Container,
-    Draggable
+    Draggable,
+    AddMemberForm
   },
   props: {
     id: String

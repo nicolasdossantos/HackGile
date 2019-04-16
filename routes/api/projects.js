@@ -72,6 +72,7 @@ router.post("/", async (req, res) => {
     let git = req.body.git;
     let owners = req.body.owners;
     let members = req.body.members;
+    let member = req.body.members[0];
 
     //time manipulation
     let splitTime = endTime.split(":");
@@ -93,11 +94,15 @@ router.post("/", async (req, res) => {
       stories: [],
       owners: owners
     });
-    await newProject.save(err => {
+    await newProject.save(async(err, project) => {
       if (err) {
         console.log(err);
       }
+      await Member.updateOne(
+        { _id:  member._id }, 
+        { $push: {projecrs:  mongoose.Types.ObjectId(project._id) }} )
     });
+    
     console.log("SUCCESS")
     res.status(201).send();
   }
@@ -351,7 +356,7 @@ router.delete("/:pid/stories/:sid", async (req, res) => {
 //Project is found by ID, user found by email. If user is not already present in project, it is then added to it
 router.post("/add_member", (req, res) => {
   let email = req.body.email;
-  let projectId = req.params.project;
+  let projectId = req.body.project;
 
   Member.findOne(
     {
@@ -359,6 +364,7 @@ router.post("/add_member", (req, res) => {
     },
     (err, member) => {
       if (!member) {
+        console.log("Member not found")
         res.send(req.flash(
           "cardError",
           "The email entered does not correspond to an active member."
