@@ -70,11 +70,12 @@
                      
                
             </v-list-tile>
+            <v-divider></v-divider>
             <v-flex right>
             <NewProjectForm />
             </v-flex>
              
-            <v-divider></v-divider>
+            
             <v-list>
                 <v-list-tile
                   v-for="project in this.$store.state.projects"
