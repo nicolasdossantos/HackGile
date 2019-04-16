@@ -151,9 +151,9 @@ export default {
     status: "",
     description: "",
     estimatedTime: "",
-    sprint: undefined,
+    sprint: "",
     priority: "",
-    assignedMember: undefined,
+    assignedMember: "",
     memberPicture: "",
     inputRules: []
   }),

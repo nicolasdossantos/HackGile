@@ -7,7 +7,7 @@
             <v-sheet color="white" min-height="250px">
               <h1 class="text-xs-center">
                 Backlog
-                <NewStoryForm pid="5ca7a58c1c9d4400006b8cfa"/>
+                <NewStoryForm v-bind:pid='this.$props.id'/>
               </h1>
               <Container
                 :get-child-payload="getChildPayload"

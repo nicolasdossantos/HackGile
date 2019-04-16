@@ -11,7 +11,7 @@
     <!-- <SprintCard id="5ca7ab051c9d44000043c95f"></SprintCard>
     <SprintCard id="5ca7afcf1c9d4400008ef9d2"></SprintCard> -->
     <v-flex xs12>
-      <ProjectCard id="5ca7a58c1c9d4400006b8cfa"></ProjectCard>
+      <ProjectCard v-bind:id='currentProject'></ProjectCard>
     </v-flex>
     
   </v-layout>
@@ -36,14 +36,17 @@
         currentProject: null,
       }
     },
-    created: async function() {
-      //TODO: change to logged in user ID
+    async beforeCreate() {
       let member = await DatabaseService.getCurrentUserId();
       this.$store.dispatch('updateUser', member);
       this.projects = await this.getProjects().then(() => {
         this.currentProject = this.$store.state.projects[0];
         this.$store.dispatch('updateCurrentProject', this.currentProject);
+        this.currentProject = this.currentProject._id;
       });
+    },
+    created: async function() {
+
     },
     methods: {
       getProjects: async function(){
@@ -56,8 +59,9 @@
       switchProject: function(projectID){
         alert(projectID);
         if(this.currentProject != projectID){
-          this.currentProject = projectID;
+          this.currentProject = this.$store.state.projects.find((elem) => elem._id == projectID);
           this.$store.dispatch('updateCurrentProject', this.currentProject);
+          this.currentProject = this.currentProject._id;
         }
       }
     }
