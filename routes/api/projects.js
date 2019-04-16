@@ -98,9 +98,10 @@ router.post("/", async (req, res) => {
       if (err) {
         console.log(err);
       }
+      console.log(members[0])
       await Member.updateOne(
-        { _id:  member._id }, 
-        { $push: {projecrs:  mongoose.Types.ObjectId(project._id) }} )
+        { _id:  members[0]}, 
+        { $push: {projects:  mongoose.Types.ObjectId(project._id) }} )
     });
     
     console.log("SUCCESS")
