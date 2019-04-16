@@ -5,6 +5,8 @@ const Story = require("../../models/story");
 const router = express.Router();
 const Project = require("../../models/project");
 const Member = require("../../models/member");
+const nodemailer = require('nodemailer');
+const keys = require('../../config/keys')
 
 //TODO: Test
 //Get Projects for current user

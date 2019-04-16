@@ -41,8 +41,7 @@ class DatabaseService {
             hackathonName: properties.hackathonName,
             git: properties.git,
             members: properties.members,
-            owners: properties.members,
-            member: properties.member
+            owners: properties.members
         });
     }
 
