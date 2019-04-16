@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <v-btn small fab dark color="red lighten-2" slot="activator">
-      <v-icon dark>add</v-icon>
+    <v-btn small color="light blue white--text" slot="activator">
+      New Project
     </v-btn>
     <v-card>
       <v-card-title>

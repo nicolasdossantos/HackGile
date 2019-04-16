@@ -57,18 +57,22 @@
         <v-list>
           
             <v-list-tile>
-              <br>
-              <v-list-tile-title class="title">
-                   Projects  &nbsp; 
+             
+              <v-list-tile-title class="title" center>
+                   Projects 
               </v-list-tile-title>
+              
 
-               <NewProjectForm />
+               
               
               
                 
                      
                
             </v-list-tile>
+            <v-flex right>
+            <NewProjectForm />
+            </v-flex>
              
             <v-divider></v-divider>
             <v-list>
