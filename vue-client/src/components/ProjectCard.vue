@@ -66,7 +66,7 @@
                 <v-item-group multiple center>
         <v-item
           v-for="member in members"
-          :key="member"
+          :key="member._id"
         >
           <v-chip
             slot-scope="{ active, toggle }"
@@ -139,7 +139,17 @@ export default {
   },
   methods: {
     updateProject: function() {
-      console.log(this.$store.state.projects);
+      //console.log(this.$store.state.projects);
+      this.json = this.jsonUpdate;
+      this.name = this.json.name;
+      this.projectType = this.json.projectType;
+      this.deadline = this.json.deadline;
+      this.hackathonName = this.json.hackathonName;
+      this.git = this.json.git;
+      this.stories = this.json.stories;
+      this.sprints = this.json.sprints;
+      this.members = this.json.members;
+      this.owners = this.json.owners;
     },
     modifyProject: function() {},
     filterStories: function() {

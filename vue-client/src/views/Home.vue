@@ -10,7 +10,7 @@
     ></Navbar>
     <!-- <SprintCard id="5ca7ab051c9d44000043c95f"></SprintCard>
     <SprintCard id="5ca7afcf1c9d4400008ef9d2"></SprintCard> -->
-    <v-flex xs12>
+    <v-flex xs12 v-if="currentProject != undefined">
       <ProjectCard v-bind:id='currentProject'></ProjectCard>
     </v-flex>
     
@@ -33,7 +33,7 @@
       return {
         projects: [],
         length: 3,
-        currentProject: null,
+        currentProject: undefined,
       }
     },
     async beforeCreate() {
@@ -57,7 +57,7 @@
         })
       },
       switchProject: function(projectID){
-        alert(projectID);
+        //alert(projectID);
         if(this.currentProject != projectID){
           this.currentProject = this.$store.state.projects.find((elem) => elem._id == projectID);
           this.$store.dispatch('updateCurrentProject', this.currentProject);
