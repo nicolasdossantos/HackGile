@@ -1,6 +1,8 @@
 <template>
   <div class="StoryCard pa-2" v-bind:id="this.$props.id">
-    <v-card v-model="dialog" v-on:dblclick="dialog = true">
+    <v-card v-model="dialog" v-on:dblclick="dialog = true"
+      :class='priorityColor'
+    >
       <v-card-title primary-title>
         <h1>{{this.title}}</h1>
       </v-card-title>
@@ -261,6 +263,18 @@ export default {
           return this.memberPicture;
         }
       }
+    },
+    priorityColor: function() {
+      let color = "";
+      if (this.priority == 'High'){
+        color = 'red lighten-3'
+      }else if (this.priority == 'Medium'){
+        color = 'orange lighten-3'
+      }else{
+        color = 'light-green lighten-3'
+      }
+
+      return color;
     }
   },
   watch: {}

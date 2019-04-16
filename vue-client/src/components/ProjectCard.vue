@@ -9,7 +9,7 @@
                 <v-flex md4>
                     <div>
                         <v-sheet
-                            color="grey lighten-3"
+                            color="white"
                             min-height="250px"
                         >
                         <h1
@@ -30,7 +30,7 @@
                 <v-flex md8>
                     <div>
                         <v-sheet
-                            color="grey lighten-3"
+                            color="white"
                             min-height="250px"
                         >
                         <h1
