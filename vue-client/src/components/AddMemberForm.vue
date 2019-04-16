@@ -21,6 +21,7 @@
             
               ></v-text-field>
             </v-flex>
+            <p>{{project}}</p>
            
             
           </v-layout>
@@ -58,7 +59,7 @@ export default {
   }),
 
 
-  created: function() {
+  mounted: function() {
     this.project = this.$props.id;
   },
 

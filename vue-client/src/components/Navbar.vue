@@ -20,7 +20,7 @@
           <v-list class="pa-0">
             <v-list-tile>
               <v-list-tile-avatar>
-                <img src="https://scontent.fphl2-1.fna.fbcdn.net/v/t1.0-9/57485407_10219343553004681_3561234131331317760_n.jpg?_nc_cat=103&_nc_ht=scontent.fphl2-1.fna&oh=4267c10bb43dd49f3864bcf1c18cfd1e&oe=5D3055E5">
+                <img :src="member.image">
               </v-list-tile-avatar>
               <v-list-tile-action>
                 <v-btn
@@ -91,6 +91,7 @@
             </v-list>
         </v-list>
         
+        
     </v-layout>
   </v-navigation-drawer>
 </template>
@@ -109,14 +110,17 @@
           { title: 'Home', icon: 'dashboard' },
           { title: 'About', icon: 'question_answer' }
         ],
+        member : '',
         mini: true,
         right: null,
         window: 0,
-        test: ''
+        memberID: ''
       }
     },
+    
     mounted:async function () {
-     this.test =  await DatabaseService.getCurrentUserId();
+     this.memberID =  await DatabaseService.getCurrentUserId();
+     this.member = await DatabaseService.getMember();
     },
     methods:{
       getUserId: async function() {

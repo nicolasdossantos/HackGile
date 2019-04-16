@@ -57,7 +57,7 @@
       <v-card class="flex green lighten-3" flat tile>
         <v-card-title>
           <strong class="title">Members</strong>
-          <AddMemberForm :id="id"/>
+          <AddMemberForm v-bind:id="this.$props.id" />
         </v-card-title>
         <v-card-actions>
           <v-layout row>
