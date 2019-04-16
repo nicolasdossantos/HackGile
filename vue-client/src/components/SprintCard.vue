@@ -83,7 +83,7 @@ export default {
   data: function() {
     return {
       json: null,
-      name: Number,
+      name: "",
       stories: [],
       time: Number,
       open: false,
@@ -97,6 +97,9 @@ export default {
       ]
     };
   },
+  beforeCreate(){
+
+  },
   mounted: function() {
     this.updateSprint();
   },
@@ -109,7 +112,7 @@ export default {
       } catch (err) {
         this.error = err;
       }
-      let sprints = await this.$store.state.currentProject.sprints;
+      let sprints = this.$store.state.currentProject.sprints;
 
       for (let i = 0; i < sprints.length; i++) {
         if (sprints[i]._id == this.$props.id) {
