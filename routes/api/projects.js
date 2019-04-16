@@ -348,5 +348,74 @@ router.delete("/:pid/stories/:sid", async (req, res) => {
 
   res.status(200).send();
 });
+//Project is found by ID, user found by email. If user is not already present in project, it is then added to it
+router.post("/add_member", (req, res) => {
+  let email = req.body.email;
+  let projectId = req.params.project;
+
+  Member.findOne(
+    {
+      email: email
+    },
+    (err, member) => {
+      if (!member) {
+        res.send(req.flash(
+          "cardError",
+          "The email entered does not correspond to an active member."
+        ));
+      } else {
+        Project.findById(projectId, (err, project) => {
+          if (err) {
+            console.log(err);
+          } else {
+            if (project.members.indexOf(member.id) < 0) {
+              project.members.push(member.id);
+              project.save(err => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  let smtpTransport = nodemailer.createTransport({
+                    service: "Gmail",
+                    auth: {
+                      user: keys.email2.username,
+                      pass: keys.email2.password
+                    }
+                  });
+
+                  let mailOptions = {
+                    to: member.email,
+                    from: "Hackgile <noreply@hackgile.org>",
+                    subject: "You Have Been Added To a New Project!",
+                    text:
+                      "Hello there,\n" +
+                      "You have been added to the project " +
+                      project.name +
+                      "\nClick here to check out your new project:\n" +
+                      "https://hackgile.org/home/" +
+                      project.id
+                  };
+                  smtpTransport.sendMail(mailOptions, err => {
+                    console.log("email sent");
+                    req.flash("cardSuccess", "Member has been added!");
+                    res.redirect("/projects/home");
+                    done(err, "done");
+                  });
+                }
+              });
+            } else {
+              req.flash(
+                "cardError",
+                "The member is already part of the project"
+              );
+              res.redirect("/projects/add_member/" + projectId);
+            }
+          }
+        });
+      }
+    }
+  );
+});
+
+
 
 module.exports = router;

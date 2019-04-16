@@ -62,26 +62,29 @@
           <v-layout row>
             <v-flex grow>
               <!-- Iterate through members here -->
-              <v-list-tile>
-                <v-list-tile-avatar>
-                  <v-img
-                    src="https://randomuser.me/api/portraits/men/85.jpg"
-                    max-height="40px"
-                    max-width="40px"
-                  ></v-img>
-                </v-list-tile-avatar>
-              </v-list-tile>
+                <v-item-group multiple center>
+        <v-item
+          v-for="member in members"
+          :key="member"
+        >
+          <v-chip
+            slot-scope="{ active, toggle }"
+            :selected="active"
+            @click="toggle"
+          >
+            <v-avatar>
+                <img :src="member.image">
+              </v-avatar>
+              {{member.firstname + ' ' + member.lastname}}
+          </v-chip>
+        </v-item>
+      </v-item-group>
+
             </v-flex>
             <v-flex v-if="git" xs1>
               <!-- Shows git link here -->
               <v-list-tile>
-                <v-list-tile-avatar>
-                  <v-img
-                    src="https://randomuser.me/api/portraits/men/85.jpg"
-                    max-height="40px"
-                    max-width="40px"
-                  ></v-img>
-                </v-list-tile-avatar>
+                <a :href="git">Access Git Repository</a>
               </v-list-tile>
             </v-flex>
           </v-layout>
@@ -127,8 +130,9 @@ export default {
       stories: []
     };
   },
-  mounted: function() {
+ mounted() {
     this.updateProject();
+    this.members = this.$store.state.currentProject.members;
   },
   methods: {
     updateProject: function() {

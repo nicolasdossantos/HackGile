@@ -46,6 +46,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "vue-click-outside": "^1.0.7",
+    "vue-clipboard2": "^0.3.0",
     "vue-smooth-dnd": "^0.7.0"
   }
 }
