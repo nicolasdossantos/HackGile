@@ -1,5 +1,13 @@
 <template>
   <div class="StoryCard pa-2" v-bind:id="this.$props.id">
+   
+    
+    <v-snackbar v-model="deleteStorySnack"  left :timeout="0" color="error">
+      <span>This is story will be deleted. Are you sure you want to proceed?</span>
+      <v-btn flat small color="white" @click="deleteStorySnack = false"> Cancel</v-btn>
+        <v-btn flat small color="white" @click="deleteStory"> Delete this shit!!</v-btn>
+    </v-snackbar>
+
     <v-card v-model="dialog" v-on:dblclick="dialog = true"
       :class='priorityColor'
     >
@@ -114,7 +122,7 @@
               Save Story
               <v-icon dark right>check_circle</v-icon>
             </v-btn>
-            <v-btn round color="red white--text" @click="dialog = false">
+            <v-btn round color="red white--text" @click="deleteStorySnack = true">
               Delete Story
               <v-icon dark right>clear</v-icon>
             </v-btn>
@@ -155,7 +163,8 @@ export default {
     priority: "",
     assignedMember: "",
     memberPicture: "",
-    inputRules: []
+    inputRules: [],
+    deleteStorySnack: false
   }),
   created: async function() {
     await this.updateStory();
@@ -246,8 +255,12 @@ export default {
         this.assignedMemberInfo = "";
       }
     },
+    
     deleteStory: async function() {
-      //TODO
+      await DatabaseService.deleteStory(this.$props.id);
+      this.dialog = false;
+      this.deleteStorySnack = false;
+      this.$emit("story-deleted");
     }
   },
   computed: {

@@ -200,7 +200,9 @@ class DatabaseService {
         });
     
     }
-
+    static deleteStory(id){
+        return axios.delete(url + 'stories/' + id);
+    }
 }
 
 export default DatabaseService;
