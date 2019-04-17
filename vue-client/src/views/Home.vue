@@ -4,9 +4,15 @@
     class= "light-green lighten-4"
     
   >
+  <v-snackbar v-model="projectAddedSnack" :timeout="4000" top color="success">
+      <span>Awesome! You added a project</span>
+      <v-btn flat small color="white" @click="projectAddedSnack = false"> Close</v-btn>
+    </v-snackbar>
+
     <Navbar
       v-on:change-project-page="switchProject"
-      v-on:project-form-complete="getProjects"
+      v-on:project-form-complete="newProjectAction"
+     
     ></Navbar>
     <!-- <SprintCard id="5ca7ab051c9d44000043c95f"></SprintCard>
     <SprintCard id="5ca7afcf1c9d4400008ef9d2"></SprintCard> -->
@@ -34,6 +40,7 @@
         projects: [],
         length: 3,
         currentProject: undefined,
+        projectAddedSnack: false,
       }
     },
     async beforeCreate() {
@@ -54,8 +61,14 @@
         await DatabaseService.getProjectsByMemberId(this.$store.state.user)
         .then((projects) => {
           this.$store.dispatch('updateProjects', projects);
+          
         })
       },
+      newProjectAction: async function(){
+        this.projectAddedSnack = true;
+        this.getProjects();
+      },
+      
       switchProject: function(projectID){
         //alert(projectID);
         if(this.currentProject != projectID){

@@ -1,5 +1,7 @@
 <template>
+    
   <div class="ProjectCard" v-bind:id="this.$props.id">
+    
     <v-container grid-list-md>
       <v-layout row justify-space-between>
         <v-flex md4>
@@ -27,7 +29,7 @@
               <v-sheet color="white" min-height="250px">
                 <h1 class="text-xs-center">
                   Sprints
-                  <NewSprintForm/>
+                  <NewSprintForm v-on:sprint-form-complete="newProjectAction"/>
                 </h1>
 
                 <Container v-for="sprint in sprints" :key="sprint._id"
@@ -130,7 +132,9 @@ export default {
       owners: [],
       members: [],
       sprints: [],
-      stories: []
+      stories: [],
+      
+
     };
   },
  mounted() {
