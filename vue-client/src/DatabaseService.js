@@ -203,6 +203,9 @@ class DatabaseService {
     static deleteStory(id){
         return axios.delete(url + 'stories/' + id);
     }
+    static deleteSprint(id){
+        return axios.delete(url + 'sprints/' + id);
+    }
 }
 
 export default DatabaseService;

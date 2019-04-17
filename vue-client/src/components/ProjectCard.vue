@@ -35,7 +35,7 @@
               <v-sheet color="white" min-height="250px">
                 <h1 class="text-xs-center">
                   Sprints
-                  <NewSprintForm v-on:sprint-form-complete="newProjectAction"/>
+                  <NewSprintForm v-on:sprint-form-complete="$emit('sprint-form-complete')"/>
                 </h1>
 
                 <Container v-for="sprint in sprints" :key="sprint._id"
@@ -44,7 +44,11 @@
                     @drop="dropResult => onDrop(dropResult, sprint._id)"
                     group-name="containers"
                 >
-                  <SprintCard v-bind:id="sprint._id"></SprintCard>
+                  <SprintCard 
+                  v-bind:id="sprint._id"
+                  v-on:story-form-complete="$emit('story-form-complete')"
+                  v-on:sprint-deleted="$emit('sprint-deleted')"
+                ></SprintCard>
                 </Container>
               </v-sheet>
             </v-flex>

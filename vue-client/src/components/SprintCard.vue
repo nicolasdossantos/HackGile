@@ -29,11 +29,21 @@
       </template>-->
 
       <v-card>
+        <v-snackbar v-model="storyDeletedSnack" :timeout="4000" top color="info">
+          <span>This story was deleted successfully!</span>
+        </v-snackbar>
+
+        <v-snackbar v-model="storyCreatedSnack" :timeout="4000" top color="info">
+          <span>The story was created successfully!</span>
+        </v-snackbar>
+
         <v-card-title class="headline red lighten-2" primary-title>
           <v-btn flat @click="open = false">
             <v-icon>close</v-icon>
           </v-btn>
           <h1>Sprint {{name}}</h1>
+          <NewStoryForm :sprintID="this.$props.id" v-on:story-form-complete="storyCreatedAction"/>
+          <v-btn small color="red white--text" @click="deleteSprint">Delete Sprint</v-btn>
         </v-card-title>
 
         <v-card-text>
@@ -51,7 +61,7 @@
                       style="min-height: 200px;"
                     >
                       <Draggable v-for="story in filterStories(s)" :key="story._id">
-                        <StoryCard v-bind:id="story._id"></StoryCard>
+                        <StoryCard v-bind:id="story._id" v-on:story-deleted="storyDeletedAction"></StoryCard>
                       </Draggable>
                     </Container>
                   </v-sheet>
@@ -68,6 +78,7 @@
 <script>
 import DatabaseService from "../DatabaseService.js";
 import StoryCard from "./StoryCard";
+import NewStoryForm from "./NewStoryForm";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { applyDrag, generateItems } from "../utils/helpers";
 export default {
@@ -75,7 +86,8 @@ export default {
   components: {
     StoryCard,
     Container,
-    Draggable
+    Draggable,
+    NewStoryForm
   },
   props: {
     id: String
@@ -94,12 +106,12 @@ export default {
         "Stuck",
         "Testing",
         "Done"
-      ]
+      ],
+      storyDeletedSnack: false,
+      storyCreatedSnack: false
     };
   },
-  beforeCreate(){
-
-  },
+  beforeCreate() {},
   mounted: function() {
     this.updateSprint();
   },
@@ -123,6 +135,21 @@ export default {
         }
       }
     },
+     storyDeletedAction: async function(){
+        this.storyDeletedSnack = true;
+        this.updateSprint();
+        
+      },
+      storyCreatedAction: async function(){
+        this.storyCreatedSnack = true;
+        this.updateSprint();
+      },
+      deleteSprint: async function(){
+        await DatabaseService.deleteSprint(this.$props.id);
+        this.open = false;
+        this.$emit('sprint-deleted');
+      },
+
     addStory: function() {},
     filterStories: function(s) {
       return this.stories.filter(function(story) {
@@ -138,12 +165,15 @@ export default {
       //console.log(payload);
     },
     onDrop: function(dropResult, status) {
-      if (dropResult.addedIndex !== null){
+      if (dropResult.addedIndex !== null) {
         console.log(dropResult.payload._id + " " + status);
-        this.stories.find(elem => elem._id == dropResult.payload._id).status = status;
-      }  
+        this.stories.find(
+          elem => elem._id == dropResult.payload._id
+        ).status = status;
+      }
     }
   },
+
   computed: {},
   watch: {}
 };

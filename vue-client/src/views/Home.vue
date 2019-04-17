@@ -7,6 +7,10 @@
   <v-snackbar v-model="projectAddedSnack" :timeout="4000" top color="info">
       <span>Awesome! You added a project</span>
     </v-snackbar>
+
+    <v-snackbar v-model="sprintDeletedSnack" :timeout="4000" top color="info">
+      <span>The sprint was deleted successfuly!</span>
+    </v-snackbar>
   
   <v-snackbar v-model="storyDeletedSnack" :timeout="4000" top color="info">
       <span>This story was deleted successfully!</span>
@@ -14,6 +18,10 @@
 
      <v-snackbar v-model="storyCreatedSnack" :timeout="4000" top color="info">
       <span>The story was created successfully!</span>
+    </v-snackbar>
+
+      <v-snackbar v-model="sprintCreatedSnack" :timeout="4000" top color="info">
+      <span>The sprint was created successfully!</span>
     </v-snackbar>
 
 
@@ -31,7 +39,10 @@
       <ProjectCard 
       v-bind:id='currentProject'
        v-on:story-deleted="storyDeletedAction"
-       v-on:story-form-complete="storyCreatedAction">
+       v-on:story-form-complete="storyCreatedAction"
+       v-on:sprint-form-complete="sprintCreatedAction"
+       v-on:sprint-deleted="sprintDeletedAction"
+       >
        </ProjectCard>
     </v-flex>
     
@@ -58,6 +69,8 @@
         projectAddedSnack: false,
         storyDeletedSnack: false,
         storyCreatedSnack: false,
+        sprintCreatedSnack: false,
+        sprintDeletedSnack: false
       }
     },
     async beforeCreate() {
@@ -92,6 +105,14 @@
       },
       storyCreatedAction: async function(){
         this.storyCreatedSnack = true;
+        this.getProjects();
+      },
+      sprintCreatedAction: async function(){
+        this.sprintCreatedSnack = true;
+        this.getProjects();
+      },
+       sprintDeletedAction: async function(){
+        this.sprintDeletedSnack = true;
         this.getProjects();
       },
       

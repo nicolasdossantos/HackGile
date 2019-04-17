@@ -15,6 +15,7 @@
             prepend-icon="book"
             :rules="inputRules"
           ></v-text-field>
+          
 
           <v-select
             label="Priority*"
@@ -25,7 +26,7 @@
             :rules="inputRules"
           ></v-select>
 
-          <v-select
+          <v-select v-if="!spID"
             label="Sprint"
             :items="sprintNumbers"
             name="sprint"
@@ -53,6 +54,8 @@
             suffix="Hours"
             hint="Enter time in hours"
           ></v-text-field>
+
+          
 
           <v-textarea
             name="description"
@@ -110,7 +113,8 @@ import MemberChip from "./MemberChip";
 export default {
   name: "NewStoryForm",
   props: {
-    pid: String
+    pid: String,
+    sprintID: String
   },
 
   data: () => ({
@@ -122,6 +126,8 @@ export default {
     names: [],
     sprintNumbers: [],
     project: "",
+    spID: "",
+   
 
     title: "",
     priority: "",
@@ -131,6 +137,8 @@ export default {
     estimatedTime: "",
     description: "",
     inputRules: [v => v.length >= 1 || "Field is required."]
+    
+
   }),
 
  updated: async function() {
@@ -139,6 +147,7 @@ export default {
 
   async created() {
     this.project = this.$store.state.currentProject._id;
+    this.spID = this.$props.sprintID;
   },
   
   async mounted() {
@@ -182,9 +191,6 @@ export default {
   },
 
   
-
-
-  
   methods: {
     getChip: async function() {
       let assigned = await this.assignedMember;
@@ -208,15 +214,23 @@ export default {
       }
     },
     submit: async function() {
+
+      if(this.spID){
+        this.sprint = this.spID;
+      }else if(this.sprint === ("Assign it later" || "")){
+        this.sprint = undefined
+      }else{
+        this.sprint = this.sprints[this.sprint -1]._id
+      }
+
+
       if (this.$refs.form.validate()) {
         let properties = {
           title: this.title,
           priority: this.priority,
           status: this.status,
-          sprint:
-            this.sprint === ("Assign it later" || "")
-              ? undefined
-              : this.sprints[this.sprint - 1]._id,
+          sprint: this.sprint,
+            
           estimatedTime: parseInt(this.estimatedTime, 10) * 60 * 60,
           description: this.description,
           member:
