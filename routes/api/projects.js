@@ -6,11 +6,7 @@ const router = express.Router();
 const Project = require("../../models/project");
 const Member = require("../../models/member");
 const nodemailer = require('nodemailer');
-<<<<<<< HEAD
-const keys = require('../../config/keys')
-=======
 const keys = require('../../config/keys');
->>>>>>> b191496a5a82a751eac9794f2c8641a09a5bca83
 
 //TODO: Test
 //Get Projects for current user
@@ -361,29 +357,26 @@ router.delete("/:pid/stories/:sid", async (req, res) => {
   res.status(200).send();
 });
 //Project is found by ID, user found by email. If user is not already present in project, it is then added to it
-router.post("/add_member", (req, res) => {
+router.post("/add_member", async(req, res) => {
   let email = req.body.email;
   let projectId = req.body.project;
 
-  console.log(projectId)
-
-  Member.findOne(
+ await Member.findOne(
     {
       email: email
     },
-    (err, member) => {
+    async(err, member) => {
       if (!member) {
         console.log("Member not found")
-        res.send(req.flash(
+       req.flash(
           "cardError",
           "The email entered does not correspond to an active member."
-        ));
+        );
       } else {
-        Project.findById(projectId, (err, project) => {
+        await Project.findById(projectId, (err, project) => {
           if (err) {
             console.log(err);
           } else {
-            console.log(project)
             if (project.members.indexOf(member.id) < 0) {
               project.members.push(member.id);
               project.save(err => {
@@ -412,8 +405,9 @@ router.post("/add_member", (req, res) => {
                   };
                   smtpTransport.sendMail(mailOptions, err => {
                     console.log("email sent");
-                    req.flash("cardSuccess", "Member has been added!");
-                    res.redirect("/projects/home");
+                     req.flash("cardSuccess", "Member has been added!");
+                    // res.redirect("/home");
+                    res.status(200).send();
                     done(err, "done");
                   });
                 }
@@ -423,7 +417,7 @@ router.post("/add_member", (req, res) => {
                 "cardError",
                 "The member is already part of the project"
               );
-              res.redirect("/projects/add_member/" + projectId);
+              //res.redirect("/home;
             }
           }
         });

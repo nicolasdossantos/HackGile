@@ -1,8 +1,6 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
-    <v-btn small color="light blue white--text" slot="activator">
-      New Story
-    </v-btn>
+    <v-btn small color="light blue white--text" slot="activator">New Story</v-btn>
     <v-card>
       <v-card-title>
         <h2>Create a New Story</h2>
@@ -63,7 +61,6 @@
             hint="Plese describe your story."
             prepend-icon="edit"
           ></v-textarea>
-        
 
           <v-spacer></v-spacer>
 
@@ -124,6 +121,7 @@ export default {
     sprints: [],
     names: [],
     sprintNumbers: [],
+    project: "",
 
     title: "",
     priority: "",
@@ -134,8 +132,19 @@ export default {
     description: "",
     inputRules: [v => v.length >= 1 || "Field is required."]
   }),
-  created:async function() {
-    this.sprints = await DatabaseService.getSprints(this.$props.pid);
+
+ updated: async function() {
+    this.project = this.$store.state.currentProject._id;
+  },
+
+  async created() {
+    this.project = this.$store.state.currentProject._id;
+  },
+  
+  async mounted() {
+    
+    this.sprints = await DatabaseService.getSprints(this.project);
+     
 
     for (let i = 1; i <= this.sprints.length; i++) {
       await this.sprintNumbers.push(i);
@@ -143,20 +152,39 @@ export default {
     await this.sprintNumbers.push("Assign it later")
  
     let data = await DatabaseService.getMemberNames(
-      this.$props.pid
+     this.project
     );
     this.names = data;
     this.names.push("Assign it later");
     this.members = this.$store.state.currentProject.members;
-    this.project = this.$store.state.currentProject._id;
+    
   },
 
+  watch:{
+    async project(newVal, oldVal){
+    //console.log(`Old value: ${oldVal}, New Value ${newVal}`)
+    this.sprints = await DatabaseService.getSprints(this.project);
+     
+    this.sprintNumbers = [];
 
-  mounted: async function(){
-
+    for (let i = 1; i <= this.sprints.length; i++) {
+      await this.sprintNumbers.push(i);
+    }
+    await this.sprintNumbers.push("Assign it later")
+ 
+    let data = await DatabaseService.getMemberNames(
+     this.project
+    );
+    this.names = data;
+    this.names.push("Assign it later");
+    this.members = this.$store.state.currentProject.members;
+    }
   },
 
-  computed: {},
+  
+
+
+  
   methods: {
     getChip: async function() {
       let assigned = await this.assignedMember;

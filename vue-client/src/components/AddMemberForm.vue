@@ -21,7 +21,7 @@
             
               ></v-text-field>
             </v-flex>
-            <p>{{project}}</p>
+          
            
             
           </v-layout>
@@ -47,7 +47,7 @@ import DatabaseService from "../DatabaseService";
 
 
 export default {
-    name: "AddMemberForm",
+  name: "AddMemberForm",
   props: {
     id: String
   },
@@ -59,7 +59,7 @@ export default {
   }),
 
 
-  mounted: function() {
+  updated() {
     this.project = this.$props.id;
   },
 
@@ -67,7 +67,7 @@ export default {
     submit: async function() {
       
       if (this.$refs.form.validate()) {
-
+       
         let properties = {
             email: this.email,
             project: this.project,
@@ -75,15 +75,17 @@ export default {
 
         //Creates New Project witth fields above
         await DatabaseService.addMember(properties);
+        console.log("OK HERE TOO")
         this.clearForm();
 
         this.$emit("member-form-complete");
+        console.log("HERE")
       }
     },
 
     clearForm: function() {
       this.dialog = false;
-      email= ""
+      this.email= "";
     }
   }
 };

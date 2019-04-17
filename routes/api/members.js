@@ -44,7 +44,6 @@ router.get("/:id/stories/", async (req, res) => {
 
 //get current member id
 router.get("/", (req, res)=>{
-  console.log(req.user._id)
   res.send(req.user._id);
 })
 
@@ -69,7 +68,6 @@ router.get("/:pid/:ln/:fn", async(req, res)=>{
 })
 
 router.get("/info", async(req, res)=>{
-  console.log(req.user)
   res.send(req.user);
 })
 

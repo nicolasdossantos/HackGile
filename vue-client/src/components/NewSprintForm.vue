@@ -66,7 +66,7 @@ export default {
   }),
 
 
-  mounted: async function() {
+  updated: async function() {
     this.project = this.$store.state.currentProject._id;
   },
    methods: {
