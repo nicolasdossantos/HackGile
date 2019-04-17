@@ -9,7 +9,9 @@
             <v-sheet color="white" min-height="250px">
               <h1 class="text-xs-center">
                 Backlog
-                <NewStoryForm v-bind:pid='this.$props.id'/>
+                <NewStoryForm 
+                v-bind:pid='this.$props.id'
+                v-on:story-form-complete="$emit('story-form-complete')"/>
               </h1>
               <Container
                 :get-child-payload="getChildPayload"

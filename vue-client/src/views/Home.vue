@@ -12,6 +12,13 @@
       <span>This story was deleted successfully!</span>
     </v-snackbar>
 
+     <v-snackbar v-model="storyCreatedSnack" :timeout="4000" top color="info">
+      <span>The story was created successfully!</span>
+    </v-snackbar>
+
+
+  
+
     <Navbar
       v-on:change-project-page="switchProject"
       v-on:project-form-complete="newProjectAction"
@@ -23,7 +30,8 @@
     <v-flex xs12 v-if="currentProject != undefined">
       <ProjectCard 
       v-bind:id='currentProject'
-       v-on:story-deleted="storyDeletedAction">
+       v-on:story-deleted="storyDeletedAction"
+       v-on:story-form-complete="storyCreatedAction">
        </ProjectCard>
     </v-flex>
     
@@ -48,7 +56,8 @@
         length: 3,
         currentProject: undefined,
         projectAddedSnack: false,
-        storyDeletedSnack: false
+        storyDeletedSnack: false,
+        storyCreatedSnack: false,
       }
     },
     async beforeCreate() {
@@ -81,7 +90,10 @@
         this.getProjects();
         
       },
-
+      storyCreatedAction: async function(){
+        this.storyCreatedSnack = true;
+        this.getProjects();
+      },
       
       
       switchProject: function(projectID){
