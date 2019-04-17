@@ -17,7 +17,11 @@
                 group-name="containers"
               >
                   <Draggable v-for="story in filterStories()" :key="story._id">
-                    <StoryCard v-bind:id="story._id"></StoryCard>
+                    <StoryCard 
+                  
+                     v-on:story-deleted="$emit('story-deleted')"
+                    
+                    v-bind:id="story._id"></StoryCard>
                   </Draggable>
               </Container>
             </v-sheet>

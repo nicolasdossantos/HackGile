@@ -4,20 +4,27 @@
     class= "light-green lighten-4"
     
   >
-  <v-snackbar v-model="projectAddedSnack" :timeout="4000" top color="success">
+  <v-snackbar v-model="projectAddedSnack" :timeout="4000" top color="info">
       <span>Awesome! You added a project</span>
-      <v-btn flat small color="white" @click="projectAddedSnack = false"> Close</v-btn>
+    </v-snackbar>
+  
+  <v-snackbar v-model="storyDeletedSnack" :timeout="4000" top color="info">
+      <span>This story was deleted successfully!</span>
     </v-snackbar>
 
     <Navbar
       v-on:change-project-page="switchProject"
       v-on:project-form-complete="newProjectAction"
+      
      
     ></Navbar>
     <!-- <SprintCard id="5ca7ab051c9d44000043c95f"></SprintCard>
     <SprintCard id="5ca7afcf1c9d4400008ef9d2"></SprintCard> -->
     <v-flex xs12 v-if="currentProject != undefined">
-      <ProjectCard v-bind:id='currentProject'></ProjectCard>
+      <ProjectCard 
+      v-bind:id='currentProject'
+       v-on:story-deleted="storyDeletedAction">
+       </ProjectCard>
     </v-flex>
     
   </v-layout>
@@ -41,6 +48,7 @@
         length: 3,
         currentProject: undefined,
         projectAddedSnack: false,
+        storyDeletedSnack: false
       }
     },
     async beforeCreate() {
@@ -68,6 +76,13 @@
         this.projectAddedSnack = true;
         this.getProjects();
       },
+      storyDeletedAction: async function(){
+        this.storyDeletedSnack = true;
+        this.getProjects();
+        
+      },
+
+      
       
       switchProject: function(projectID){
         //alert(projectID);
