@@ -118,9 +118,7 @@ export default {
   animation: bounce-in 0.5s reverse;
 }
 
-v-date-picker {
-  color: red;
-}
+
 
 @keyframes bounce-in {
   0% {

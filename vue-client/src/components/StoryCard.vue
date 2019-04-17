@@ -1,16 +1,6 @@
 <template>
   <div class="StoryCard pa-2" v-bind:id="this.$props.id">
-   
-    
-    <v-snackbar v-model="deleteStorySnack"  left :timeout="0" color="error">
-      <span>This is story will be deleted. Are you sure you want to proceed?</span>
-      <v-btn flat small color="white" @click="deleteStorySnack = false"> Cancel</v-btn>
-        <v-btn flat small color="white" @click="deleteStory"> Delete this shit!!</v-btn>
-    </v-snackbar>
-
-    <v-card v-model="dialog" v-on:dblclick="dialog = true"
-      :class='priorityColor'
-    >
+    <v-card v-model="dialog" v-on:dblclick="dialog = true" :class="priorityColor">
       <v-card-title primary-title>
         <h1>{{this.title}}</h1>
       </v-card-title>
@@ -114,7 +104,7 @@
             <br>
 
             <v-spacer></v-spacer>
-            <v-btn round color="red lighten-2 white--text" @click="dialog = false">
+            <v-btn round color="red lighten-2 white--text" @click="closeAction">
               Cancel
               <v-icon dark right>clear</v-icon>
             </v-btn>
@@ -122,11 +112,28 @@
               Save Story
               <v-icon dark right>check_circle</v-icon>
             </v-btn>
-            <v-btn round color="red white--text" @click="deleteStorySnack = true">
+            <v-btn round color="red white--text" @click="deleteAlert = true">
               Delete Story
               <v-icon dark right>clear</v-icon>
             </v-btn>
           </v-form>
+
+          <v-alert :value="deleteAlert" type="error">
+            THIS STORY WILL BE DELETED! ARE YOU SURE YOU WANT TO PROCEED?
+            <div class="text-xs-center">
+              <div>
+                <v-btn small color="white" flat dark @click="deleteStory">
+                  Delete
+                  <v-icon dark right>delete_forever</v-icon>
+                </v-btn>
+
+                <v-btn flat small color="white" dark @click="deleteAlert=false">
+                  Cancel
+                  <v-icon dark right>block</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </v-alert>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -164,7 +171,7 @@ export default {
     assignedMember: "",
     memberPicture: "",
     inputRules: [],
-    deleteStorySnack: false
+    deleteAlert: false
   }),
   created: async function() {
     await this.updateStory();
@@ -172,21 +179,20 @@ export default {
     this.sprints = await this.$store.state.currentProject.sprints;
 
     for (let i = 0; i < this.sprints.length; i++) {
-      await this.sprintNumbers.push(i+1);
+      await this.sprintNumbers.push(i + 1);
       if (this.sprints[i]._id == this.sprint) {
         this.sprintNum = i + 1;
       }
     }
     await this.sprintNumbers.push("Assign it later");
-    let data = await DatabaseService.getMemberNames(
-      this.currentProject
-    );
+    let data = await DatabaseService.getMemberNames(this.currentProject);
     this.names = data;
     this.names.push("Assign it later");
 
     this.members = this.$store.state.currentProject.members;
     [v => v.length >= 1 || "Field is required."];
   },
+
   mounted: async function() {},
   methods: {
     updateStory: async function() {
@@ -234,6 +240,13 @@ export default {
         this.updateStory();
       }
     },
+
+    closeAction: function(){
+      this.deleteAlert = false;
+      this.dialog = false;
+    },
+   
+
     getChip: async function() {
       let assigned = await this.assignedMember;
 
@@ -255,12 +268,13 @@ export default {
         this.assignedMemberInfo = "";
       }
     },
-    
+
     deleteStory: async function() {
       await DatabaseService.deleteStory(this.$props.id);
       this.dialog = false;
       this.deleteStorySnack = false;
       this.$emit("story-deleted");
+      this.deleteAlert = false;
     }
   },
   computed: {
@@ -279,22 +293,22 @@ export default {
     },
     priorityColor: function() {
       let color = "";
-      if (this.priority == 'High'){
-        color = 'red lighten-3'
-      }else if (this.priority == 'Medium'){
-        color = 'orange lighten-3'
-      }else{
-        color = 'light-green lighten-3'
+      if (this.priority == "High") {
+        color = "red lighten-3";
+      } else if (this.priority == "Medium") {
+        color = "orange lighten-3";
+      } else {
+        color = "light-green lighten-3";
       }
 
       return color;
     }
   },
   watch: {
-    dialog: function(){
-      if (this.dialog == false){
+    dialog: function() {
+      if (this.dialog == false) {
         //revert back to store
-        console.log('dialog closed')
+        console.log("dialog closed");
       }
     }
   }
