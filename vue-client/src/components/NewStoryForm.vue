@@ -222,7 +222,8 @@ export default {
           member:
             this.assignedMemberInfo !== (undefined || "")
               ? this.assignedMemberInfo._id
-              : undefined
+              : undefined,
+          project: this.project
         };
         console.log(properties);
 

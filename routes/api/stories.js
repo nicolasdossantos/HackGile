@@ -22,6 +22,9 @@ router.get("/:sid", async (req, res) => {
 //Tested
 //Post new story
 router.post("/", async (req, res) => {
+  
+  let project = req.body.project;
+  
   let status = "";
 
   if(req.body.sprint === undefined){
@@ -45,6 +48,7 @@ router.post("/", async (req, res) => {
     description: req.body.description,
     priority: req.body.priority,
     estimatedTime: req.body.estimatedTime
+    
   });
   await newStory.save(async(err, story) => {
     if (err) {
@@ -58,6 +62,8 @@ router.post("/", async (req, res) => {
       await Sprint.updateOne({_id: story.sprint}, 
         {$push:{stories:mongoose.Types.ObjectId(story._id) }})
     }
+    await Project.updateOne({_id: project},
+        {$push:{stories: mongoose.Types.ObjectId(story._id)}})
 
 
 

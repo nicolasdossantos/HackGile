@@ -54,7 +54,8 @@ class DatabaseService {
             estimatedTime: properties.estimatedTime,
             description: properties.description,
             member: properties.member,
-            priority: properties.priority
+            priority: properties.priority,
+            project: properties.project
         });
     }
    
