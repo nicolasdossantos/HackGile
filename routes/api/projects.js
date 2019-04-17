@@ -6,11 +6,7 @@ const router = express.Router();
 const Project = require("../../models/project");
 const Member = require("../../models/member");
 const nodemailer = require('nodemailer');
-<<<<<<< HEAD
-const keys = require('../../config/keys')
-=======
 const keys = require('../../config/keys');
->>>>>>> b191496a5a82a751eac9794f2c8641a09a5bca83
 
 //TODO: Test
 //Get Projects for current user
