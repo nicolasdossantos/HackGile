@@ -219,16 +219,16 @@ router.put("/:pid/members/:id", async (req, res) => {
 });
 
 //Delete - Remove member from owners
-router.delete("/:pid/members/:id", async (req, res) => {
-  await Project.updateOne({
-    _id: req.params.pid
-  }, {
-    $pull: {
-      owners: mongoose.Types.ObjectId(req.params.id)
-    }
-  });
-  res.status(200).send();
-});
+// router.delete("/:pid/members/:id", async (req, res) => {
+//   await Project.updateOne({
+//     _id: req.params.pid
+//   }, {
+//     $pull: {
+//       owners: mongoose.Types.ObjectId(req.params.id)
+//     }
+//   });
+//   res.status(200).send();
+// });
 
 //Tested
 //Deletes a member from project and a project from member
@@ -247,7 +247,6 @@ router.delete("/:pid/members/:id", async (req, res) => {
       projects: mongoose.Types.ObjectId(req.params.pid)
     }
   });
-  console.log("Yay")
   res.status(200).send();
 });
 

@@ -171,12 +171,10 @@ export default {
     
 
     removeMember: async function(id){
-      console.log("GOT HERE")
+      
         let pid = this.$props.id;
         let MemberId = id;
 
-        console.log(pid);
-        console.log(MemberId);
         await DatabaseService.removeMember(pid, MemberId);
         this.$emit('member-removed');
     },

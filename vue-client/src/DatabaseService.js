@@ -206,11 +206,9 @@ class DatabaseService {
     static deleteSprint(id){
         return axios.delete(url + 'sprints/' + id);
     }
-
     static removeMember(pid, id){
-        console.log("ENTERED DBSERV")
+        
         return axios.delete(url + 'projects/' + pid + '/members/'+ id );
-    
     }
 
 }

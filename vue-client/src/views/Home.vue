@@ -8,6 +8,12 @@
       <span>Member added successfuly!</span>
     </v-snackbar>
 
+   
+     <v-snackbar v-model="memberRemovedSnack" :timeout="4000" top color="info">
+      <span>The member was removed from this project successfuly!</span>
+    </v-snackbar>
+
+
     <v-snackbar v-model="sprintDeletedSnack" :timeout="4000" top color="info">
       <span>The sprint was deleted successfuly!</span>
     </v-snackbar>
@@ -39,7 +45,8 @@
         v-on:story-form-complete="storyCreatedAction"
         v-on:sprint-form-complete="sprintCreatedAction"
         v-on:sprint-deleted="sprintDeletedAction"
-        @member-form-complete="memberAddAction"
+        v-on:member-form-complete="memberAddAction"
+        v-on:member-removed="memberRemovedAction"
       ></ProjectCard>
     </v-flex>
   </v-layout>
@@ -69,7 +76,8 @@ export default {
       storyCreatedSnack: false,
       sprintCreatedSnack: false,
       sprintDeletedSnack: false,
-      memberAddSnack: false
+      memberAddSnack: false,
+      memberRemovedSnack: false
     };
   },
   async beforeCreate() {
@@ -123,6 +131,10 @@ export default {
     },
     memberAddAction: async function() {
       this.memberAddSnack = true;
+      this.getProjects();
+    },
+     memberRemovedAction: async function() {
+      this.memberRemovedSnack = true;
       this.getProjects();
     },
 
