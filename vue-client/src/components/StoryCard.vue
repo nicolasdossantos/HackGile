@@ -122,12 +122,12 @@
             THIS STORY WILL BE DELETED! ARE YOU SURE YOU WANT TO PROCEED?
             <div class="text-xs-center">
               <div>
-                <v-btn small color="white" flat dark @click="deleteStory">
+                <v-btn small color="red lighten-2 white--text" dark @click="deleteStory">
                   Delete
                   <v-icon dark right>delete_forever</v-icon>
                 </v-btn>
 
-                <v-btn flat small color="white" dark @click="deleteAlert=false">
+                <v-btn small color="info" dark @click="deleteAlert=false">
                   Cancel
                   <v-icon dark right>block</v-icon>
                 </v-btn>
