@@ -16,6 +16,10 @@ let storySchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Sprint'
     },
+    project: {
+        type: Schema.Types.ObjectId,
+        ref: 'Project'
+    },
    
     member: {
         type: Schema.Types.ObjectId,

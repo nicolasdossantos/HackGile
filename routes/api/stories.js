@@ -47,7 +47,8 @@ router.post("/", async (req, res) => {
     title: req.body.title,
     description: req.body.description,
     priority: req.body.priority,
-    estimatedTime: req.body.estimatedTime
+    estimatedTime: req.body.estimatedTime,
+    project: project
     
   });
   await newStory.save(async(err, story) => {

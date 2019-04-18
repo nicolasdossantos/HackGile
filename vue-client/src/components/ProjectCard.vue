@@ -95,6 +95,7 @@
           </v-chip>
         </v-item>
       </v-item-group>
+      
 
             </v-flex>
             <v-flex v-if="git" xs1>

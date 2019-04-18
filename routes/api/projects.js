@@ -230,9 +230,15 @@ router.put("/:pid/members/:id", async (req, res) => {
 //   res.status(200).send();
 // });
 
+
+
+
+
+
 //Tested
 //Deletes a member from project and a project from member
 router.delete("/:pid/members/:id", async (req, res) => {
+  
   await Project.updateOne({
     _id: req.params.pid
   }, {
@@ -247,6 +253,13 @@ router.delete("/:pid/members/:id", async (req, res) => {
       projects: mongoose.Types.ObjectId(req.params.pid)
     }
   });
+
+  await Story.updateMany(
+    {project: req.params.pid, member: req.params.id},
+    {$set:{member:undefined, status:"Backlog"}}
+    );
+
+
   res.status(200).send();
 });
 
@@ -356,6 +369,14 @@ router.delete("/:pid/stories/:sid", async (req, res) => {
 
   res.status(200).send();
 });
+
+
+
+
+
+
+
+
 //Project is found by ID, user found by email. If user is not already present in project, it is then added to it
 router.post("/add_member", async(req, res) => {
   let email = req.body.email;
