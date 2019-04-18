@@ -110,11 +110,16 @@ router.put("/:sid", async (req, res) => {
     status = "Backlog";
   }
 
-  else if(req.body.sprint !== undefined && req.body.member === undefined){
+  if(req.body.sprint !== undefined && req.body.member === undefined){
     status= "Unassigned";
   }
-  else{
+  else if (req.body.sprint !== undefined){
     status = "Assigned";
+  }
+
+  if(req.body.status != "Assigned" && req.body.status != "Unassigned" && req.body.status != "Backlog"){
+    status = req.body.status;
+    //console.log(status);
   }
 
   await Story.updateOne(
