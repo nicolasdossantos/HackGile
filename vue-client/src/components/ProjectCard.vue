@@ -69,7 +69,9 @@
       <v-card class="flex green lighten-3" flat tile>
         <v-card-title>
           <strong class="title">Members</strong>
-          <AddMemberForm v-bind:id="this.$props.id" />
+          <AddMemberForm 
+          v-bind:id="this.$props.id"
+          @member-form-complete="$emit('member-form-complete')" />
         </v-card-title>
         <v-card-actions>
           <v-layout row>
@@ -81,9 +83,9 @@
           :key="member._id"
         >
           <v-chip
-            slot-scope="{ active, toggle }"
-            :selected="active"
-            @click="toggle"
+            
+            close
+            
           >
             <v-avatar>
                 <img :src="member.image">
