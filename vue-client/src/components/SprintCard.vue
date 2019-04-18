@@ -177,12 +177,29 @@ export default {
     onDragStart: function({ index, payload }) {
       //console.log(payload);
     },
-    onDrop: function(dropResult, status) {
+    onDrop: async function(dropResult, status) {
       if (dropResult.addedIndex !== null) {
         console.log(dropResult.payload._id + " " + status);
-        this.stories.find(
+        let story = this.stories.find(
           elem => elem._id == dropResult.payload._id
-        ).status = status;
+        );
+        //console.log(story);
+        let properties = {
+          title: story.title,
+          priority: story.priority,
+          status: status,
+          sprint: story.sprint,
+          estimatedTime: story.estimatedTime,
+          description: story.description,
+          member: story.member
+        };
+        await DatabaseService.updateStory(
+          story._id,
+          properties
+        );
+        console.log(properties)
+        //this.updateSprint();
+        //this.$emit('story-form-edit');
       }
     }
   },
