@@ -22,7 +22,7 @@
                     <StoryCard 
                   
                      v-on:story-deleted="$emit('story-deleted')"
-                    
+                      v-on:story-form-edit="$emit('story-form-edit')"
                     v-bind:id="story._id"></StoryCard>
                   </Draggable>
               </Container>
@@ -47,6 +47,7 @@
                   <SprintCard 
                   v-bind:id="sprint._id"
                   v-on:story-form-complete="$emit('story-form-complete')"
+                  v-on:story-form-edit="$emit('story-form-edit')"
                   v-on:sprint-deleted="$emit('sprint-deleted')"
                 ></SprintCard>
                 </Container>

@@ -189,7 +189,10 @@ export default {
     this.names = data;
     this.names.push("Assign it later");
 
-    this.members = this.$store.state.currentProject.members;
+    this.members = await this.$store.state.currentProject.members;
+    if (this.assignedMember != ""){
+      await this.getChip();
+    }
     [v => v.length >= 1 || "Field is required."];
   },
 
@@ -207,9 +210,10 @@ export default {
         this.timeInSeconds = this.json.estimatedTime;
         this.member = this.json.member;
         this.memberPicture = this.json.member.image;
-        this.estimatedTime = this.timeInSeconds / 60 / 60;
-        this.assignedMember =
-          this.member.firstname + " " + this.member.lastname;
+        this.estimatedTime = parseInt(this.timeInSeconds, 10) / 60 / 60;
+        this.assignedMember = this.member !== (undefined)
+              ? this.member.firstname + " " + this.member.lastname
+              : "";
       } catch (err) {
         this.error = err;
       }
@@ -223,7 +227,7 @@ export default {
           sprint:
             this.sprintNum === ("Assign it later" || "")
               ? undefined
-              : this.sprints[this.sprint - 1]._id,
+              : this.sprints[this.sprintNum - 1]._id,
           estimatedTime: parseInt(this.estimatedTime, 10) * 60 * 60,
           description: this.description,
           member:
@@ -234,10 +238,12 @@ export default {
         console.log(properties);
 
         await DatabaseService.updateStory(
-          this.$store.state.currentProject,
+          this.$props.id,
           properties
         );
         this.updateStory();
+        this.$emit('story-form-edit');
+        this.dialog = false;
       }
     },
 
@@ -302,7 +308,13 @@ export default {
       }
 
       return color;
-    }
+    },
+    sprintsUpdated: function(){
+      return this.$store.state.currentProject.sprints;
+    },
+    membersUpdated: function(){
+      return this.$store.state.currentProject.members;
+    },
   },
   watch: {
     dialog: function() {
@@ -310,6 +322,24 @@ export default {
         //revert back to store
         console.log("dialog closed");
       }
+    },
+    sprintsUpdated: function(){
+      this.sprints = this.$store.state.currentProject.sprints;
+      this.sprintNumbers = [];
+      for (let i = 0; i < this.sprints.length; i++) {
+        this.sprintNumbers.push(i + 1);
+        if (this.sprints[i]._id == this.sprint) {
+          this.sprintNum = i + 1;
+        }
+      }
+      this.sprintNumbers.push("Assign it later");
+    },
+    membersUpdated: async function(){
+      let data = await DatabaseService.getMemberNames(this.currentProject);
+      this.names = data;
+      this.names.push("Assign it later");
+
+      this.members = this.$store.state.currentProject.members;
     }
   }
 };

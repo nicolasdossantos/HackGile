@@ -33,6 +33,10 @@
           <span>This story was deleted successfully!</span>
         </v-snackbar>
 
+        <v-snackbar v-model="storyEditedSnack" :timeout="4000" top color="info">
+          <span>The story was edited successfully!</span>
+        </v-snackbar>
+
         <v-snackbar v-model="storyCreatedSnack" :timeout="4000" top color="info">
           <span>The story was created successfully!</span>
         </v-snackbar>
@@ -61,7 +65,10 @@
                       style="min-height: 200px;"
                     >
                       <Draggable v-for="story in filterStories(s)" :key="story._id">
-                        <StoryCard v-bind:id="story._id" v-on:story-deleted="storyDeletedAction"></StoryCard>
+                        <StoryCard v-bind:id="story._id"
+                        v-on:story-deleted="storyDeletedAction"
+                        v-on:story-form-edit="storyEditedAction"
+                        ></StoryCard>
                       </Draggable>
                     </Container>
                   </v-sheet>
@@ -108,7 +115,8 @@ export default {
         "Done"
       ],
       storyDeletedSnack: false,
-      storyCreatedSnack: false
+      storyCreatedSnack: false,
+      storyEditedSnack: false
     };
   },
   beforeCreate() {},
@@ -144,6 +152,11 @@ export default {
         this.storyCreatedSnack = true;
         this.updateSprint();
       },
+      storyEditedAction: async function(){
+        this.storyEditedSnack = true;
+        this.updateSprint();
+        this.$emit('story-form-edit');
+      },
       deleteSprint: async function(){
         await DatabaseService.deleteSprint(this.$props.id);
         this.open = false;
@@ -175,7 +188,11 @@ export default {
   },
 
   computed: {},
-  watch: {}
+  watch: {
+    open: function(){
+      this.updateSprint();
+    }
+  }
 };
 </script>
 

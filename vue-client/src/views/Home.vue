@@ -24,6 +24,10 @@
       <span>The story was created successfully!</span>
     </v-snackbar>
 
+    <v-snackbar v-model="storyEditedSnack" :timeout="4000" top color="info">
+      <span>The story was edited successfully!</span>
+    </v-snackbar>
+
       <v-snackbar v-model="sprintCreatedSnack" :timeout="4000" top color="info">
       <span>The sprint was created successfully!</span>
     </v-snackbar>
@@ -41,8 +45,9 @@
     <SprintCard id="5ca7afcf1c9d4400008ef9d2"></SprintCard> -->
     <v-flex xs12 v-if="currentProject != undefined">
       <ProjectCard 
-      v-bind:id='currentProject'
+      v-bind:id='currentProjectID'
        v-on:story-deleted="storyDeletedAction"
+       v-on:story-form-edit="storyEditedAction"
        v-on:story-form-complete="storyCreatedAction"
        v-on:sprint-form-complete="sprintCreatedAction"
        v-on:sprint-deleted="sprintDeletedAction"
@@ -71,8 +76,10 @@
         projects: [],
         length: 3,
         currentProject: undefined,
+        currentProjectID: undefined,
         projectAddedSnack: false,
         storyDeletedSnack: false,
+        storyEditedSnack: false,
         storyCreatedSnack: false,
         sprintCreatedSnack: false,
         sprintDeletedSnack: false,
@@ -85,7 +92,7 @@
       this.projects = await this.getProjects().then(() => {
         this.currentProject = this.$store.state.projects[0];
         this.$store.dispatch('updateCurrentProject', this.currentProject);
-        this.currentProject = this.currentProject._id;
+        this.currentProjectID = this.currentProject._id;
       });
     },
     created: async function() {
@@ -97,8 +104,11 @@
         await DatabaseService.getProjectsByMemberId(this.$store.state.user)
         .then((projects) => {
           this.$store.dispatch('updateProjects', projects);
-          
         })
+        if(this.currentProject !== undefined){
+          this.currentProject = this.$store.state.projects.find((elem) => elem._id == this.currentProjectID);
+          this.$store.dispatch('updateCurrentProject', this.currentProject);
+        }
       },
       newProjectAction: async function(){
         this.projectAddedSnack = true;
@@ -111,6 +121,10 @@
       },
       storyCreatedAction: async function(){
         this.storyCreatedSnack = true;
+        this.getProjects();
+      },
+      storyEditedAction: async function(){
+        this.storyEditedSnack = true;
         this.getProjects();
       },
       sprintCreatedAction: async function(){
@@ -132,7 +146,7 @@
         if(this.currentProject != projectID){
           this.currentProject = this.$store.state.projects.find((elem) => elem._id == projectID);
           this.$store.dispatch('updateCurrentProject', this.currentProject);
-          this.currentProject = this.currentProject._id;
+          this.currentProjectID = this.currentProject._id;
         }
       }
     }
