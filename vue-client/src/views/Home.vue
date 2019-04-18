@@ -144,9 +144,15 @@
       switchProject: function(projectID){
         //alert(projectID);
         if(this.currentProject != projectID){
-          this.currentProject = this.$store.state.projects.find((elem) => elem._id == projectID);
-          this.$store.dispatch('updateCurrentProject', this.currentProject);
-          this.currentProjectID = this.currentProject._id;
+          this.getProjects();
+          let project = this.$store.state.projects.find((elem) => elem._id == projectID);
+          if (project != null){
+            this.currentProject = project;
+            this.$store.dispatch('updateCurrentProject', this.currentProject);
+            this.currentProjectID = this.currentProject._id;
+          }else{
+            //Project was probably deleted and does not exist anymore. Tell user
+          }
         }
       }
     }
