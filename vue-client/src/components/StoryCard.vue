@@ -112,28 +112,31 @@
               Save Story
               <v-icon dark right>check_circle</v-icon>
             </v-btn>
-            <v-btn round color="red white--text" @click="deleteAlert = true">
+            <v-btn round color="red white--text" @click.stop="deleteDialog=true">
               Delete Story
               <v-icon dark right>clear</v-icon>
             </v-btn>
+            
+            <v-dialog v-model="deleteDialog" max-width="290">
+              <v-card>
+                <v-card-title class="headline">Delete Story?</v-card-title>
+
+                <v-card-text>
+                  You are abou to delete this story permanently. Would you like to proceed?
+                  </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn color="green darken-1" flat="flat" @click="deleteDialog = false">Cancel</v-btn>
+
+                  <v-btn color="green darken-1" flat="flat" @click="deleteStory">Delete it!</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-form>
 
-          <v-alert :value="deleteAlert" type="error">
-            THIS STORY WILL BE DELETED! ARE YOU SURE YOU WANT TO PROCEED?
-            <div class="text-xs-center">
-              <div>
-                <v-btn small color="red lighten-2 white--text" dark @click="deleteStory">
-                  Delete
-                  <v-icon dark right>delete_forever</v-icon>
-                </v-btn>
-
-                <v-btn small color="info" dark @click="deleteAlert=false">
-                  Cancel
-                  <v-icon dark right>block</v-icon>
-                </v-btn>
-              </div>
-            </div>
-          </v-alert>
+          
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -171,7 +174,8 @@ export default {
     assignedMember: "",
     memberPicture: "",
     inputRules: [],
-    deleteAlert: false
+    deleteAlert: false,
+    deleteDialog: false
   }),
   created: async function() {
     await this.updateStory();
@@ -190,7 +194,7 @@ export default {
     this.names.push("Assign it later");
 
     this.members = await this.$store.state.currentProject.members;
-    if (this.assignedMember != ""){
+    if (this.assignedMember != "") {
       await this.getChip();
     }
     [v => v.length >= 1 || "Field is required."];
@@ -211,9 +215,10 @@ export default {
         this.member = this.json.member;
         this.memberPicture = this.json.member.image;
         this.estimatedTime = parseInt(this.timeInSeconds, 10) / 60 / 60;
-        this.assignedMember = this.member !== (undefined)
-              ? this.member.firstname + " " + this.member.lastname
-              : "";
+        this.assignedMember =
+          this.member !== undefined
+            ? this.member.firstname + " " + this.member.lastname
+            : "";
       } catch (err) {
         this.error = err;
       }
@@ -237,21 +242,17 @@ export default {
         };
         console.log(properties);
 
-        await DatabaseService.updateStory(
-          this.$props.id,
-          properties
-        );
+        await DatabaseService.updateStory(this.$props.id, properties);
         this.updateStory();
-        this.$emit('story-form-edit');
+        this.$emit("story-form-edit");
         this.dialog = false;
       }
     },
 
-    closeAction: function(){
+    closeAction: function() {
       this.deleteAlert = false;
       this.dialog = false;
     },
-   
 
     getChip: async function() {
       let assigned = await this.assignedMember;
@@ -278,9 +279,9 @@ export default {
     deleteStory: async function() {
       await DatabaseService.deleteStory(this.$props.id);
       this.dialog = false;
-      this.deleteStorySnack = false;
+
       this.$emit("story-deleted");
-      this.deleteAlert = false;
+      this.deleteDialog = false;
     }
   },
   computed: {
@@ -309,12 +310,12 @@ export default {
 
       return color;
     },
-    sprintsUpdated: function(){
+    sprintsUpdated: function() {
       return this.$store.state.currentProject.sprints;
     },
-    membersUpdated: function(){
+    membersUpdated: function() {
       return this.$store.state.currentProject.members;
-    },
+    }
   },
   watch: {
     dialog: function() {
@@ -323,7 +324,7 @@ export default {
         console.log("dialog closed");
       }
     },
-    sprintsUpdated: function(){
+    sprintsUpdated: function() {
       this.sprints = this.$store.state.currentProject.sprints;
       this.sprintNumbers = [];
       for (let i = 0; i < this.sprints.length; i++) {
@@ -334,7 +335,7 @@ export default {
       }
       this.sprintNumbers.push("Assign it later");
     },
-    membersUpdated: async function(){
+    membersUpdated: async function() {
       let data = await DatabaseService.getMemberNames(this.currentProject);
       this.names = data;
       this.names.push("Assign it later");

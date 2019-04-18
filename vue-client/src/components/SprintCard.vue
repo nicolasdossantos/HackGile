@@ -47,7 +47,26 @@
           </v-btn>
           <h1>Sprint {{name}}</h1>
           <NewStoryForm :sprintID="this.$props.id" v-on:story-form-complete="storyCreatedAction"/>
-          <v-btn small color="red white--text" @click="deleteSprint">Delete Sprint</v-btn>
+          <v-btn small color="red white--text" @click.stop="deleteDialog=true">Delete Sprint</v-btn>
+
+           <v-dialog v-model="deleteDialog" max-width="290">
+              <v-card>
+                <v-card-title class="headline">Delete Sprint?</v-card-title>
+
+                <v-card-text>
+                  You are abou to delete this sprint permanently. The stories currently assigned to it will be moved back to the projact backlog. Would you like to continue?
+                  </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn color="green darken-1" flat="flat" @click="deleteDialog = false">Cancel</v-btn>
+
+                  <v-btn color="green darken-1" flat="flat" @click="deleteSprint">Delete it!</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
         </v-card-title>
 
         <v-card-text>
@@ -116,7 +135,8 @@ export default {
       ],
       storyDeletedSnack: false,
       storyCreatedSnack: false,
-      storyEditedSnack: false
+      storyEditedSnack: false,
+      deleteDialog: false,
     };
   },
   beforeCreate() {},
