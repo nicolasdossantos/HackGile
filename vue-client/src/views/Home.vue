@@ -141,11 +141,11 @@
       },
       
       
-      switchProject: function(projectID){
+      switchProject: async function(projectID){
         //alert(projectID);
         if(this.currentProject != projectID){
-          this.getProjects();
-          let project = this.$store.state.projects.find((elem) => elem._id == projectID);
+          await this.getProjects();
+          let project = await this.$store.state.projects.find((elem) => elem._id == projectID);
           if (project != null){
             this.currentProject = project;
             this.$store.dispatch('updateCurrentProject', this.currentProject);
