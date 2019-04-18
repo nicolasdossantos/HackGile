@@ -198,7 +198,7 @@ export default {
           properties
         );
         console.log(properties)
-        //this.updateSprint();
+        this.updateSprint();
         //this.$emit('story-form-edit');
       }
     }
