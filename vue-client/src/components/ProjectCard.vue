@@ -78,15 +78,15 @@
           <v-layout row>
             <v-flex grow>
               <!-- Iterate through members here -->
-                <v-item-group multiple center>
+    <v-item-group multiple center>
         <v-item
           v-for="member in members"
           :key="member._id"
         >
           <v-chip
-            
             close
-            
+            :id="member._id"
+            @input="removeMember(member._id)"
           >
             <v-avatar>
                 <img :src="member.image">
@@ -168,6 +168,19 @@ export default {
       this.members = this.json.members;
       this.owners = this.json.owners;
     },
+    
+
+    removeMember: async function(id){
+      console.log("GOT HERE")
+        let pid = this.$props.id;
+        let MemberId = id;
+
+        console.log(pid);
+        console.log(MemberId);
+        await DatabaseService.removeMember(pid, MemberId);
+        this.$emit('member-removed');
+    },
+
     modifyProject: function() {},
     filterStories: function() {
       return this.stories.filter(function(story) {

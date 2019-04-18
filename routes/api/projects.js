@@ -247,6 +247,7 @@ router.delete("/:pid/members/:id", async (req, res) => {
       projects: mongoose.Types.ObjectId(req.params.pid)
     }
   });
+  console.log("Yay")
   res.status(200).send();
 });
 

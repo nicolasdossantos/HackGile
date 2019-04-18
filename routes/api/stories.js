@@ -64,12 +64,6 @@ router.post("/", async (req, res) => {
     }
     await Project.updateOne({_id: project},
         {$push:{stories: mongoose.Types.ObjectId(story._id)}})
-
-
-
-
-
-
   });
   res.status(201).send();
 });
