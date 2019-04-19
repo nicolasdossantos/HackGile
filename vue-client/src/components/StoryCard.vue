@@ -1,16 +1,16 @@
 <template>
   <div class="StoryCard pa-2" v-bind:id="this.$props.id">
-    <v-card v-model="dialog" v-on:dblclick="dialog = true" :class="priorityColor">
+    <v-card v-model="dialog" v-on:dblclick="dialog = true" :class="priorityColor" height="175px">
       <v-card-title primary-title>
-        <h1>{{this.title}}</h1>
+        <h1 class="text-truncate">{{this.title}}</h1>
       </v-card-title>
-      <v-card-text>
-        <p>{{this.description}}</p>
+      <v-card-text style="padding-bottom: 0px">
+        <p class="text-truncate">{{this.description}}</p>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions style="padding-top: 0px">
         <v-list-tile>
           <v-list-tile-avatar>
-            <v-img v-bind:src="this.memberPicture" max-height="40px" max-width="40px"></v-img>
+            <v-img v-bind:src="this.memberPicture" max-height="30px" max-width="30px"></v-img>
           </v-list-tile-avatar>
         </v-list-tile>
       </v-card-actions>

@@ -89,7 +89,7 @@
     </v-container>
     <v-footer app inset height="auto">
       <v-card class="flex green lighten-3" flat tile>
-        <v-card-title>
+        <v-card-title style="padding-bottom:0px; padding-top:10px">
           <strong class="title">Members</strong>
           <AddMemberForm 
           v-bind:id="this.$props.id"
