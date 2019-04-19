@@ -8,8 +8,9 @@
           <h1 class="display-2 font-weight-bold">{{name}}</h1>
         </v-flex>
         <v-flex md4 align-self-center>
-              <h1 class="text-xs-center display-2 font-weight-bold">Timer</h1>
+             <CountDown :endTime="deadline" />
         </v-flex>
+       
         <v-flex md2 offset-md2 align-self-right>
           <v-btn small color="red white--text">Delete Project</v-btn>
         </v-flex>
@@ -139,8 +140,9 @@ import AddMemberForm from "./AddMemberForm";
 import DatabaseService from "../DatabaseService";
 import NewSprintForm from "./NewSprintForm";
 import NewStoryForm from "./NewStoryForm";
-import { Container, Draggable } from 'vue-smooth-dnd'
-import { applyDrag, generateItems } from '../utils/helpers'
+import CountDown from "./CountDown";
+import { Container, Draggable } from 'vue-smooth-dnd';
+import { applyDrag, generateItems } from '../utils/helpers';
 export default {
   name: "ProjectCard",
   components: {
@@ -150,7 +152,8 @@ export default {
     NewStoryForm,
     Container,
     Draggable,
-    AddMemberForm
+    AddMemberForm,
+    CountDown
   },
   props: {
     id: String
