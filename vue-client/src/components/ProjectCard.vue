@@ -3,7 +3,11 @@
   <div class="ProjectCard" v-bind:id="this.$props.id">
     
     <v-container grid-list-md>
+      <v-flex md12> 
+        <h1>{{name}}</h1>
+      </v-flex>
       <v-layout row justify-space-between>
+
         <v-flex md4>
           <div>
             <v-sheet color="white" min-height="250px">
