@@ -7,7 +7,7 @@
         <v-flex md4 style="padding-bottom: 10px"> 
           <h1 class="display-2">{{name}}</h1>
         </v-flex>
-        <v-flex md4 align-self-center>
+        <v-flex md4 align-self-center text-xs-center>
              <CountDown :endTime="deadline" />
         </v-flex>
        
