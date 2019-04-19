@@ -149,9 +149,9 @@ router.get("/add_member/:id", (req, res) => {
 });
 
 //Project is found by ID, user found by email. If user is not already present in project, it is then added to it
-router.post("/add_member/:id", (req, res) => {
+router.post("/add_member", (req, res) => {
   let email = req.body.email;
-  let projectId = req.params.id;
+  let projectId = req.body.project;
 
   Member.findOne(
     {
@@ -159,11 +159,11 @@ router.post("/add_member/:id", (req, res) => {
     },
     (err, member) => {
       if (!member) {
-        req.flash(
-          "cardError",
-          "The email entered does not correspond to an active member."
-        );
-        res.redirect("/projects/add_member/" + projectId);
+        // req.flash(
+        //   "cardError",
+        //   "The email entered does not correspond to an active member."
+       // );
+        //res.redirect("/projects/add_member/" + projectId);
       } else {
         Project.findById(projectId, (err, project) => {
           if (err) {
@@ -197,18 +197,20 @@ router.post("/add_member/:id", (req, res) => {
                   };
                   smtpTransport.sendMail(mailOptions, err => {
                     console.log("email sent");
-                    req.flash("cardSuccess", "Member has been added!");
-                    res.redirect("/projects/home");
+                    //req.flash("cardSuccess", "Member has been added!");
+                    //res.redirect("/projects/home");
+                    res.status.send(200);
                     done(err, "done");
+                    
                   });
                 }
               });
             } else {
-              req.flash(
-                "cardError",
-                "The member is already part of the project"
-              );
-              res.redirect("/projects/add_member/" + projectId);
+              // req.flash(
+              //   "cardError",
+              //   "The member is already part of the project"
+              // );
+              //res.redirect("/projects/add_member/" + projectId);
             }
           }
         });

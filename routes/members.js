@@ -104,7 +104,7 @@ router.post("/signup", (req, res) => {
           lastname: lastname,
           email: email,
           username: username,
-          image: "/images/default-user.jpg",
+          image: "https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-2.png",
           provider: "local",
           projects: [],
           password: password
