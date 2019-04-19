@@ -200,7 +200,8 @@ export default {
     [v => v.length >= 1 || "Field is required."];
   },
 
-  mounted: async function() {},
+  mounted: async function() {
+  },
   methods: {
     updateStory: async function() {
       try {
@@ -315,6 +316,12 @@ export default {
     },
     membersUpdated: function() {
       return this.$store.state.currentProject.members;
+    },
+    projectRefreshed: function() {
+      let id = this.$props.id; //Bringing id into scope
+      return this.$store.state.currentProject.stories.filter(function(obj) {
+        return obj._id === id;
+      })[0];
     }
   },
   watch: {
@@ -341,6 +348,10 @@ export default {
       this.names.push("Assign it later");
 
       this.members = this.$store.state.currentProject.members;
+    },
+    projectRefreshed: async function() {
+      console.log('Story Changed');
+      this.updateStory();
     }
   }
 };
