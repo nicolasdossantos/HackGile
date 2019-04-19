@@ -92,6 +92,10 @@ class DatabaseService {
         return axios.put(url + 'stories/' + id, json);
     }
 
+    static updateSprint(id, json){
+        return axios.put(url + 'sprints/' + id, json);
+    }
+
     static getCurrentUserId(){
         return new Promise(async (resolve, reject) => {
             try{

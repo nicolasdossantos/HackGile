@@ -1,7 +1,7 @@
 <template>
     <div id="clock">
-         <div v-if="distance > 0"><h1>{{`${hours}:${minutes}:${seconds}`}}</h1></div>
-         <div v-else>00:00:00:00</div>
+         <h1 v-if="distance > 0" class="display-2 font-weight-thin">{{`${hours}:${minutes}:${seconds}`}}</h1>
+         <h1 v-else class="display-2 font-weight-thin">00:00:00:00</h1>
     </div>
 </template> 
  

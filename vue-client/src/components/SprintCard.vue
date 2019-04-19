@@ -2,18 +2,16 @@
   <div class="SprintCard pa-2" v-bind:id="this.$props.id">
     <v-card @dblclick="open = true">
       <v-card-title primary-title>
-        <v-layout row justify-space-between>
+        <v-layout row>
           <v-flex>
             <h1>Sprint {{name}}</h1>
           </v-flex>
-          <v-flex align-self-center>
-            <v-sheet color="red lighten-3" elevation="4" class="d-flex">
-              <h1 class="text-xs-center">Timer</h1>
-            </v-sheet>
+          <v-flex align-self-end v-if="isStarted == true">
+            <h1 class="text-xs-right"><CountDown :endTime="duration" /></h1>
           </v-flex>
-          <v-flex align-self-end>
+          <v-flex align-self-end v-if="isStarted == false">
             <div class="text-xs-right">
-              <v-btn flat class="green white--text">
+              <v-btn class="green white--text" @click="startSprint">
                 <h1>Start</h1>
               </v-btn>
             </div>
@@ -107,13 +105,15 @@ import StoryCard from "./StoryCard";
 import NewStoryForm from "./NewStoryForm";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { applyDrag, generateItems } from "../utils/helpers";
+import CountDown from "./CountDown";
 export default {
   name: "SprintCard",
   components: {
     StoryCard,
     Container,
     Draggable,
-    NewStoryForm
+    NewStoryForm,
+    CountDown
   },
   props: {
     id: String
@@ -123,7 +123,8 @@ export default {
       json: null,
       name: "",
       stories: [],
-      time: Number,
+      duration: Number,
+      isStarted: Boolean,
       open: false,
       status: [
         "Unassigned",
@@ -148,7 +149,8 @@ export default {
       try {
         this.json = await DatabaseService.getSprintById(this.$props.id);
         this.stories = this.json.stories;
-        this.time = this.json.time;
+        this.duration = this.json.duration;
+        this.isStarted = this.json.isStarted;
       } catch (err) {
         this.error = err;
       }
@@ -162,6 +164,12 @@ export default {
           this.name = "";
         }
       }
+    },
+    startSprint: async function(){
+      this.json.isStarted = true;
+      this.json.duration = (this.duration * 1000) + Date.now();
+      await DatabaseService.updateSprint(this.$props.id, this.json);
+      this.updateSprint();
     },
      storyDeletedAction: async function(){
         this.storyDeletedSnack = true;
@@ -182,8 +190,6 @@ export default {
         this.open = false;
         this.$emit('sprint-deleted');
       },
-
-    addStory: function() {},
     filterStories: function(s) {
       return this.stories.filter(function(story) {
         return story.status == s;

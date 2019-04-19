@@ -5,7 +5,7 @@
     <v-container grid-list-md>
       <v-layout row>
         <v-flex md4 style="padding-bottom: 10px"> 
-          <h1 class="display-2 font-weight-bold">{{name}}</h1>
+          <h1 class="display-2">{{name}}</h1>
         </v-flex>
         <v-flex md4 align-self-center>
              <CountDown :endTime="deadline" />

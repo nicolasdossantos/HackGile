@@ -70,6 +70,19 @@ router.put("/:zid/stories/:sid", async (req, res) => {
   });
 });
 
+//Updates Sprint
+router.put("/:zid/", async (req, res) => {
+  await Sprint.findById(req.params.zid, async (err, sprint) => {
+    if (sprint.stories.indexOf(req.params.sid) < 0) {
+      await Sprint.updateOne(
+        { _id: req.params.zid },
+        { $set: {isStarted: req.body.isStarted, duration: req.body.duration} }
+      );
+      res.status(200).send();
+    }
+  });
+});
+
 //Tested
 //Remove one story from sprint and unassign sprint from story...Change story status to Backlog
 router.delete("/:zid/stories/:sid", async (req, res) => {
