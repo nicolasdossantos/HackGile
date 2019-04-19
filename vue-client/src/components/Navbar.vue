@@ -20,12 +20,13 @@
           <v-list class="pa-0">
             <v-list-tile>
               <v-list-tile-avatar>
-                <img src="https://randomuser.me/api/portraits/men/85.jpg">
+                <img :src="member.image">
               </v-list-tile-avatar>
               <v-list-tile-action>
                 <v-btn
                   icon
-                  @click.native.stop="mini = !mini"
+                  @click.native.stop="mini = !mini, drawer = false"
+                
                 >
                   <v-icon>chevron_left</v-icon>
                 </v-btn>
@@ -56,20 +57,28 @@
         <v-list>
           
             <v-list-tile>
-               <!-- <NewProjectForm></NewProjectForm> -->
-               <NewStoryForm></NewStoryForm>
-               <br>
-                <v-list-tile-title class="title">
-                     &nbsp; Projects
-                </v-list-tile-title>
+             
+              <v-list-tile-title class="title" center>
+                   Projects 
+              </v-list-tile-title>
+              
+
+               
+              
+              
+                
+                     
+               
             </v-list-tile>
             <v-divider></v-divider>
+            <v-flex right>
+            <NewProjectForm
+              v-on:project-form-complete="$emit('project-form-complete')"
+            ></NewProjectForm>
+            </v-flex>
+             
+            
             <v-list>
-              <v-list-tile>
-                <v-list-tile-title>
-                  {{test}}
-                </v-list-tile-title>
-              </v-list-tile>
                 <v-list-tile
                   v-for="project in this.$store.state.projects"
                   :key="project._id"
@@ -82,6 +91,7 @@
             </v-list>
         </v-list>
         
+        
     </v-layout>
   </v-navigation-drawer>
 </template>
@@ -90,6 +100,7 @@
   import DatabaseService from '../DatabaseService'
   import NewProjectForm from './NewProjectForm'
   import NewStoryForm from './NewStoryForm'
+  import NewSprintForm from './NewSprintForm'
 
   export default {
     data () {
@@ -99,14 +110,17 @@
           { title: 'Home', icon: 'dashboard' },
           { title: 'About', icon: 'question_answer' }
         ],
+        member : '',
         mini: true,
         right: null,
         window: 0,
-        test: ''
+        memberID: ''
       }
     },
+    
     mounted:async function () {
-     this.test =  DatabaseService.getCurrentUserId();
+     this.memberID =  await DatabaseService.getCurrentUserId();
+     this.member = await DatabaseService.getMember();
     },
     methods:{
       getUserId: async function() {
@@ -115,11 +129,9 @@
     },
     components:{
       NewProjectForm,
-      NewStoryForm
+      NewStoryForm,
+      NewSprintForm
     }
   }
 </script>
 
-<style>
-
-</style>

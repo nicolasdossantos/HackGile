@@ -22,19 +22,49 @@ router.get("/:sid", async (req, res) => {
 //Tested
 //Post new story
 router.post("/", async (req, res) => {
+  
+  let project = req.body.project;
+  
+  let status = "";
+
+  if(req.body.sprint === undefined){
+    status = "Backlog";
+  }
+
+  else if(req.body.sprint !== undefined && req.body.member === undefined){
+    status= "Unassigned";
+  }
+  else{
+    status = "Assigned";
+  }
+  
+  
+  
   let newStory = new Story({
-    sprint: undefined,
-    status: "Backlog",
-    member: undefined,
+    sprint: req.body.sprint,
+    status: status,
+    member: req.body.member,
     title: req.body.title,
     description: req.body.description,
     priority: req.body.priority,
-    estimatedTime: req.body.estimatedTime
+    estimatedTime: req.body.estimatedTime,
+    project: project
+    
   });
-  await newStory.save(err => {
+  await newStory.save(async(err, story) => {
     if (err) {
       console.log(err);
     }
+    if(story.member !== undefined){
+      await Member.updateOne({_id: story.member}, 
+        {$push:{stories:mongoose.Types.ObjectId(story._id) }})
+    }
+    if(story.sprint !== undefined){
+      await Sprint.updateOne({_id: story.sprint}, 
+        {$push:{stories:mongoose.Types.ObjectId(story._id) }})
+    }
+    await Project.updateOne({_id: project},
+        {$push:{stories: mongoose.Types.ObjectId(story._id)}})
   });
   res.status(201).send();
 });
@@ -42,16 +72,72 @@ router.post("/", async (req, res) => {
 //TODO: Test
 //Updates Story by ID
 router.put("/:sid", async (req, res) => {
-  const stories = await loadStoriesCollection();
-  stories.findOneAndUpdate(
+  const story = await Story.findOne({
+    _id: mongoose.Types.ObjectId(req.params.sid)
+  });
+
+  //Checks if sprint has changed
+  if (req.body.sprint != story.sprint){
+    await Sprint.updateOne(
+      { stories: { $in: req.params.sid } },
+      { $pull: { stories: mongoose.Types.ObjectId(req.params.sid) } }
+    );
+    await Sprint.updateOne(
+      { _id: req.body.sprint },
+      { $push: { stories: mongoose.Types.ObjectId(req.params.sid) } }
+    ); 
+  }
+
+  //Checks if member has changed
+  if (req.body.member != story.member){
+    //Pull story from former member
+    await Member.updateOne(
+      { stories: { $in: req.params.sid } },
+      { $pull: { stories: mongoose.Types.ObjectId(req.params.sid) } }
+    );
+    //If switched to different member
+    if (req.body.member != undefined){
+      //Push story to new member
+      await Member.updateOne(
+        { _id: req.body.member },
+        { $push: { stories: mongoose.Types.ObjectId(req.params.sid) } }
+      );
+    }
+  }
+
+  let status = "";
+
+  if(req.body.sprint === undefined){
+    status = "Backlog";
+  }
+
+  if(req.body.sprint !== undefined && req.body.member === undefined){
+    status= "Unassigned";
+  }
+  else if (req.body.sprint !== undefined){
+    status = "Assigned";
+  }
+
+  if(req.body.status != "Assigned" && req.body.status != "Unassigned" && req.body.status != "Backlog"){
+    status = req.body.status;
+    //console.log(status);
+  }
+
+  await Story.updateOne(
     { _id: mongoose.Types.ObjectId(req.params.sid) },
     {
-      sprint: mongoose.Types.ObjectId(req.body.sprint),
-      status: req.body.status,
-      member: mongoose.Types.ObjectId(req.body.member),
+      sprint:
+        req.body.sprint == undefined
+          ? undefined
+          : mongoose.Types.ObjectId(req.body.sprint),
+      status: status,
+      member:
+        req.body.member == undefined
+          ? undefined
+          : mongoose.Types.ObjectId(req.body.member),
       title: req.body.title,
       description: req.body.description,
-      priority: req.params.priority,
+      priority: req.body.priority,
       estimatedTime: req.body.estimatedTime
     }
   );
