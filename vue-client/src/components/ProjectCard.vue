@@ -122,7 +122,7 @@
             <v-flex v-if="git" xs1>
               <!-- Shows git link here -->
               <v-list-tile>
-                <img :src="gitImage" alt="TEXT" height="10%" width="10%"/>
+                <v-img :src="gitImage" alt="TEXT" contain height="" width=""/>
                
               </v-list-tile>
             </v-flex>
@@ -171,7 +171,7 @@ export default {
       members: [],
       sprints: [],
       stories: [],
-      gitImage: "../../public/Git-Logo-2Color.png"
+      gitImage: "./Git-Logo-2Color.png"
       
 
     };
