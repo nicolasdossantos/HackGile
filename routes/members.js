@@ -161,7 +161,7 @@ router.get(
 //Google Redirect
 router.get("/google/redirect", (req, res, next) => {
   passport.authenticate("google", {
-    successRedirect: "/projects/home",
+    successRedirect: "/home",
     successFlash: "You are now logged in!",
     failureRedirect: "/members/login",
     failureFlash: true
