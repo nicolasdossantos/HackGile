@@ -262,7 +262,7 @@ export default {
 
       let user = this.$store.state.user;
       this.userStories = this.stories.filter(function(obj){
-        return obj.member = user;
+        return obj.member === user;
       });
     }
   }
