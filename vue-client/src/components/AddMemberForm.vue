@@ -75,11 +75,11 @@ export default {
 
         //Creates New Project witth fields above
         await DatabaseService.addMember(properties);
-        console.log("OK HERE TOO")
+        
         this.clearForm();
 
         this.$emit("member-form-complete");
-        console.log("HERE")
+       
       }
     },
 
