@@ -3,9 +3,17 @@
   <div class="ProjectCard" v-bind:id="this.$props.id">
     
     <v-container grid-list-md>
-      <v-flex md12> 
-        <h1>{{name}}</h1>
-      </v-flex>
+      <v-layout row>
+        <v-flex md4 style="padding-bottom: 10px"> 
+          <h1 class="display-2 font-weight-bold">{{name}}</h1>
+        </v-flex>
+        <v-flex md4 align-self-center>
+              <h1 class="text-xs-center display-2 font-weight-bold">Timer</h1>
+        </v-flex>
+        <v-flex md2 offset-md2 align-self-right>
+          <v-btn small color="red white--text">Delete Project</v-btn>
+        </v-flex>
+      </v-layout>
       <v-layout row justify-space-between>
 
         <v-flex md4>
@@ -61,9 +69,17 @@
               <v-sheet color="white" min-height="250px">
                 <h1 class="text-xs-center">Your Stories</h1>
                 <!-- Iterate Stories here -->
-                <div>
-
-                </div>
+                  <v-container fluid grid-list-sm>
+                    <v-layout row wrap>
+                      <v-flex v-for="story in userStories" :key="story._id" xs4>
+                        <StoryCard
+                          v-bind:id="story._id"
+                          v-on:story-deleted="$emit('story-deleted')"
+                          v-on:story-form-edit="$emit('story-form-edit')"
+                        ></StoryCard>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
               </v-sheet>
             </v-flex>
           </v-layout>
@@ -151,7 +167,7 @@ export default {
       members: [],
       sprints: [],
       stories: [],
-      
+      userStories: []
 
     };
   },
@@ -172,6 +188,11 @@ export default {
       this.sprints = this.json.sprints;
       this.members = this.json.members;
       this.owners = this.json.owners;
+
+      let user = this.$store.state.user;
+      this.userStories = this.stories.filter(function(obj){
+        return obj.member = user;
+      });
     },
     
 
@@ -183,8 +204,6 @@ export default {
         await DatabaseService.removeMember(pid, MemberId);
         this.$emit('member-removed');
     },
-
-    modifyProject: function() {},
     filterStories: function() {
       return this.stories.filter(function(story) {
         return story.status == "Backlog";
@@ -224,7 +243,7 @@ export default {
       return this.$store.state.projects.filter(function(obj) {
         return obj._id === id;
       })[0];
-    }
+    },
   },
   watch: {
     //Watches for a changed in the computed property and executes code
@@ -240,6 +259,11 @@ export default {
       this.sprints = this.json.sprints;
       this.members = this.json.members;
       this.owners = this.json.owners;
+
+      let user = this.$store.state.user;
+      this.userStories = this.stories.filter(function(obj){
+        return obj.member = user;
+      });
     }
   }
 };
