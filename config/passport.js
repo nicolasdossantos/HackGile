@@ -67,6 +67,8 @@ module.exports = (passport) => {
         clientSecret: keys.google.clientSecret
     }, (accessToken, refreshToken, profile, done) => {
 
+       
+
         //Putting information gathered from profile into variables for readability
         let firstname = profile.name.givenName;
         let lastname = profile.name.familyName;
@@ -108,6 +110,8 @@ module.exports = (passport) => {
         scope: ['user:email']
     }, (accessToken, refreshToken, profile, done) => {
 
+       
+
         // //Putting information gathered from profile into variables for readability
         // let firstname = profile.name.givenName;
         // let lastname = profile.name.familyName;
@@ -143,6 +147,8 @@ module.exports = (passport) => {
 
     //Linkedin Strategy
     passport.use(new LinkedinStrategy({
+
+            
             //options for strategy
             callbackURL: '/members/linkedin/redirect',
             clientID: keys.linkedin.clientID,
@@ -151,6 +157,8 @@ module.exports = (passport) => {
             state: true
         },
         function (req, token, refreshToken, profile, done) {
+
+           
             //Putting information gathered from profile into variables for readability
             let firstname = profile.name.givenName;
             let lastname = profile.name.familyName;

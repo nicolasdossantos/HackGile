@@ -6,7 +6,7 @@
     hide-overlay
     stateless
     app
-    width="300"
+    width="200"
     
   >
     <v-layout fill-height>

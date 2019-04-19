@@ -12,8 +12,25 @@
         </v-flex>
        
         <v-flex md2 offset-md2 align-self-right>
-          <v-btn small color="red white--text">Delete Project</v-btn>
+          <v-btn small color="red white--text" @click="deleteDialog = true">Delete Project</v-btn>
         </v-flex>
+          <v-dialog v-model="deleteDialog" max-width="290">
+              <v-card>
+                <v-card-title class="headline">Delete Project?</v-card-title>
+
+                <v-card-text>
+                  You are about to delete this project permanently. All data related to this project will be lost. Would you like to proceed?
+                  </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn color="green darken-1" flat="flat" @click="deleteDialog = false">Cancel</v-btn>
+
+                  <v-btn color="green darken-1" flat="flat" @click="deleteProject">Delete it!</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
       </v-layout>
       <v-layout row justify-space-between>
 
@@ -68,7 +85,7 @@
             </v-flex>
             <v-flex md8>
               <v-sheet color="white" min-height="250px">
-                <h1 class="text-xs-center">Your Stories</h1>
+                <h1 class="text-xs-center">My Stories</h1>
                 <!-- Iterate Stories here -->
                   <v-container fluid grid-list-sm>
                     <v-layout row wrap>
@@ -89,7 +106,7 @@
     </v-container>
     <v-footer app inset height="auto">
       <v-card class="flex green lighten-3" flat tile>
-        <v-card-title style="padding-bottom:0px; padding-top:10px">
+        <v-card-title>
           <strong class="title">Members</strong>
           <AddMemberForm 
           v-bind:id="this.$props.id"
@@ -171,7 +188,8 @@ export default {
       members: [],
       sprints: [],
       stories: [],
-      gitImage: "./Git-Logo-2Color.png"
+      gitImage: "../../public/Git-Logo-2Color.png",
+      deleteDialog: false,
       
 
     };
@@ -208,6 +226,12 @@ export default {
 
         await DatabaseService.removeMember(pid, MemberId);
         this.$emit('member-removed');
+    },
+
+    deleteProject: async function(){
+      await DatabaseService.deleteProjectById(this.$props.id);
+      console.log("Deleting " + this.$props.id);
+      this.$emit('project-deleted');
     },
     filterStories: function() {
       return this.stories.filter(function(story) {

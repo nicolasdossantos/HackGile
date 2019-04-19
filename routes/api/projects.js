@@ -119,6 +119,11 @@ router.post("/", async (req, res) => {
 //Tested
 //Delete project linked to this pid
 router.delete("/:pid", async (req, res) => {
+  await Member.updateMany(
+    {projects: {
+    $in: req.params.pid
+  }}, {$pull:{projects:req.params.pid}})
+  
   await Project.deleteOne({
     _id: mongoose.Types.ObjectId(req.params.pid)
   });
