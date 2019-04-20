@@ -21,7 +21,7 @@ router.get("/login", (req, res) => {
 //Login Process
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", {
-    successRedirect: "/projects/home",
+    successRedirect: "/home",
     successFlash: true,
     failureRedirect: "/members/login",
     failureFlash: true
@@ -161,7 +161,7 @@ router.get(
 //Google Redirect
 router.get("/google/redirect", (req, res, next) => {
   passport.authenticate("google", {
-    successRedirect: "/projects/home",
+    successRedirect: "/home",
     successFlash: "You are now logged in!",
     failureRedirect: "/members/login",
     failureFlash: true
@@ -179,7 +179,7 @@ router.get(
 //GitHub Redirect
 router.get("/github/redirect", (req, res, next) => {
   passport.authenticate("github", {
-    successRedirect: "/projects/home",
+    successRedirect: "/home",
     successFlash: "You are now logged in!",
     failureRedirect: "/members/login",
     failureFlash: true
@@ -191,7 +191,7 @@ router.get("/linkedin", passport.authenticate("linkedin"));
 //Linkedin Redirect
 router.get("/linkedin/redirect", (req, res, next) => {
   passport.authenticate("linkedin", {
-    successRedirect: "/projects/home",
+    successRedirect: "/home",
     successFlash: "You are now logged in!",
     failureRedirect: "/members/login",
     failureFlash: true

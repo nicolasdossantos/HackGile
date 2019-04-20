@@ -12,29 +12,7 @@ let Member = require("../models/member");
 let Project = require("../models/project");
 
 //Home route
-router.get("/home", ensureAuthentication, async (req, res) => {
-  //Retrieve all current user's projects
-    const members = await loadMemberCollection();
-    res.send(await members.find({}).toArray())
 
-//   Project.find(
-//     {
-//       members: {
-//         $in: req.user._id
-//       }
-//     },
-//     (err, projects) => {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         res.render("home", {
-//           title: "Projects",
-//           projects: projects
-//         });
-//       }
-//     }
-//   );
-});
 //New Project Route
 router.get("/new_project", ensureAuthentication, (req, res) => {
   res.render("new_project");
@@ -232,8 +210,6 @@ function ensureAuthentication(req, res, next) {
   }
 }
 
-async function loadMemberCollection() {
-  return db.db.useDb("test").collection("members");
-}
+
 
 module.exports = router;
