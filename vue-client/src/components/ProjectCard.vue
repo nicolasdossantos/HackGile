@@ -115,7 +115,7 @@
           @member-form-complete="$emit('member-form-complete')" />
              </v-flex>
              <v-flex md2>
-               <h3 class="text-xs-right">Access Your Project</h3>
+               <h3 class="text-xs-right pr-3 pb-0">Access Your Project</h3>
              </v-flex>
            </v-layout>
         </v-card-title>
@@ -146,14 +146,9 @@
             <v-flex v-if="git" xs2 class="pr-5 pb-1">
               <!-- Shows git link here -->
               <v-list-tile>
-<<<<<<< HEAD
-               <v-img :src="gitImage" alt="TEXT" contain height="" width=""/> 
-               
-=======
                 <a :href="git">
                   <img :src="gitImage" alt="Git Link" style="height:90%; width:90%"/>
                 </a>
->>>>>>> 7af9b5095ab26cd2df1b260b5f3682d21475c7cc
               </v-list-tile>
             </v-flex>
 
