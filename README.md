@@ -4,8 +4,8 @@
 
 ### What is Hackgile? ###
 
-* Hackgile is a website used to implement the SCRUM Agile methodology to your school projects / hackathons.
-* Version 0.01
+* HackGile brings Agile/Scrum methodology to hackathons and school projects. Manage your projects using one of the most popular project management methodologies.
+* Version 1.0
 
 
 ### How do I get set up? ###
