@@ -107,10 +107,17 @@
     <v-footer app inset height="auto">
       <v-card class="flex green lighten-3" flat tile>
          <v-card-title style="padding-bottom:0px; padding-top:10px">
+           <v-layout row>
+             <v-flex md10>
           <strong class="title">Members</strong>
           <AddMemberForm 
           v-bind:id="this.$props.id"
           @member-form-complete="$emit('member-form-complete')" />
+             </v-flex>
+             <v-flex md2>
+               <h3 class="text-xs-right">Access Your Project</h3>
+             </v-flex>
+           </v-layout>
         </v-card-title>
         <v-card-actions>
           <v-layout row>
@@ -139,8 +146,14 @@
             <v-flex v-if="git" xs2 class="pr-5 pb-1">
               <!-- Shows git link here -->
               <v-list-tile>
+<<<<<<< HEAD
                <v-img :src="gitImage" alt="TEXT" contain height="" width=""/> 
                
+=======
+                <a :href="git">
+                  <img :src="gitImage" alt="Git Link" style="height:90%; width:90%"/>
+                </a>
+>>>>>>> 7af9b5095ab26cd2df1b260b5f3682d21475c7cc
               </v-list-tile>
             </v-flex>
 
@@ -215,7 +228,7 @@ export default {
 
       let user = this.$store.state.user;
       this.userStories = this.stories.filter(function(obj){
-        return obj.member === user;
+        return (obj.member === user && obj.status != 'Done');
       });
     },
     
@@ -292,7 +305,7 @@ export default {
 
       let user = this.$store.state.user;
       this.userStories = this.stories.filter(function(obj){
-        return obj.member === user;
+        return (obj.member === user && obj.status != 'Done');
       });
     }
   }

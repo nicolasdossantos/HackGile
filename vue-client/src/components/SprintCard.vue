@@ -225,7 +225,7 @@ export default {
         );
         console.log(properties)
         this.updateSprint();
-        //this.$emit('story-form-edit');
+        this.$emit('story-form-edit');
       }
     }
   },
