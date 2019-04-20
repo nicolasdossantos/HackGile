@@ -136,13 +136,14 @@
       
 
             </v-flex>
-            <v-flex v-if="git" xs1>
+            <v-flex v-if="git" xs2 class="pr-5 pb-1">
               <!-- Shows git link here -->
               <v-list-tile>
-                <v-img :src="gitImage" alt="TEXT" contain height="" width=""/>
+               <v-img :src="gitImage" alt="TEXT" contain height="" width=""/> 
                
               </v-list-tile>
             </v-flex>
+
           </v-layout>
         </v-card-actions>
       </v-card>
