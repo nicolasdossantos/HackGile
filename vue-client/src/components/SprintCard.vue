@@ -1,6 +1,6 @@
 <template>
   <div class="SprintCard pa-2" v-bind:id="this.$props.id">
-    <v-card @dblclick="open = true">
+    <v-card @dblclick="open = true" :class='sprintEnded'>
       <v-card-title primary-title>
         <v-layout row>
           <v-flex>
@@ -230,7 +230,17 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+    sprintEnded: function(){
+      if(this.isStarted == true){
+        if (this.duration > Date.now()){
+          return 'white';
+        }else{
+          return 'grey lighten-2';
+        }
+      }
+    }
+  },
   watch: {
     open: function(){
       this.updateSprint();
