@@ -41,7 +41,9 @@
           <v-list-tile
             v-for="item in items"
             :key="item.title"
-            @click=""
+            router
+            
+            :to="item.route"
           >
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>  
@@ -107,8 +109,8 @@
       return {
         drawer: true,
         items: [
-          { title: 'Home', icon: 'dashboard' },
-          { title: 'About', icon: 'question_answer' }
+          { title: 'Settings', icon: 'settings', route: '/'},
+          { title: 'Logout', icon: 'logout', route:'/members/logout' }
         ],
         member : '',
         mini: true,
