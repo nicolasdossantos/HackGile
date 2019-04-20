@@ -146,7 +146,7 @@
             <v-flex v-if="git" xs2 class="pr-5 pb-1">
               <!-- Shows git link here -->
               <v-list-tile>
-                <a :href="git">
+                <a :href="git" target="_blank">
                   <img :src="gitImage" alt="Git Link" style="height:90%; width:90%"/>
                 </a>
               </v-list-tile>

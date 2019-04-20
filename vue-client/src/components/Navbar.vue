@@ -42,6 +42,7 @@
             v-for="item in items"
             :key="item.title"
             router
+            
             :to="item.route"
           >
             <v-list-tile-action>
