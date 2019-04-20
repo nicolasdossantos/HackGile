@@ -115,7 +115,7 @@
           @member-form-complete="$emit('member-form-complete')" />
              </v-flex>
              <v-flex md2>
-               <h3 class="text-xs-right pr-3 pb-0">Access Your Project</h3>
+               <h3 v-if="git" class="text-xs-right pr-3 pb-0">Access Your Project</h3>
              </v-flex>
            </v-layout>
         </v-card-title>
