@@ -2,13 +2,14 @@ const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 const sprintSchema = new Schema({
-    name: {
-        type: String,
-        required: true
+    duration: {
+        type: Number
     },
-    time: {
-        type: Number,
-        required: true
+    startTime:{
+        type: Number
+    },
+    isStarted:{
+        type: Boolean
     },
     stories: [{
         type: Schema.Types.ObjectId,

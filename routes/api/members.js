@@ -1,12 +1,75 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const app = require('../../app.js');
-let Member = require('../../models/member');
-
+const express = require("express");
+const mongoose = require("mongoose");
+const app = require("../../app.js");
 const router = express.Router();
+const Member = require("../../models/member");
+const Story = require("../../models/story");
 
-async function loadMembersCollection(){
-    return app.collection('members');
-}
+//Puts story into member and assign member to story...Change story status to Assigned
+router.put("/:id/stories/:sid", async (req, res) => {
+  await Member.findById(req.params.id, async (err, member) => {
+    if (member.stories.indexOf(req.params.sid) < 0) {
+      await Member.updateOne(
+        { _id: req.params.id },
+        { $push: { stories: mongoose.Types.ObjectId(req.params.sid) } }
+      );
+      await Story.updateOne(
+        { _id: req.params.sid },
+        {
+          $set: {
+            member: mongoose.Types.ObjectId(req.params.id),
+            status: "Assigned"
+          }
+        }
+      );
+      res.status(200).send();
+    }
+  });
+});
+
+//Gets all stories assigned to member id
+router.get("/:id/stories/", async (req, res) => {
+  await Member.findById(mongoose.Types.ObjectId(req.params.id))
+    .populate("stories")
+    .then(
+      member => {
+        let stories = member.stories;
+        res.send(stories);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+});
+
+//get current member id
+router.get("/", (req, res)=>{
+  res.send(req.user._id);
+})
+
+//Removes one story from member's story array - Changes story status to backlog - Set story's member to undefined
+router.delete("/:id/stories/:sid", async (req, res) => {
+  await Member.updateOne(
+    { _id: req.params.id },
+    { $pull: { stories: mongoose.Types.ObjectId(req.params.sid) } }
+  );
+  await Story.updateOne(
+    { _id: req.params.sid },
+    { $set: { status: "Backlog", member: undefined } }
+  );
+  res.status(200).send();
+});
+
+router.get("/:pid/:ln/:fn", async(req, res)=>{
+  await Member.findOne({lastname: req.params.ln, firstname: req.params.fn, projects: {
+    $in: req.params.pid
+  } })
+  res.status(200).send();
+})
+
+router.get("/info", async(req, res)=>{
+  res.send(req.user);
+})
+
 
 module.exports = router;

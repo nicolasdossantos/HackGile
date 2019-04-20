@@ -38,7 +38,7 @@ let Story = require('./models/story');
 
 
 // //For Testing. This will remove all members from database
-// Member.deleteMany({}, (err)=>{
+// Project.deleteMany({}, (err)=>{
 //     if(err){
 //         console.log(err);
 //     }
@@ -126,6 +126,10 @@ app.get("/", ensureSecure, (req, res) => {
     res.render('index');
 });
 
+app.get("/home", ensureAuthentication, (req, res)=>{
+    res.sendFile(__dirname + '/public/index2.html')
+} )
+
 app.get("/card", (req, res) => {
     res.render('story_card');
 });
@@ -145,4 +149,15 @@ function ensureSecure(req, res, next) {
         res.redirect('https://' + req.hostname + req.url);
     }
 }
+
+
+function ensureAuthentication(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    } else {
+      req.flash("cardError", "Please Login");
+      res.redirect("/members/login");
+    }
+  }
+
 exports.db = db;

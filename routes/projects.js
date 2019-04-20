@@ -4,6 +4,8 @@ const flash = require("connect-flash");
 const nodemailer = require("nodemailer");
 const keys = require("../config/keys");
 const db = require("../app");
+let cheerio = require("cheerio");
+const rp = require("request-promise");
 
 //Bring in models
 let Member = require("../models/member");
@@ -36,6 +38,29 @@ router.get("/home", ensureAuthentication, async (req, res) => {
 //New Project Route
 router.get("/new_project", ensureAuthentication, (req, res) => {
   res.render("new_project");
+});
+
+//Get a json file with all mls hackathons
+router.get("/scrape", (req, res) => {
+  let hackathonList = [];
+  rp("https://mlh.io/seasons/na-2019/events")
+    .then(html => {
+      let $ = cheerio.load(html);
+      
+      // console.log(html);
+      $(".event-wrapper").each(function(index, element) {
+        hackathonList.push(
+          $(this)
+            .find(".event-link")
+            .attr("title").trim()
+        );
+      });
+      res.send(hackathonList);
+      
+    })
+
+    .catch(console.error.bind(console));
+    
 });
 
 //
@@ -128,9 +153,9 @@ router.get("/add_member/:id", (req, res) => {
 });
 
 //Project is found by ID, user found by email. If user is not already present in project, it is then added to it
-router.post("/add_member/:id", (req, res) => {
+router.post("/add_member", (req, res) => {
   let email = req.body.email;
-  let projectId = req.params.id;
+  let projectId = req.body.project;
 
   Member.findOne(
     {
@@ -138,11 +163,11 @@ router.post("/add_member/:id", (req, res) => {
     },
     (err, member) => {
       if (!member) {
-        req.flash(
-          "cardError",
-          "The email entered does not correspond to an active member."
-        );
-        res.redirect("/projects/add_member/" + projectId);
+        // req.flash(
+        //   "cardError",
+        //   "The email entered does not correspond to an active member."
+       // );
+        //res.redirect("/projects/add_member/" + projectId);
       } else {
         Project.findById(projectId, (err, project) => {
           if (err) {
@@ -176,18 +201,20 @@ router.post("/add_member/:id", (req, res) => {
                   };
                   smtpTransport.sendMail(mailOptions, err => {
                     console.log("email sent");
-                    req.flash("cardSuccess", "Member has been added!");
-                    res.redirect("/projects/home");
+                    //req.flash("cardSuccess", "Member has been added!");
+                    //res.redirect("/projects/home");
+                    res.status.send(200);
                     done(err, "done");
+                    
                   });
                 }
               });
             } else {
-              req.flash(
-                "cardError",
-                "The member is already part of the project"
-              );
-              res.redirect("/projects/add_member/" + projectId);
+              // req.flash(
+              //   "cardError",
+              //   "The member is already part of the project"
+              // );
+              //res.redirect("/projects/add_member/" + projectId);
             }
           }
         });
