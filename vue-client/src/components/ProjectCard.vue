@@ -34,7 +34,7 @@
       </v-layout>
       <v-layout row justify-space-between>
 
-        <v-flex md4>
+        <v-flex md3>
           <div>
             <v-sheet color="white" min-height="250px">
               <h1 class="text-xs-center">
@@ -59,7 +59,7 @@
             </v-sheet>
           </div>
         </v-flex>
-        <v-flex md8>
+        <v-flex md9>
           <v-layout column>
             <v-flex md4>
               <v-sheet color="white" min-height="250px">
@@ -106,7 +106,7 @@
     </v-container>
     <v-footer app inset height="auto">
       <v-card class="flex green lighten-3" flat tile>
-        <v-card-title>
+         <v-card-title style="padding-bottom:0px; padding-top:10px">
           <strong class="title">Members</strong>
           <AddMemberForm 
           v-bind:id="this.$props.id"
@@ -188,7 +188,7 @@ export default {
       members: [],
       sprints: [],
       stories: [],
-      gitImage: "../../public/Git-Logo-2Color.png",
+     gitImage: "./Git-Logo-2Color.png",
       deleteDialog: false,
       
 
