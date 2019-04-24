@@ -1,6 +1,6 @@
-const keys = require('./keys');
+const keys = require("./keys");
 
 module.exports = {
-    database: keys.database.databaseurl,
-    secret: keys.database.secret
-}
+  database: keys.database.databaseurl,
+  secret: keys.database.secret
+};

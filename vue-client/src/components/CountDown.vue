@@ -25,6 +25,8 @@
   mounted(){
     var vm = this
     this.countDownDate = this.endTime
+
+
     var x = setInterval(function() {
       var now = new Date().getTime();
       vm.distance = vm.countDownDate - now;

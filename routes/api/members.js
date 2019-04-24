@@ -43,9 +43,9 @@ router.get("/:id/stories/", async (req, res) => {
 });
 
 //get current member id
-router.get("/", (req, res)=>{
+router.get("/", (req, res) => {
   res.send(req.user._id);
-})
+});
 
 //Removes one story from member's story array - Changes story status to backlog - Set story's member to undefined
 router.delete("/:id/stories/:sid", async (req, res) => {
@@ -60,16 +60,19 @@ router.delete("/:id/stories/:sid", async (req, res) => {
   res.status(200).send();
 });
 
-router.get("/:pid/:ln/:fn", async(req, res)=>{
-  await Member.findOne({lastname: req.params.ln, firstname: req.params.fn, projects: {
-    $in: req.params.pid
-  } })
+router.get("/:pid/:ln/:fn", async (req, res) => {
+  await Member.findOne({
+    lastname: req.params.ln,
+    firstname: req.params.fn,
+    projects: {
+      $in: req.params.pid
+    }
+  });
   res.status(200).send();
-})
+});
 
-router.get("/info", async(req, res)=>{
+router.get("/info", async (req, res) => {
   res.send(req.user);
-})
-
+});
 
 module.exports = router;
