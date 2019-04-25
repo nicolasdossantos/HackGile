@@ -192,7 +192,6 @@ router.get("/linkedin", passport.authenticate("linkedin"));
 router.get("/linkedin/redirect", (req, res, next) => {
   passport.authenticate("linkedin", {
     successRedirect: "/home",
-    successFlash: "You are now logged in!",
     failureRedirect: "/members/login",
     failureFlash: true
   })(req, res, next);

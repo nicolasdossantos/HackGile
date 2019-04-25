@@ -235,7 +235,7 @@ export default {
           description: this.description,
           member:
             this.assignedMemberInfo !== (undefined || "")
-              ? this.assignedMemberInfo._id
+              ? await this.assignedMemberInfo._id
               : undefined,
           project: this.project
         };
