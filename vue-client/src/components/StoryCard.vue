@@ -2,7 +2,7 @@
   <div class="StoryCard pa-2" v-bind:id="this.$props.id">
     <v-card v-model="dialog" v-on:dblclick="dialog = true" :class="priorityColor" height="175px">
       <v-card-title primary-title>
-        <h1 class="text-truncate">{{this.title}}</h1>
+        <h3 class="text">{{this.title}}</h3>
       </v-card-title>
       <v-card-text style="padding-bottom: 0px">
         <p class="text-truncate">{{this.description}}</p>

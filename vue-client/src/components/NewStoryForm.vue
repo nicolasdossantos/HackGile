@@ -172,7 +172,7 @@ export default {
   watch:{
     async project(newVal, oldVal){
     //console.log(`Old value: ${oldVal}, New Value ${newVal}`)
-    this.sprints = await DatabaseService.getSprints(this.project);
+    this.sprints = await DatabaseService.getSprints(this.project);  
      
     this.sprintNumbers = [];
 
