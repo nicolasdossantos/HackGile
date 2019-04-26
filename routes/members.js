@@ -162,7 +162,6 @@ router.get(
 router.get("/google/redirect", (req, res, next) => {
   passport.authenticate("google", {
     successRedirect: "/home",
-    successFlash: "You are now logged in!",
     failureRedirect: "/members/login",
     failureFlash: true
   })(req, res, next);
@@ -180,7 +179,6 @@ router.get(
 router.get("/github/redirect", (req, res, next) => {
   passport.authenticate("github", {
     successRedirect: "/home",
-    successFlash: "You are now logged in!",
     failureRedirect: "/members/login",
     failureFlash: true
   })(req, res, next);
