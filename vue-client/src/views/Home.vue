@@ -1,5 +1,18 @@
 <template>
-  <v-layout fill-height class="light-green lighten-4">
+<!-- <div>
+  <v-toolbar class="white">
+   <h3>HackGile</h3>
+    
+    <v-spacer></v-spacer>
+    <v-toolbar-items class="hidden-sm-and-down">
+      <v-btn flat class="white--text">Projects</v-btn>
+      
+    </v-toolbar-items>
+  </v-toolbar> -->
+
+
+
+  <v-layout fill-height class="light-green lighten-4" >
     <v-snackbar v-model="projectAddedSnack" :timeout="4000" top color="info">
       <span>Awesome! You added a project</span>
     </v-snackbar>
@@ -38,8 +51,14 @@
     <v-snackbar v-model="sprintCreatedSnack" :timeout="4000" top color="info">
       <span>The sprint was created successfully!</span>
     </v-snackbar>
-
+    
+  
     <Navbar v-on:change-project-page="switchProject" v-on:project-form-complete="newProjectAction"></Navbar>
+ 
+
+  
+
+
     <!-- <SprintCard id="5ca7ab051c9d44000043c95f"></SprintCard>
     <SprintCard id="5ca7afcf1c9d4400008ef9d2"></SprintCard>-->
     <v-flex xs12 v-if="currentProject != undefined">
@@ -56,6 +75,7 @@
       ></ProjectCard>
     </v-flex>
   </v-layout>
+</div>
 </template>
 
 <script>

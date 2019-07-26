@@ -6,6 +6,8 @@ const async = require("async");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const keys = require("../config/keys");
+const isMobile = require('ismobilejs');
+
 
 //Bring in Models
 let Story = require("../models/story");
@@ -13,9 +15,18 @@ let Member = require("../models/member");
 let Project = require("../models/project");
 let Sprint = require("../models/sprint");
 
+
+
+
+
 //Login form
 router.get("/login", (req, res) => {
-  res.render("login");
+  const userAgent = req.headers['user-agent'];
+  if(!isMobile(userAgent).any){
+    res.render("login");
+  }else{
+    res.render("mobile");
+  }
 });
 
 //Login Process
@@ -30,7 +41,12 @@ router.post("/login", (req, res, next) => {
 
 //Signup Route
 router.get("/signup", (req, res) => {
-  res.render("signup");
+  const userAgent = req.headers['user-agent'];
+  if(!isMobile(userAgent).any){
+    res.render("signup");
+  }else{
+    res.render("mobile");
+  }
 });
 
 router.post("/signup", (req, res) => {

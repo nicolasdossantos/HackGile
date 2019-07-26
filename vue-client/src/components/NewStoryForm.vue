@@ -1,3 +1,5 @@
+
+
 <template>
   <v-dialog v-model="dialog" max-width="600px">
     <v-btn small color="light blue white--text" slot="activator">New Story</v-btn>

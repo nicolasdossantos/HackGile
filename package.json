@@ -27,9 +27,12 @@
     "express-messages": "^1.0.1",
     "express-session": "^1.15.6",
     "express-validator": "^5.3.1",
-    "jquery": "^3.3.1",
+    "is-mobile": "^2.0.1",
+    "ismobilejs": "^0.5.2",
+    "jquery": "^3.4.1",
     "materialize": "^1.0.0",
     "materialize-css": "^1.0.0-rc.2",
+    "mobile-detect": "^1.4.3",
     "mongoose": "^5.4.17",
     "nodemailer": "^5.1.1",
     "nodemon": "^1.18.11",
@@ -47,6 +50,7 @@
     "request-promise": "^4.2.4",
     "vue-click-outside": "^1.0.7",
     "vue-clipboard2": "^0.3.0",
+    "vue-responsive": "^1.1.0",
     "vue-smooth-dnd": "^0.7.0"
   }
 }

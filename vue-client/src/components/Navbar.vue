@@ -1,3 +1,4 @@
+
 <template>
   <v-navigation-drawer
     v-model="drawer"
@@ -30,6 +31,7 @@
                 >
                   <v-icon>chevron_left</v-icon>
                 </v-btn>
+               
               </v-list-tile-action>
             </v-list-tile>
           </v-list>
@@ -58,10 +60,12 @@
     
         <v-list>
           
+           
             <v-list-tile>
              
               <v-list-tile-title class="title" center>
-                   Projects 
+  
+                   {{window.width}}
               </v-list-tile-title>
               
 
@@ -116,7 +120,11 @@
         mini: true,
         right: null,
         window: 0,
-        memberID: ''
+        memberID: '',
+        window: {
+      width: 0,
+      height: 0
+    }
       }
     },
     
@@ -124,10 +132,30 @@
      this.memberID =  await DatabaseService.getCurrentUserId();
      this.member = await DatabaseService.getMember();
     },
+    updated(){
+      if(this.window.width < 600){
+        this.drawer = false;
+      }else{
+        this.drawer = true;
+      }
+    
+    },
+     created() {
+    window.addEventListener('resize', this.handleResize)
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize)
+  },
     methods:{
       getUserId: async function() {
         
-      }
+      },
+       handleResize() {
+      this.window.width = window.innerWidth;
+      this.window.height = window.innerHeight;
+    }
+      
     },
     components:{
       NewProjectForm,

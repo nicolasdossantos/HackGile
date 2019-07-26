@@ -16,8 +16,11 @@ import VueClipboard from 'vue-clipboard2'
 
 import Demo from './index.vue'
 import VeeValidate from 'vee-validate';
+import responsive from 'vue-responsive';
 Vue.use(VeeValidate);
-Vue.use(VueClipboard)
+Vue.use(VueClipboard);
+
+Vue.use(responsive);
 
 Vue.config.productionTip = false
 

@@ -82,6 +82,23 @@ body{
 
   }
 
+  .largelabel {
+    color: white;
+    font-size: 36pt;
+    margin-left: 70px;
+
+
+  }
+
+  .mediumlabel {
+    color: white;
+    font-size: 26pt;
+    margin-left: 20px;
+    text-align: center;
+
+
+  }
+
   .logo {
     margin-left: 400px;
   }
